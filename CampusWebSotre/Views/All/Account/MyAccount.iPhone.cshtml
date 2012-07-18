@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "MyAccount";
+
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+
+    var acctype = Convert.ToString(Session["ACCTYPE"]);
+     
+}
+<div class="cartcontainer">
+    <div>
+        <form >
+		<p align="center"> <img src="@Url.Content("~/Content/Images/bar_top.png")" style="vertical-align: top;" width="181" /></p>
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro">
+              <a style="float:left">My Account</a> <a href="@Url.Action("index","Home")" style="float:right">Logout</a>
+        </div>
+        <div class="clear">
+        </div>
+        <div>
+            <a href="@Url.Action("AccountDetails", "Account")" class="myacctext"><img src="/NewCampusWebStore/Content/Images/Mobile/accountiocn.jpg">Account Details</a>
+            <br />
+            <a href="@Url.Action("OrderHistory", "Account")"  class="myacctext"><img src="/NewCampusWebStore/Content/Images/Mobile/detailicon.jpg">Order History</a>
+        </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,241 @@
+﻿@model CampusWebStore.Models.OrderDetailViewModel
+@{
+    ViewBag.Title = "OrderDetails";
+    
+}
+<div style="width: 100%">
+    <h4>
+        Order Details:
+    </h4>
+    <table width="75%" cellspacing="5">
+        <tr>
+            <td style="width: 50%" >
+                <table border="1" style="width: 100%" >
+                    <tr>
+                        <td colspan="2">
+                            <h4>
+                                Billing Info:</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Name:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Name)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Address1)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Address2)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            City:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.City)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            State:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.State)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Zip:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Zip)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Country:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Country)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td style="width: 50%">
+                <table border="1"  style="width: 100%">
+                    <tr>
+                        <td colspan="2">
+                            <h4>
+                                Shipping Info:</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Name:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipToName)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipAddress1)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Address:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipAddress2)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            City:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipCity)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            State:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipState)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Zip:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipZip)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Country:
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.ShipCountry)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table width="100%" border="1">
+                    <tr>
+                        <th>
+                            Title
+                        </th>
+                        <th>
+                            Author
+                        </th>
+                        <th>
+                            Memo
+                        </th>
+                        <th>
+                            Type
+                        </th>
+                        <th>
+                            Qty
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Ext Price
+                        </th>
+                    </tr>
+                    @foreach (var item in Model.OrderItemDetail)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Author)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Memo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Type)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Qty)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ExtPrice)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <table border="1" width="100%">
+                    <tr>
+                        <th>
+                            Code:
+                        </th>
+                        <th>
+                            SubTotal:
+                        </th>
+                        <th>
+                            Tax:
+                        </th>
+                        <th>
+                            Frieght:
+                        </th>
+                        <th>
+                            Total:
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => model.PromoCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.SubTotal)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Tax)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Frieght)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => model.Total)
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>

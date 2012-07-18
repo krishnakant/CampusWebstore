@@ -1,0 +1,47 @@
+﻿<link href="@Url.Content("~/Content/Bootstrap/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<div>
+    <h1>
+        Images in @ViewBag.folder
+    </h1>
+    <br />
+    <p>
+        @Html.ActionLink("Upload more images", "FileUploader", "Admin", new { }, new { @class = "btn" })
+        @Html.ActionLink("Back to Galleries", "ManageImages", "Admin", new {})
+    </p>
+    <br /><br />
+
+    <div class="file-viewer">
+        <table class="table table-condensed  table-striped">
+            <thead>
+            <tbody>
+                @foreach (var image in ViewBag.files)
+                {
+                    var path = "http://" + ViewBag.path + image;
+                    var thumbPath = "http://" + ViewBag.path + "Thumbnails/" + image;
+                    <tr>
+                        <td>
+                            <div style="min-height: 140px;">
+                                <a href="@path" target="_blank">
+                                    <img src="@thumbPath" alt="@image" style="width: 150px;" />
+                                </a>
+                            </div>
+                        </td>
+                        <td>
+                            <p style="padding: 20px; font-size: 16px;">
+                                @image
+                            </p>
+                        </td>
+                        <td>
+                            <div class="pull-right" style="padding: 20px;">
+                                <a class="btn btn-danger" href="/Admin/DeleteFile/@image?dest=@ViewBag.dest&r=true" style="color: #ffffff">
+                                    <i class="icon-trash icon-white"></i>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr> 
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

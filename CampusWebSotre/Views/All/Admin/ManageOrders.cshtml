@@ -1,0 +1,95 @@
+﻿@model IEnumerable<CampusWebStore.Models.OrderViewModel>
+
+@{
+    ViewBag.Title = "ManageOrders";
+    
+}
+
+<h2>Orders:</h2>
+<script type="text/javascript">
+
+    var sortorder = "ASC";
+    
+    jQuery(document).ready(function() {
+
+        jQuery("#btnSubmit").click(function() {
+
+            var ordertoclose = '';
+
+            jQuery(".Orders").each(function() {
+
+                if (jQuery(this).is(":checked")) {
+                    ordertoclose += this.id + "]";
+                }
+            });
+
+            if (ordertoclose.length > 0) {
+
+                jQuery("#imgLoading").show();
+
+                if (confirm("Are you sure you,you want to close the selected order?")) {
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("JsonCloseOrders","Admin")',
+                        data: {
+                            OrderToClose: ordertoclose
+                        },
+                        success: function (data) {
+
+                            jQuery("#imgLoading").hide();
+
+                            jQuery("#divOrderList").html("");
+
+                            jQuery("#divOrderList").html(data);
+                        }
+                    });
+                }
+
+            } else {
+                alert("Please choose atleast one order to close");
+            }
+        });
+    });
+
+    //Sorting the order list...
+    function fnSort(sortby) {
+        
+        //Get Sort  Direction
+        if (sortorder == "ASC") {
+            sortorder = "DESC";
+        } else {
+            sortorder = "ASC";
+        }
+
+        jQuery("#imgLoading").show();
+        
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("JsonSortOrderList","Admin")',
+            data: {
+                SortBy: sortby,
+                SortDirection: sortorder
+            },
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                jQuery("#divOrderList").html("");
+
+                jQuery("#divOrderList").html(data);
+            }
+        });
+    }
+
+</script>
+
+<img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+
+<div id="divOrderList">
+    
+    @Html.Partial("EditorTemplates/ViewOrderList", Model)
+
+</div>
+<div>
+    <input type="button" id="btnSubmit" value="Close Checked Orders"/>
+</div>

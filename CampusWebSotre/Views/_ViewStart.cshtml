@@ -1,0 +1,9 @@
+﻿@using System.Configuration;
+@using System.Web.Configuration;
+
+@{
+    PagesSection pages = ConfigurationManager.GetSection("system.web/pages") as PagesSection;
+    string Theme = pages.Theme ?? "Default";
+
+    Layout = "~/Views/"+Theme+"/Shared/_Layout.cshtml";
+}

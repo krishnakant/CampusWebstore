@@ -1,0 +1,188 @@
+﻿@using CampusWebStore.Models
+@using System.Configuration
+@model IEnumerable<CatalogItemViewModel>
+@{
+    ViewBag.Title = ViewBag.Title;
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+@{
+    var path = ConfigurationManager.AppSettings["DomainName"]+"/";
+} 
+  <link rel="stylesheet" href="@Url.Content("~/Content/jquery.mobile-1.0b2.min.css")" />
+<script type="text/javascript" src="@Url.Content("~/js/input.js")"></script>
+<script src="@Url.Content("~/js/AjaxBase.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    var gridItems = '';
+    function AddToCart(id) {
+        //   var ddlSku = $();
+        var hdnsku = $("#hdn" + id).val();
+
+        var selectedText = $("#select" + id).text();
+
+        var splitselectedTest = selectedText.split("$");
+
+        var detail = $.trim(splitselectedTest[0].replace("-", " "));
+
+        var price = splitselectedTest[1];
+
+        var items = id + "," + hdnsku + "," + detail + "," + price + ",1," + price + "_";
+        var isAlraedyExist = id + "," + hdnsku + "," + detail;
+        if (gridItems.indexOf(isAlraedyExist) == -1) {
+            gridItems += items;
+        }
+        else {
+            alert("Already Added.");
+        }
+
+        ShowItemGrid(gridItems);
+    }
+    function ShowItemGrid(value) {
+
+        var items = value.split("_");
+
+        var itemGrid = '<tr><th width="40%">Title </th><th>Detail</th><th>Price</th><th>Qty</th><th>Total</th> </tr>';
+        if (items.length < 2) {
+            itemGrid = "";
+        }
+
+
+        for (var i = 0; i < items.length - 1; i++) {
+
+            if (i % 2 == 0) {
+
+                clase = 'odd';
+
+            }
+            else {
+
+                clase = 'even';
+            }
+
+            var item = items[i].split(",");
+
+            var id = item[0];
+            //     var course = item[7].replace(/\s/g, "-");
+
+            //Create the ddl to add the dropdown for the quantity**************************************
+            var ddl = '<p><select onchange="javascript:CalculatePrice(this.id);" style="width:40px;"  id="ddlQty' + id + i + '" >';
+
+            var hdnValue = item[0] + "," + item[2] + "," + item[3];
+
+            var qtyddl = item[4];
+            var totalPrice = item[5];
+
+            for (var j = 1; j <= 30; j++) {
+                if (j == qtyddl) {
+                    ddl += '<option selected value=' + j + '>' + j + '</option>';
+                }
+                else {
+                    ddl += '<option value=' + j + '>' + j + '</option>';
+                }
+            }
+            ddl += '</select></p>';
+
+            itemGrid += "<tr id='tr" + id + i + "' class='" + clase + "'><td><label>" + item[1] + "</label><input id='innerhdn" + id + i + "' value='" + items[i] + "' type='hidden' /></td><td>" + item[2] + "</td><td><label id='lblPrice" + id + i + "'>" + item[3] + "</label></td><td>" + ddl + "</td><td class='lastborder'><label id='lbl" + id + i + "'>" + item[5] + "</label><a href='#' id='" + id + i + "' onclick='javascript:Delete(this.id);' class='crose'><img src='../Images/Mobile/Delete_Black.png'></a></td></tr>";
+
+
+        }
+
+        $("#itemGrid").html("");
+
+        $("#itemGrid").html(itemGrid);
+
+
+    }
+    //*******************************Function to calculate the the price on change of the ddl quantity**********************
+    function CalculatePrice(id) {
+
+        var qty = $("#" + id).val();
+
+        var newId = id.replace("ddlQty", "");
+
+        var price = $("#lblPrice" + newId).text();
+
+        var total = parseFloat(price) * parseFloat(qty);
+
+        var hdnValue = $("#innerhdn" + newId).val();
+
+        var hdnValueSplit = hdnValue.split(",");
+
+        var hdnNewValue = hdnValueSplit[0] + "," + hdnValueSplit[1] + "," + hdnValueSplit[2] + "," + hdnValueSplit[3] + "," + qty + "," + total;
+
+        //comment on the 17/03/2012 add the total price at the 
+        gridItems = gridItems.replace(hdnValue, hdnNewValue);
+
+        $("#innerhdn" + newId).val(hdnNewValue);
+
+        $("#lbl" + newId).text(total);
+
+    }
+    //***********************************End of function*******************************************************
+    //***********************************Function to delete the item*******************************************
+    function Delete(id) {
+
+        if (confirm("Are you sure?")) {
+
+            //***************************Replace the value from the itemgrid ******************************
+            gridItems = gridItems.replace($("#innerhdn" + id).val() + "_", '');
+
+            ShowItemGrid(gridItems);
+
+        }
+    }
+
+    //***********************************End of fucntion********************************************************
+
+</script>
+
+@*<div id="headerproduct">
+    <!--header-->
+    <img alt="bar_top" src="@Url.Content("~/Content/Images/bar_top.png")" width="320" />
+</div>*@
+<!--//header-->
+<div class="cartcontainer">
+ <img  src="@Url.Content("~/Content/images/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore" id="logo"/>
+    <!--container-->
+    <div id="form">
+        <form id="form1" action="" name="">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro">
+            <a href="#" class="left">Store</a>
+        </div>
+        <div class="content-primary">
+            <ul data-role="listview" class="ui-listview">
+                @foreach (var m in Model)
+                {
+                      var image = m.Images.Contains("http");
+                    <li data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c">
+                        <div class="ui-btn-inner ui-li">
+                            <div class="ui-btn-text">
+                                <a href="@Url.Action("CatalogProductItems", "catalogs", new { Sku = m.Sku, Source = m.Source, Delc = m.Desc })" class="ui-link-inherit">
+                                
+                                @if (image)
+                                {
+                                     <img src="@m.Images"  class="ui-li-thumb"/>
+                                }
+
+                                else
+                                {
+                                     <img src="@(path+m.Images)" class="ui-li-thumb"/>
+                                }
+                                    <h3 class="ui-li-heading">@MvcHtmlString.Create(m.Title)</h3>
+                                    <p class="ui-li-desc">@m.Price</p>
+                                </a>
+                            </div>
+                            <span class="ui-icon ui-icon-arrow-r ui-icon-shadow"></span>
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+        <div class="clear">
+        </div>
+      
+        </form>
+    </div>
+</div>

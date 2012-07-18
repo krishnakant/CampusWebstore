@@ -1,0 +1,155 @@
+﻿@using CampusWebStore.Models
+@{
+    ViewBag.Title = "SellBack";
+    
+}
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/Styles/Desktop/colorbox.css")" media="screen" />
+<script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        jQuery(".divWhatIsIsbn").colorbox({
+            width: "600px",
+            height: "200px",
+            inline: true,
+            href: "#divWhatIsIsbn",
+            close: "Close"
+        });
+        $("#btnSearch").click(function () {
+            $("#processing").removeAttr("style");
+            var isbns = $("#txtIsbn").val();
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("SellBackBooks", "Home")',
+
+                data: { Isbn: isbns },
+
+                success: function (data, status, xhr) {
+                    $("#processing").attr("style", "visibility:hidden;display:block;");
+                    $("#viewSellBack").html(data);
+
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        });
+
+    });
+
+    //function to remove the item form the cart
+
+    function RemoveSellBackItem(id) {
+        $("#processing").removeAttr("style");
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("RemoveSellBackCartItem", "Home")',
+
+            data: { Id: id },
+
+            success: function (data, status, xhr) {
+                if (data != null) {
+
+                    var isSuccess = String(data.success);
+
+                    var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                    if (!isTrue)
+                    { $("#errMsg").text(data.errMsg); }
+
+                    else {
+                        $("#sellBackCartItems").html(data);
+                        $("#processing").attr("style", "visibility:hidden;display:block;");
+                        $("#errMsg").text('');
+
+                    }
+                    $("#processing").html('');
+                    //Function to reload the cartitems
+
+
+
+
+
+                }
+            }
+
+
+        });
+
+    }
+
+   
+</script>
+<h1 class="main_heading">Sell Back</h1>
+<br />
+<span id="errMsg"></span>
+<div>
+    <div>
+    </div>
+</div>
+<div id="sellBackCartItems">
+</div>
+<div id="contentBodyDivInner">
+    <p id="title">
+    </p>
+    <div>
+        <p>
+            <span>***Enter "DEMO" into the ISBN field to view a demo of the Buyback module</span>
+        </p>
+        <span style="font-size: small;">(Enter ISBN's seperated by newline or space)</span>
+        <br />
+		<textarea class="textarea1" id="txtIsbn" cols="20"
+            rows="2" name=""></textarea>
+        <a href="#" class="divWhatIsIsbn">What's an ISBN?</a>
+        <div style="visibility: hidden; display: block;" id="processing">
+            <img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")">Searching...
+        </div>
+        <input type="button" class="FlatCSSButton" title="Search" id="btnSearch" value="Search">
+        <br />
+        <div>
+        </div>
+        <div style="display: none; position: fixed; z-index: 100001;">
+        </div>
+		<span class="clrspan">&nbsp;</span>
+    </div>
+</div>
+<div style="display: none">
+    <div id="divWhatIsIsbn">
+        <div >
+            <div id="modalSearchHelp" class="news">
+                <table  cellspacing="0" cellpadding="0" border="0" class="modalsBackground">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table cellspacing="0" cellpadding="0" border="0">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                The International Standard Book Number (ISBN) is a unique commercial book identifier.
+                                                It is located on the back of each book. Please type this number into the textbox
+                                                on the search page. You can enter a 10 digit ISBN, or a 13, or a combination of
+                                                the two.
+                                            </td>
+                                            <td>
+                                                <img style="border-width: 0px;" src="@Url.Content("~/Content/images/Desktop/barcode_sellback.jpg")" id="">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="viewSellBack">
+    @*  @Html.Partial("EditorTemplates/ViewSellBackBooks")*@
+</div>
+<br /><br /><br />

@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "GetPage";
+    
+}
+<h3 align="center">
+    @{
+        var viewbackup = Request.QueryString["Backup"] ?? "";
+
+        var pagename1 = Request.QueryString["PageName"] ?? "";
+
+        var pageext = ".desc";
+
+        if (viewbackup == "backup")
+        {
+            pageext = ".descbackup";
+        }
+        else if (viewbackup == "preview")
+        {
+            pageext = ".previewdesc";
+        }
+        else
+        {
+            pageext = ".desc";
+        }
+
+        var sr1 = new StreamReader(Server.MapPath("~/CustomPages/" + pagename1 + pageext));
+
+        var heading = sr1.ReadToEnd();
+
+        sr1.Close();
+    }
+    @*<%--content will go here--%>*@
+    @MvcHtmlString.Create(heading)
+</h3>
+
+@{
+
+    var viewbackup1 = Request.QueryString["Backup"] ?? "";
+
+    var pagename = Request.QueryString["PageName"] ?? "";
+
+    var pageext1 = ".cws";
+
+    if (viewbackup1 == "backup")
+    {
+        pageext1 = ".backup";
+    }
+    else if (viewbackup1 == "preview")
+    {
+        pageext1 = ".preview";
+    }
+    else
+    {
+        pageext1 = ".cws";
+    }
+
+                
+    var sr = new StreamReader(Server.MapPath("~/CustomPages/" + pagename + pageext1));
+
+    //Reading the file data
+    var str = @sr.ReadToEnd().ToString();
+
+    sr.Close();
+                                      
+                                     
+}
+@*<%--content will go here--%>*@
+@MvcHtmlString.Create(str);

@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "PolicyMang";
+    
+}
+<div class="policy-manager-wrapper">
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/colorbox.css")" media="screen" />
+    <script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function () {
+
+            jQuery(".divCheckoutPolicy").colorbox({
+                width: "600px",
+                inline: true,
+                href: "#divCheckoutPolicy",
+                close: "Close"
+            });
+
+            jQuery("#btnSave").click(function () {
+
+                jQuery("#imgLoading").show();
+            
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '@Url.Action("JsonSavePolicyText","Admin")',
+                    data: {
+                        PolicyText: jQuery("#txtCheckoutPolicy").val()
+                    },
+                    success: function (data) {
+                        if (data.success) {
+
+                            jQuery("#imgLoading").hide();
+                        
+                            jQuery.colorbox.close();
+                        
+                            window.location.reload();
+                        }
+                    }
+                });
+
+
+            });
+
+        });    
+
+    </script>
+    <div>
+        <p>
+            This policy will be displayed to the users at the time they are checking out. This
+            policy should be setup like an agreement. They will have a "yes" and a "no" option
+            to hit when they see this policy. This policy should contain your main bullet points
+            to the user so they understand your policies.
+        </p>
+        <div>
+            <a href="#" class="divCheckoutPolicy">Edit Checkout Policy</a>
+        </div>
+        <div style="display: none">
+            <div id="divCheckoutPolicy">
+                <div>
+                    <h2 style="text-align: center;">
+                        Checkout Policy Editor</h2>
+                    <textarea id="txtCheckoutPolicy" rows="25" cols="60">@ViewData["Policy"]</textarea>
+                    <br />
+                    <p align="center">
+                        <input type="button" id="btnSave" value="Save and Exit" />
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

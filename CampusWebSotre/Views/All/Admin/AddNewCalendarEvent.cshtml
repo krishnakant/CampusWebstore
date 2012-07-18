@@ -1,0 +1,178 @@
+﻿@model CampusWebStore.Models.CalendarViewModel
+
+@{
+    ViewBag.Title = "Add New Calendar Event";
+    
+}
+@*
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+
+<h1 class="main_heading">Calendar Events - Add a new Event</h1>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/jquery-1.6.3.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/js/jquery-ui-1.8.11.js")" type="text/javascript"></script>
+
+<link href="@Url.Content("~/Content/jquery-ui-timepicker-addon.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/js/jquery-ui-timepicker-addon.js")" type="text/javascript"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#MeetingDate").datepicker
+({
+    dateFormate: 'yy/mm/dd',
+    showStatus: true,
+    showWeeks: true,
+    currentText: 'Now',
+    autoSize: true,
+    gotoCurrent: true,
+    showAnim: 'blind',
+    highlightWeek: true
+});
+    });
+
+    $(document).ready(function () {
+        $('#StartTime').timepicker({});
+        $('#EndTime').timepicker({});
+    });
+
+    //$(document).ready(function () {
+    //    $('#CalandarId').lost(function () {
+    //        //alert("I am here");
+    //        return this.value = '';
+    //    });
+    //});
+
+    $(document).ready(function () {
+        $('#StartTime').attr('readonly', true);
+
+        $("#CalandarId").blur(function () {
+            //alert(this.Value);
+            fnCheckAvailability(this.Value);
+        });
+    });
+    $(document).ready(function () {
+        $('#EndTime').attr('readonly', true);
+    });
+
+
+    //function to check availability of username....
+    function fnCheckAvailability(obj) {
+
+        var from = $("#CalandarId").val();
+
+        if (from == '') {
+            jQuery("#spanMessage").text('Please enter ID');
+        } else {
+            jQuery("#spanMessage").hide();
+
+            jQuery("#imgLoading").show();
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '@Url.Action("JsonCheckIdAvailability","Admin")',
+                data: {
+                    CalandarId: jQuery("#CalandarId").val()
+                },
+                success: function (data) {
+
+                    jQuery("#imgLoading").hide();
+
+                    if (data.success) {
+                        jQuery("#spanMessage").css("color", "green");
+
+                        jQuery("#spanMessage").text('That ID is available');
+
+                    } else {
+                        jQuery("#spanMessage").css("color", "red");
+
+                        jQuery("#spanMessage").text('That ID is taken');
+                        $("#CalandarId").focus();
+                    }
+
+                    jQuery("#spanMessage").show();
+                }
+            });
+        }
+
+    }
+
+
+</script>
+
+<div class="add_new_cal">
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div class="addlink-wrapper">
+        <span class="clr_span"></span>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CalandarId, new { @style = "text-align:left;" })
+        </div>
+        <div class="editor-field">
+            
+            @Html.EditorFor(model => model.CalandarId)
+            @Html.ValidationMessageFor(model => model.CalandarId)
+            <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+            <span id="spanMessage" style="display: none;"></span>
+
+        </div>
+
+        <span class="clr_span"></span>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title, new { @style = "text-align:left;" })
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+
+        <span class="clr_span"></span>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.MeetingDate, new { @style = "text-align:left;" })
+        </div>
+        <div class="editor-field">
+           @Html.EditorFor(model => model.MeetingDate)          
+
+        </div>
+
+
+        <span class="clr_span"></span>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.StartTime, new { @style = "text-align:left;" })
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.StartTime)
+           @* @Html.ValidationMessageFor(model => model.StartTime)*@
+        </div>
+
+        <span class="clr_span"></span>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EndTime, new { @style = "text-align:left;" })
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EndTime)
+            @*@Html.ValidationMessageFor(model => model.EndTime)*@
+        </div>
+<span class="clr_span"></span>
+        <div class="editor-label" >
+            @Html.LabelFor(model => model.Location, new { @style = "text-align:left;" })
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Location)
+           @* @Html.ValidationMessageFor(model => model.Location)*@
+        </div>
+    </div>
+<span class="clr_span"></span>
+            <input type="submit" style = "margin:0 0 0 111px;float: none;" value="Insert" />
+}
+
+</div>
+
+<div>
+   @* @Html.ActionLink("Back to List", "Index")*@
+</div>

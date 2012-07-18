@@ -1,0 +1,137 @@
+﻿@model CampusWebStore.Models.FacultyAdminViewModel
+@{
+    ViewBag.Title = "FacultyAdmin";
+    
+}
+<script type="text/javascript">
+
+
+    $(document).ready(function() {
+        //Update the email address
+        $("#btnUpdate").click(function() {
+         $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"> Please Wait...<br>');
+            var isError = false;
+            var primaryEmail = $("#FacultyAdminEmail").val();
+             var secondaryEmail = $("#FacultySecondaryEmail").val();
+            
+             if (!IsvalidEmailAddress(primaryEmail)) {
+                isError = true;
+                
+            }
+             if (!IsvalidEmailAddress(secondaryEmail)) {
+                isError = true;
+                
+            }
+            if(isError) {
+                alert("dsfsdfs");
+                $("#errMsg").html("Invalid email address");
+                return false;
+            }
+            else {
+                 $("#errMsg").html("");
+            }
+            
+              $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("JsonUpdateAdmin","Admin")',
+
+                dataType: "json",
+
+                data: $("form").first().serialize(),
+                
+                success: function (data, status, xhr) {
+                    $("#processing").html("");
+                    
+                    $("#errMsg").html(data.errMsg);
+                    
+                    $("#errMsg").fadeOut(2000);
+
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+            return true;
+        });
+      
+        
+        
+        //Show the list of terms for the faculty admin
+        $("#showTermList").click(function() {
+          $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"> Please Wait...<br>');
+            $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("JsonShowTerms", "Admin")',
+
+                    success: function(data) {
+
+                        $("#termList").html(data);
+                         $("#processing").html("");
+                    }
+
+                });
+        });
+    });
+   function AddNewTerm() {
+         $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"> Please Wait...<br>');
+       var ddl = @Html.Partial("EditorTemplates/StoresDropDown");
+       $("#AddNewTerm").html('<div>'+ddl+'</div><br/><br/><br/>Term Number :&nbsp;&nbsp;&nbsp;<input type="text" id="txtTerm" /><br /><a href="#" id="insert">Insert</a><a href="#" id="cancel">Cancel</a>');
+       $("#processing").html("");
+   }
+     //Function to check email address is valid or not
+    function IsvalidEmailAddress(text) {
+        var isValid = false;
+        try {
+
+            if (text.length > 0) {
+                var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+                if (emailReg.test(text)) {
+                   
+                    isValid = true;
+                }
+            }
+        } catch (e) {
+
+            isValid = false;
+        }
+
+        return isValid;
+    }
+</script>
+@*<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>*@
+<form action="#" >
+    <div id="errMsg" style="color:red;"></div>
+        <div id="processing" ></div>
+    <br />
+    <div class="editor-label">
+        @Html.LabelFor(model => model.FacultyAdminEmail)
+    </div>
+    
+    <div class="editor-field">
+        @Html.EditorFor(model => model.FacultyAdminEmail)
+      
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.FacultySecondaryEmail)
+    </div>
+    
+    <div class="editor-field">
+        @Html.EditorFor(model => model.FacultySecondaryEmail)
+     
+    </div>
+    <br />
+    <input type="button" id="btnUpdate" value="Update" />
+    <br />
+    
+    <a href="#" id="showTermList">View Terms Faculty is allowed to add adoptions to
+    </a>
+    <br /> <br />
+    <div id="termList">
+    </div>
+    
+</form>

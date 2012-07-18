@@ -1,0 +1,74 @@
+﻿@using System.Globalization
+@using CampusWebStore.Models
+@model IEnumerable<CampusWebStore.Models.SellBackCartViewModel>
+@{
+    ViewBag.Title = "SellBackCheckout";
+}
+@{if (Model.Any())
+  {
+      var objBaseMainConfigAdmin = new BaseMainConfigAdmin();
+      
+      var cashAmount = 0.00;
+      
+      var storeAmount = 0.00;
+      if(Model.Any())
+      {
+          <table table id="itemGrid" class="tXtBook carttable" >
+              <tr>
+                  <th>
+                      Title
+                  </th>
+                  @* requeire  // IWEB.BuyBack bbConfig = System.Configuration.ConfigurationManager.GetSection("buybackConfig") as IWEB.BuyBack;
+        GridView1.Columns[1].Visible = bbConfig.StoreCredit;*@
+                  @if (objBaseMainConfigAdmin.IwebBuyBackConfig.StoreCredit)
+                  {
+                      <th>
+                          Store Credit
+                      </th>
+                  }
+                  <th>
+                      Cash Price
+                  </th>
+              </tr>
+              @foreach (var m in Model)
+              {
+                  cashAmount += m.CashPrice;
+
+                  storeAmount += m.StoreCredit;
+
+                  <tr>
+                      <td>@MvcHtmlString.Create(@m.Title)
+                      </td>
+                      @if (objBaseMainConfigAdmin.IwebBuyBackConfig.StoreCredit)
+                      {
+                          <td>@m.StoreCredit
+                          </td>
+                      }
+                      <td>@m.CashPrice
+                      </td>
+                  </tr>
+
+
+
+              }
+          </table>
+          <br />
+          <br />
+          @Html.Label("CashTotal")
+          @cashAmount.ToString("C",new CultureInfo("en-us"))
+          <br />
+
+          @Html.Label("StoreTotal")
+          @storeAmount.ToString("C",new CultureInfo("en-us"))
+          <br />
+          <br />
+
+          <br />
+      }
+      <div style="float: right;">
+       <div id="divfooter" style="padding:10px 0"><a style="" class="buyNew" href="@Url.Action("PrintVoucher", "Account")" title="Checkout">Print Voucher</a><span class="clr"></span></div>
+        
+      </div>
+  }
+}
+

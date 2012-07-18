@@ -1,0 +1,6 @@
+<Modules>
+  <Module PersistentId="D94D5DA6-D364-4428-836F-DED4DCCBFDDC" ModuleId="CampusWebSotre" />
+  <Module PersistentId="25C007E0-3247-4F68-9213-D57EB08BDB93" ModuleId="CampusWebStore.Data" />
+  <Module PersistentId="648A64F3-9FD7-41BD-82D1-44BF0D7BF34E" ModuleId="CampusWebStore.Business" />
+  <Module PersistentId="B3879CCF-4720-485A-BB64-D5B7AE88B4BF" ModuleId="CampusWebStore.Shared" />
+</Modules>

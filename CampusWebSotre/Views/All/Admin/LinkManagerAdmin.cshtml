@@ -1,0 +1,106 @@
+﻿@{
+    ViewBag.Title = "Link Manager Admin";
+}
+
+<link href="@Url.Content("~/js/jquery-ui-1.8.7.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/js/ui.multiselect.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/js/ui.jqgrid.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/js/grid.locale-en.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/js/themes/base/jquery.jqGrid.min.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/js/jquery.ui.selectable.css")" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript" language="javascript">
+
+    //  *********************** This Jquery code for Show grid**********************//
+    var LinkOrderID = 0;
+
+    var campId = 0;
+
+    jQuery(document).ready(function () {
+    
+        jQuery("#list").jqGrid({
+
+            url: '@Url.Action("LinkManagerGrid", "Admin")',
+            datatype: 'json',
+            mtype: 'Post',
+            colNames: ['Link Order', 'Link Title', 'Link Address'],
+            colModel: [
+                     { name: 'LinkOrder', index: 'LinkOrder', width: 80, align: 'left', sortable: true, editable: true, hidden: false },
+
+                     { name: 'LinkTitle', index: 'LinkTitle', width: 230, align: 'left', sortable: true, editable: true, hidden: false },
+
+                   { name: 'LinkAddress', index: 'LinkAddress', width: 350, align: 'left', sortable: true, editable: true}],
+
+            pager: jQuery('#pager'),
+            rowNum: 5,
+            sortname: 'LinkOrder',
+            sortorder: "asc",
+            rowList: [5, 10, 20, 50],
+            viewrecords: true,
+            imgpath: '',
+            hoverrows: false,
+            hover: false,
+            height: "300",
+            caption: 'Link Detail',
+
+
+            //*************************** Function to get campaignId when grid is loaded *********************************//
+
+            gridComplete: function () {
+                var count = 1;
+              $("#list tr").each(function () {
+                    if ($(this).attr('id') > 0) {
+                        //alert('grid');
+                        LinkOrderID = $("#" + $(this).attr('id') + " td:first-child").text();
+                        //alert('cmapid=' + campId);
+                        //$(this).attr('id', count);
+                        $(this).attr('id', LinkOrderID);
+                        //alert(campaignId);
+                        count++;
+                    }
+                });
+            },
+            //***************************Function to highlight the row when delete is succeed******************************//
+            onSelectRow: function () {
+                //alert('select');
+                $("#list tr").each(function () {
+                    if ($(this).attr('aria-selected')) {
+                        campId = $(this).attr('id');
+                        //alert(campId);
+                    }
+                });
+            }
+        });
+
+        //alert("HELLO WORLD!");
+
+        //*******************navGrid is define in min.js,through which edit and delete symbol is display********************//
+        jQuery("#list").jqGrid('navGrid', "#pager", { edit: true, add: false, del: true },
+
+        { url: '@Url.Action("EditLinkOrderXml", "Admin")' },
+        {},
+        { url: '@Url.Action("DeleteLinkOrder", "Admin")' });
+    });
+    
+</script>
+
+<h1>
+    Link Manager
+</h1>
+
+<p align="justify">
+    Control your quick links here by organizing the order, editing title and address
+    to your links. You may also delete and add links here.
+</p>
+
+<div class="alignleft" style="width:600px;">
+    <a id="hlAddLink1" class="alignleft" style="font-size: 18px;" href="@Url.Action("AddLinkAdmin", "Admin")">
+        Click here to add a new link
+    </a>
+</div>
+<table id="list" class="scroll" cellpadding="0" cellspacing="0">
+</table>
+<table id="subList" class="scroll" cellpadding="0">
+</table>
+<div id="pager">
+</div>

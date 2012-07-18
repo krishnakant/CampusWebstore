@@ -1,0 +1,110 @@
+﻿@{
+    ViewBag.Title = "Calendar Admin";
+}
+<link href="@Url.Content("~/js/jquery-ui-1.8.7.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/js/ui.multiselect.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/js/ui.jqgrid.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/js/grid.locale-en.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/js/themes/base/jquery.jqGrid.min.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/js/jquery.ui.selectable.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript" language="javascript">
+
+    //  *********************** This Jquery code for Show grid**********************//
+    var campaignId = 0;
+
+    var campId = 0;
+
+    jQuery(document).ready(function () {
+
+
+        //$("#userId").val('@Session["Emailid"]');
+
+        //alert("HELLO WORLD!");
+
+        jQuery("#list").jqGrid({
+
+            url: '@Url.Action("CalendarnGrid", "Admin")',
+            datatype: 'json',
+            mtype: 'Post',
+            colNames: ['CalandarId', 'Title', 'MeetingDate', 'StartTime', 'EndTime', 'Location'],
+            colModel: [
+                     { name: 'CalandarId', index: 'CalandarId', width: 10, align: 'left', sortable: true, editable: true, hidden: true },
+
+                     { name: 'Title', index: 'Title', width: 200, align: 'left', sortable: true, editable: true, hidden: false },
+
+                    { name: 'MeetingDate', index: 'MeetingDate', width: 120, align: 'left', sortable: true, editable: true },
+
+                    { name: 'StartTime', index: 'StartTime', width: 120, align: 'left', sortable: true, editable: true },
+
+                    { name: 'EndTime', index: 'EndTime', width: 120, align: 'left', sortable: true, editable: true },
+
+                    { name: 'Location', index: 'Location', width: 100, align: 'left', sortable: true, editable: true}],
+
+            pager: jQuery('#pager'),
+            rowNum: 5,
+            sortname: 'CalandarId',
+            sortorder: "asc",
+            rowList: [5, 10, 20, 50],
+            viewrecords: true,
+            imgpath: '',
+            hoverrows: false,
+            hover: false,
+            height: "400",
+            caption: 'Events List',
+            
+            //***************************Function to get campaignId when grid is loaded*********************************//
+
+            gridComplete: function () {
+                var count = 1;
+                //alert('grid');
+                $("#list tr").each(function () {
+                    if ($(this).attr('id') > 0) {
+                        //alert('grid');
+                        campaignId = $("#" + $(this).attr('id') + " td:first-child").text();
+                        //alert('cmapid=' + campId);
+                        //$(this).attr('id', count);
+                        $(this).attr('id', campaignId);
+                        //alert(campaignId);
+                        count++;
+                    }
+                });
+            },
+            //***************************Function to highlight the row when delete is succeed******************************//
+            onSelectRow: function () {
+                //alert('select');
+                $("#list tr").each(function () {
+                    if ($(this).attr('aria-selected')) {
+                        campId = $(this).attr('id');
+                        //alert(campId);
+                    }
+                });
+            }
+        });
+
+        //alert("HELLO WORLD!");
+
+        //*******************navGrid is define in min.js,through which edit and delete symbol is display********************//
+        jQuery("#list").jqGrid('navGrid', "#pager", { edit: true, add: false, del: true },
+
+        { url: '@Url.Action("EditCalenderXml", "Admin")' },
+        {},
+        { url: '@Url.Action("DeleteCalendarElement", "Admin")' });
+    });
+    
+</script>
+<h1>Calendar - Manage Events</h1>
+
+<a id="AddNewHyperLink" class="alignleft" style="font-size: 18px;" href="@Url.Action("AddNewCalendarEvent", "Admin")">
+    Add new Event
+</a>
+ - 
+<a id="hlViewUpdated" style="font-size: 18px;" href="@Url.Action("Calendar", "Home")">
+    View Updated Calendar
+</a>
+
+<table id="list" class="scroll" cellpadding="0" cellspacing="0">
+</table>
+<table id="subList" class="scroll" cellpadding="0">
+</table>
+<div id="pager">
+</div>

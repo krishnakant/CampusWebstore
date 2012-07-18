@@ -1,0 +1,422 @@
+﻿@using System.Xml;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title Campus WebStore</title>
+    <link href="http://www.landmark.edu/a/c/screen.css" rel="stylesheet" media="screen, projection">
+    <link href="@Url.Content(ViewBag.CssPath + "desktop/style.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Nunito">
+    <link href='http://fonts.googleapis.com/css?family=Tienne' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/ico" href="http://www.landmark.edu/a/screen/icons/favicon.ico">
+    <link rel="apple-touch-icon" href="http://www.landmark.edu/a/screen/icons/apple-touch-icon.png">
+    <style type="text/css">
+        .tk-minion-pro {
+            font-family: "minion-pro-1","minion-pro-2",sans-serif;
+        }
+    </style>
+    <!--[if gte IE 9]>
+      <style type="text/css">
+        .gradient {
+           filter: none;
+        }
+      </style>
+    <![endif]-->
+    <!--[if IE]>
+        <link href="@Url.Content(ViewBag.CssPath + "desktop/iestyle.css")" rel="stylesheet" />
+    <![endif]-->
+    <script type="text/javascript">try { Typekit.load(); } catch (e) { }</script>
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <link href="http://www.landmark.edu/a/c/enhanced.css" rel="stylesheet" media="screen, projection">
+    <script src="@Url.Content("~/Scripts/jquery-1.6.4.min.js")" type="text/javascript"></script>
+
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-2.0.6-development-only.js")" type="text/javascript"></script>
+
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript">
+        function formatCurrency(num) {
+            num = isNaN(num) || num === '' || num === null ? 0.00 : num;
+            return parseFloat(num).toFixed(2);
+        }
+
+        //Function to show the cart items at top left corner of the page
+        function ViewCartItems() {
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("ViewCart", "web")',
+
+                success: function (data, status, xhr) {
+                    if (data != null) {
+                        var viewCart = '<a href=@Url.Action("ViewCartDetail", "Home")><img alt="View Cart" style="width: 20px;height:21px;" src="@Url.Content("~/Content/Images/Desktop/search.png")" /></a>&nbsp;&nbsp;<b>' + data.items + '</b> Items(s) Total <b>$' + formatCurrency(data.total) + '</b> @Html.ActionLink("Checkout", "checkout", "Account")';
+                        $(".viewcart").html(viewCart);
+                        $("#processing").html("");
+                        $(".image_process").html("");
+                    }
+                }
+
+
+            });
+        }
+        //        ViewCartItems();
+        //*********************************Function to add the books to the cart*************************************************
+
+        function AddToCart(isbn, priceType) {
+            $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")">Please Wait...<br>');
+            var newId = "";
+            var usedId = "";
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("AddToShoppingCart", "Home")',
+
+
+                data: { Isbn: isbn, PriceType: priceType },
+
+
+                success: function (data, status, xhr) {
+                    //********************************************8OCde to add the items into the ddl section****************************************************************
+                    if (data.success) {
+                        newId = "#new" + isbn;
+                        usedId = "#used" + isbn;
+                        rentalId = "#rental" + isbn;
+                        ebookId = "#ebook" + isbn;
+
+                        boughtImage = '@Url.Content("~/Content/images/DeskTop/bought-check.gif")';
+                        buyImage = '@Url.Content("~/Content/images/Desktop/cart-buy.gif")';
+
+                        if (priceType == "NEW") {
+                            $(newId).attr('src', boughtImage);
+                            $(usedId).attr('src', buyImage);
+                            $(rentalId).attr('src', buyImage);
+                            $(ebookId).attr('src', buyImage);
+                        }
+                        if (priceType == "USED") {
+                            $(newId).attr('src', buyImage);
+                            $(usedId).attr('src', boughtImage);
+                            $(rentalId).attr('src', buyImage);
+                            $(ebookId).attr('src', buyImage);
+                        }
+                        if (priceType == "RENTAL") {
+                            $(newId).attr('src', buyImage);
+                            $(usedId).attr('src', buyImage);
+                            $(rentalId).attr('src', boughtImage);
+                            $(ebookId).attr('src', buyImage);
+                        }
+                        if (priceType == "EBOOK") {
+                            $(newId).attr('src', buyImage);
+                            $(usedId).attr('src', buyImage);
+                            $(rentalId).attr('src', buyImage);
+                            $(ebookId).attr('src', boughtImage);
+                        }
+                        //    $("#processing").html("");
+                    }
+                    ViewCartItems();
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        }
+
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div role="banner" class=" ">
+            <div class="org-nav">
+                <div class="wrap">
+
+                    <strong class="logo"><a href="/" title="Home">Landmark College</a></strong>
+
+                    <ul role="navigation">
+                        <li><a href="http://www.landmark.edu/">College</a></li>
+                        <li><a href="http://www.landmark.edu/institute">LCIRT</a></li>
+                        <li><a href="http://www.landmark.edu/library">Library</a></li>
+                        <li class="on"><a href="http://www.landmark.edu/bookstore">Bookstore</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="header-nav" role="navigation">
+                <div class="wrap">
+                    <ul class="action-nav">
+                        <li><a href="http://www.landmark.edu/admissions/visit-our-campus/plan-a-visit">Plan a Visit</a></li>
+                        <li><a href="http://www.landmark.edu/admissions/apply-now">Apply Now</a></li>
+                        <li><a href="http://www.landmark.edu/make-a-gift">Make a Gift</a></li>
+                    </ul>
+
+
+                    <div class="service-nav">
+                        <ul class="utility-nav">
+                            <li><a href="http://www.landmark.edu/events-calendar">Events</a></li>
+                            <li><a href="http://www.landmark.edu/news">News</a></li>
+                            <li><a href="http://www.landmark.edu/student-tools">Current Students</a></li>
+                            <li class="last"><a href="http://www.landmark.edu/parent-tools">Parent Tools</a></li>
+                        </ul>
+
+                        <form class="search" method="post" action="http://www.landmark.edu/">
+                        <div class="hiddenFields">
+                            <input type="hidden" name="ACT" value="6">
+                            <input type="hidden" name="XID" value="fec510e253008de488cd0a07c4452c20d2fa27ee">
+                            <input type="hidden" name="RES" value="15">
+                            <input type="hidden" name="meta" value="1FGrFYnBskzQfK/tCpSZuOpCSBxUnyRr9bZxjqkDgk7KP080BtVMkkxbofHxazvhx8T4aKS1y7bSjS2uHhWpyDQfeBiUQwiCcxu4+dOYZLM5U+gMns5ITWihQuHYwK+YM7zDawQL2i0Bc0v7Qvk2Iq8LYRxDL0okajAr2f2OwySL5JODMUwyhbTneXaw495BIOAmXCdON/38SB/PRjNosBj6TZktUoP9+JxTmzQv77Huvb5roDaeWHb3m2Ytrm15hLRdym9bMNqb6UHFlFrpF5bwrLe0yymdMOVeb+23de2HAiCj/8BaJpTcSEdnpAHNQk3ZaSDQLQwTlNHDSGIZVnHxEBcw4NGJeI0uXZJUAhnleunfgh1E3mQrB+zs90WK">
+                            <input type="hidden" name="site_id" value="1">
+                        </div>
+
+
+                        <p>
+                            <label for="keywords" class="move">Search Landmark College</label>
+                            <input type="text" name="keywords" id="keywords">
+                            <input type="submit" class="btn" value="Search">
+                        </p>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-nav" role="navigation">
+                <ul>
+                    <li><a href="http://www.landmark.edu/why-landmark">Why Landmark?</a></li>
+                    <li><a href="http://www.landmark.edu/academics">Academics</a></li>
+                    <li><a href="http://www.landmark.edu/campus-life">Campus Life</a></li>
+                    <li><a href="http://www.landmark.edu/admissions">Admissions</a></li>
+                    <li><a href="http://www.landmark.edu/alumni-life">Alumni</a></li>
+                    <li><a href="http://www.landmark.edu/ld-and-adhd-resources">Learning Disabilities Resources</a></li>
+                    <li><a href="http://www.landmark.edu/strengthening-landmark">Strengthening Landmark</a></li>
+                </ul>
+            </div>
+
+            <div class="bookstore-nav-wrapper gradient">
+                <div class="bookstore-nav" role="navigation">
+                    <div class="bookstore-nav-menu">
+                        <ul>
+                            <li>@Html.ActionLink("Books", "CourseSearch", "Home")</li>
+                            <li>@Html.ActionLink("Apparel", "CatalogProduct", "catalogs", new { CatId = 132, Title = "Clothing" }, "")</li>
+                            <li>@Html.ActionLink("Accessories", "CatalogProduct", "catalogs", new { CatId = 151, Title = "Supplies" }, "")</li>
+                            <li>@Html.ActionLink("Gifts", "CatalogProduct", "catalogs", new { CatId = 151, Title = "Supplies" }, "")</li>
+                            <li>@Html.ActionLink("Supplies", "CatalogProduct", "catalogs", new { CatId = 151, Title = "Supplies" }, "")</li>
+                            <li>@Html.ActionLink("Computer Supplies", "CatalogProduct", "catalogs", new { CatId = 133, Title = "Computers" }, "")</li>
+                            @*<li>@Html.ActionLink("Alumni", "CatalogProduct", "catalogs", new { CatId = 150, Title = "Alumni" }, "")</li>*@
+                            <li>@Html.ActionLink("Buyback", "SellBackBooks", "Home")</li>
+                            @*<li>@Html.ActionLink("Rentals", "GetPage", "Admin", new { PageName = "Rentals" }, null)</li>*@
+                            <li>@Html.ActionLink("Calendar", "Calendar", "Home")</li>
+                        </ul>
+                        <div style="clear: both"></div>
+                    </div>
+                    <div class="bookstore-nav-cart">
+                         @{
+                                var user = "Guest"; 
+                            }
+                            @if (Session["USERINFO"] != null)
+                            {
+                                user = ((CampusWebStore.Shared.Models.UserModel)Session["USERINFO"]).FirstName;
+                            
+                                @Html.ActionLink("My Account", "MyAccount", "Account") <text>
+                                |</text>       
+                                @Html.ActionLink("SignOut", "LogOut", "Account")
+                            }
+                            else
+                            {
+                                @Html.ActionLink("Sign In", "LogOn", "Account", null, new { id = "logonLink" })
+                            }
+                        &nbsp;
+                        <span class="viewcart">@Html.Partial("Widgets/ViewCart")</span>
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+            </div>
+        </div>
+
+        <span class="clr"></span>
+        <div class="content">
+            <div class="wrap">
+                <div class="secondary">
+                    <h1 class="leftnav">Catalogs</h1>
+                    @Html.Partial("Widgets/CatalogList")
+                    <br />
+                    <br />
+                    <h1 class="quicklinks_heading">Quick Links</h1>
+                    <ul class="quicklinks">
+                        @{
+                            if (ViewBag.objBaseMainConfigAdmin.IwebConfigAdmin.UseQuickLinks)
+                            {
+                                XmlDataDocument xmlDox = new XmlDataDocument();
+                                xmlDox.DataSet.ReadXmlSchema(Server.MapPath("~/QuickLinks.xml"));
+                                xmlDox.Load(Server.MapPath("~/QuickLinks.xml"));
+                                var links = xmlDox.DataSet.Tables["QuickLink"];
+
+                                for (int i = 1; i < links.Rows.Count; i++)
+                                {
+                            <li><a href="@links.Rows[i]["LinkAddress"].ToString()">@links.Rows[i]["LinkTitle"].ToString()</a></li>
+                                }
+                            }
+                            else
+                            {
+                            <li><a href="#">Home Page</a></li>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Portfolio</a></li>
+                            <li><a href="#">Point of Sale</a></li>
+                            <li><a href="#">TextBook Management </a></li>
+                            <li><a href="#">Smart Suite Solution</a></li>
+                            <li><a href="#">Introduction Video</a></li>
+                            <li><a href="#">Contact Us</a></li>
+                            }
+                        }
+                    </ul>
+                    <span class="clr"></span>
+                    <span class="verisign"></span>
+                </div>
+                <div class="main" role="main">
+                    @RenderBody()
+                    <span class="clr"></span><span class="create_bottomline"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tools">
+        <div class="wrap">
+
+            <h2 class="student-tools">
+                <a id="student-tools-link" href="javascript:void(0)" onclick="openBlock('student-tools')">Current Students
+                </a>
+            </h2>
+            <ul id="student-tools-block" style="display: none;">
+                <li><a href="https://imail.landmark.edu/gw/webacc">WebAccess Email</a></li>
+                <li><a href="https://intranet.landmark.edu/">Intranet</a></li>
+                <li><a href="https://intranet.landmark.edu/isis/">ISIS</a></li>
+                <li><a href="http://courses.landmark.edu/">Moodle (Online Courses) Library</a></li>
+                <li><a href="https://mercury.landmark.edu/self/Home.aspx">Self-Service</a></li>
+                <li><a href="http://www.landmark.edu/student_events/calendar/monthview/2012_03.htm">Calendar</a></li>
+                <li><a href="https://intranet.landmark.edu/lists/absences/">Faculty Absences</a></li>
+                <li><a href="http://intranet.landmark.edu/student_affairs/hours/building_hours.cfm">Building Hours</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/residential-life1/shuttle-services/">Shuttle Service</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/student-activities-organizations/wlmc-radio/">WLMC Radio</a></li>
+            </ul>
+
+            <h2 class="parent-tools">
+                <a id="parent-tools-link" href="javascript:void(0)" onclick="openBlock('parent-tools')">Parent Tools
+                </a>
+            </h2>
+            <ul id="parent-tools-block" style="display: none;">
+                <li><a href="http://www.landmark.edu/academic_events/calendar/month/2012_03.htm">Academic Calendar</a></li>
+                <li><a href="http://www.landmark.edu/academics/academic-support-services">Academic Support</a></li>
+                <li><a href="http://www.landmark.edu/student_events/calendar/monthview/2012_03.htm">Activity Calendar</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/campus-offices">Campus Offices</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/counseling-and-health-programs">Counseling &amp; Health Services</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/campus-offices/office-of-parent-services/common-questions10">Parent FAQs</a></li>
+                <li><a href="http://quikpay.landmark.edu/">Pay Online</a></li>
+                <li><a href="http://www.landmark.edu/admissions/visit-our-campus/plan-a-visit">Plan a Visit</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/campus-offices/safety-security">Safety &amp; Security</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/residential-life1/shuttle-services">Shuttle &amp; Transportation</a></li>
+                <li><a href="http://www.landmark.edu/academics/summer-and-january-programs">Summer Programs</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/student-activities-organizations/student-newspaper-the-independent">The Independent</a></li>
+                <li><a href="http://www.landmark.edu/campus-life/student-activities-organizations/wlmc-radio">WLMC Radio</a></li>
+
+
+            </ul>
+        </div>
+    </div>
+    <div class="footer" role="contentinfo">
+        <div class="wrap">
+
+            <div class="col-a">
+                <a class="map" href="http://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1+River+Road+South+Putney,+Vermont+05346&amp;aq=&amp;sll=49.267805,-86.44043&amp;sspn=11.042649,43.110352&amp;ie=UTF8&amp;hq=&amp;hnear=1+River+Rd+S,+Putney,+Vermont+05346&amp;z=15">
+                    <img border="0" alt="Landmark College" src="/App_Themes/@ViewBag.theme/staticmap.jpg">
+                </a>
+
+                <address>
+                    <strong>Landmark College</strong><br>
+                    1 River Road South<br>
+                    Putney, Vermont 05346
+                </address>
+
+                <ul>
+                    <li><a href="http://www.landmark.edu/maps-and-directions">Maps &amp; Directions</a></li>
+                    <li><a href="http://www.landmark.edu/virtual-tour">Virtual Tour</a></li>
+                    <li><a href="http://www.landmark.edu/campus-life/campus-offices">Campus Offices</a></li>
+                    <li><a href="http://www.landmark.edu/campus-life/campus-offices/human-resources">Employment Opportunities</a></li>
+                </ul>
+            </div>
+
+            <div class="col-b">
+                <strong class="move">Contact By Phone:</strong>
+                <ul>
+                    <li>Admissions
+				<span class="highlight">802.387.6718</span>
+                    </li>
+                    <li>Institute for Research and Training
+				<span class="highlight">802.387.1662</span>
+                    </li>
+                    <li>All Other Inquiries
+				<span class="highlight">802.387.4767</span>
+                    </li>
+                </ul>
+            </div>
+
+            <strong class="move">Connect with Landmark College:</strong>
+
+            <ul class="social">
+                <li><a class="fb" href="https://www.facebook.com/pages/Landmark-College/386235728069684">Facebook</a></li>
+                <li><a class="youtube" href="http://www.youtube.com/user/LandmarkChannel">YouTube</a></li>
+                <li><a class="linkedin" href="http://www.linkedin.com/groups?gid=2233505">LinkedIn</a></li>
+                <li>
+                    <span class="st_twitter_large" displaytext="Tweet" st_processed="yes"><span style="text-decoration: none; color: #000000; display: inline-block; cursor: pointer;" class="stButton"><span class="stLarge" style="background-image: url(http://w.sharethis.com/images/twitter_32.png);"></span>
+                        <img src="@{ string checkBig = ViewBag.ImgPath + "Desktop/check-big.png"; @checkBig }" style="position: absolute; top: -7px; right: -7px; width: 19px; height: 19px; max-width: 19px; max-height: 19px; display: none; ">
+                    </span></span>
+                </li>
+            </ul>
+
+
+            <ul class="legal">
+                <li>©<!--?=date('Y')?-->
+                    Total Computing Solutions. All Rights Reserved.</li>
+                <li>Powered by: <a href="http://www.total-computing.com">Campus Webstore</a></li>
+                @*<li><a href="http://www.landmark.edu/contact-us">Contact Us</a></li>
+                <li><a href="https://intranet.landmark.edu/">Intranet</a></li>
+                <li><a href="http://www.landmark.edu/privacy-policy">Privacy Policy</a></li>
+                <li><a href="http://www.landmark.edu/public-disclosure">Public Disclosure</a></li>
+                <li><a href="http://www.landmark.edu/sitemap">Sitemap</a></li>*@
+            </ul>
+
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        function openBlock(block) {
+            if ($("#" + block + "-link").hasClass('on')) {
+                $("#" + block + "-link").removeClass('on');
+                $("#" + block + "-block").css(
+                    'display', 'none'
+                );
+            }
+            else {
+                $("#" + block + "-link").addClass('on');
+                $("#" + block + "-block").css(
+                    'display', 'block'
+                );
+
+                if (block == 'parent-tools') {
+                    $("#student-tools-link").removeClass('on');
+                    $("#student-tools-block").css(
+                        'display', 'none'
+                    );
+                }
+                else {
+                    $("#parent-tools-link").removeClass('on');
+                    $("#parent-tools-block").css(
+                        'display', 'none'
+                    );
+                }
+            }
+        }
+    </script>
+</body>
+</html>

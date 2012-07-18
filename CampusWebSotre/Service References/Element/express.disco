@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="https://certtransaction.elementexpress.com/express.asmx?wsdl" docRef="https://certtransaction.elementexpress.com/express.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="https://certtransaction.elementexpress.com/express.asmx" xmlns:q1="https://transaction.elementexpress.com" binding="q1:ExpressSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="https://certtransaction.elementexpress.com/express.asmx" xmlns:q2="https://transaction.elementexpress.com" binding="q2:ExpressSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

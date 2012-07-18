@@ -1,0 +1,79 @@
+﻿@model IEnumerable<CampusWebStore.Shared.Models.ShoppingCartModel>
+
+@{
+   
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+    <link rel="stylesheet" href="@Url.Content("~/Content/jquery.mobile-1.0b2.min.css")" />
+<script type="text/javascript">
+    //function to calculate total
+    function CalculateTotal(id) {
+       
+    $.ajax({
+
+        type: "POST",
+
+        url: '@Url.Action("UpdateItemQty","Home")',
+
+        data: { Id: id, Quantity: $("#" + id).val() },
+
+        success: function (data, status, xhr) {
+            if (data != null) {
+                //Function to reload the cartitems
+              //  ViewCartItems();
+                
+                $("#cartITems").html(data);
+            }
+        }
+
+
+    });
+    
+}
+//Function to remove the items for the cart
+function RemoveCartItem(id) {
+
+    $.ajax({
+
+        type: "POST",
+
+        url: '@Url.Action("RemoveCartItems","Home")',
+
+        data: { Id: id },
+
+        success: function (data, status, xhr) {
+            if (data != null) {
+                
+                //Function to reload the cartitems
+              //  ViewCartItems();
+
+                $("#cartITems").html(data);
+            }
+        }
+
+
+    });
+
+}
+</script>
+
+</div>
+<!--//header-->
+<div class="cartcontainer">
+ <img  src="@Url.Content("~/Content/images/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore" id="logo"/>
+    <!--container-->
+    <div id="form">
+        <form id="form1" action="" name="">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro minheight">
+            <a href="#" class="left">Shopping Cart</a>
+        </div>
+@{
+    <div  id="cartITems">
+    @Html.Partial("EditorTemplates/ViewCartItems",Model)
+    </div>
+	
+}
+</form></div></div>

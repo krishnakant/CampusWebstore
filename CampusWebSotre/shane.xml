@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<buybackConfig category="BuyBack" DisplayPrices="true" RequireLogin="true"
+    RetailBooks="true" WholesaleBooks="false" Vouchers="false"
+    ShowBuyBackNeed="true" StoreCredit="false" VoucherExpire="1"
+    enabled="true" />
+

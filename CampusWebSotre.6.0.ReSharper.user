@@ -1,0 +1,91 @@
+<Configuration>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="B3879CCF-4720-485A-BB64-D5B7AE88B4BF/d:Models/f:StoreModel.cs" caret="0" fromTop="0" />
+      <File id="B3879CCF-4720-485A-BB64-D5B7AE88B4BF/d:Models/f:SectionModel.cs" caret="0" fromTop="0" />
+      <File id="B3879CCF-4720-485A-BB64-D5B7AE88B4BF/d:Models/f:CourseModel.cs" caret="0" fromTop="0" />
+      <File id="B3879CCF-4720-485A-BB64-D5B7AE88B4BF/f:Constants.cs" caret="0" fromTop="0" />
+      <File id="648A64F3-9FD7-41BD-82D1-44BF0D7BF34E/d:Services/f:TermService.cs" caret="0" fromTop="0" />
+      <File id="648A64F3-9FD7-41BD-82D1-44BF0D7BF34E/d:Services/f:SectionService.cs" caret="0" fromTop="0" />
+      <File id="648A64F3-9FD7-41BD-82D1-44BF0D7BF34E/d:Services/f:DepartmentService.cs" caret="0" fromTop="0" />
+      <File id="648A64F3-9FD7-41BD-82D1-44BF0D7BF34E/d:Services/f:CourseService.cs" caret="0" fromTop="0" />
+      <File id="25C007E0-3247-4F68-9213-D57EB08BDB93/d:Daos/f:StoreDaos.cs" caret="0" fromTop="0" />
+      <File id="25C007E0-3247-4F68-9213-D57EB08BDB93/d:Daos/f:DepartmentDaos.cs" caret="0" fromTop="0" />
+      <File id="25C007E0-3247-4F68-9213-D57EB08BDB93/d:Daos/f:CourseDaos.cs" caret="0" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Contact.iPhone.cshtml" caret="41" fromTop="4" />
+      <File id="B3879CCF-4720-485A-BB64-D5B7AE88B4BF/d:Models/f:DepartmentModel.cs" caret="0" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Controllers/f:AccountController.cs" caret="289" fromTop="4" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml1" caret="0" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/f:_Layout.Mobile.cshtml" caret="0" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Index.iPhone.cshtml" caret="555" fromTop="15" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Index.cshtml" caret="0" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/f:_LogOnPartial.cshtml" caret="594" fromTop="10" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml" caret="30083" fromTop="26" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/f:_Layout.cshtml" caret="838" fromTop="15" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Controllers/f:WebController.cs" caret="98" fromTop="5" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/f:_Layout.iPhone.cshtml" caret="518" fromTop="10" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/f:Global.asax.cs" caret="1292" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Utils/f:UnityControllerFactory.cs" caret="666" fromTop="16" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/d:EditorTemplates/f:StoresDropDown.cshtml" caret="139" fromTop="4" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Models/f:StoreViewModel.cs" caret="167" fromTop="9" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="11241" fromTop="24" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Controllers/f:HomeController.cs" caret="1667" fromTop="0" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/f:Web.config" caret="1227" fromTop="29" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/f:Global.asax.cs" caret="3677" fromTop="31" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/f:Global.asax.cs" caret="2945" fromTop="16" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml" caret="27568" fromTop="14" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml" caret="28186" fromTop="29" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml" caret="28828" fromTop="29" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml" caret="29454" fromTop="29" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.iPhone.cshtml" caret="30083" fromTop="29" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="1149" fromTop="15" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="25997" fromTop="7" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/f:_Layout.cshtml" caret="1149" fromTop="13" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/f:_Layout.cshtml" caret="962" fromTop="17" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Controllers/f:HomeController.cs" caret="921" fromTop="10" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Models/f:StoreViewModel.cs" caret="167" fromTop="9" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="66" fromTop="1" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="3445" fromTop="39" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Controllers/f:HomeController.cs" caret="1317" fromTop="16" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="27527" fromTop="19" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Controllers/f:HomeController.cs" caret="1684" fromTop="25" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="25631" fromTop="6" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="28774" fromTop="13" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="29403" fromTop="16" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="30030" fromTop="22" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="28139" fromTop="22" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Shared/d:EditorTemplates/f:StoresDropDown.cshtml" caret="137" fromTop="3" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="5840" fromTop="28" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="5517" fromTop="21" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="8196" fromTop="22" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="8746" fromTop="16" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="10879" fromTop="16" />
+      <File id="D94D5DA6-D364-4428-836F-DED4DCCBFDDC/d:Views/d:Home/f:Course.cshtml" caret="11234" fromTop="24" />
+    </RecentEdits>
+  </RecentFiles>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="HtmlCodeCompletionContext">
+      <Item value="Contact1.cshtml" priority="5" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+</Configuration>

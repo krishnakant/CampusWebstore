@@ -1,0 +1,356 @@
+﻿@model CampusWebStore.Models.AccountSettingsViewModel
+@{
+    ViewBag.Title = "AccountDetails";
+    
+
+}
+
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        jQuery('input[id*="chkSameAs"]').click(function () {
+            var status = jQuery('input[id*="chkSameAs"]').is(":checked") ? "on" : "off";
+            if (status == "on") {
+                jQuery('input[id*="ShipToName"]').val(jQuery('input[id*="FirstName"]').val() + ' ' + jQuery('input[id*="LastName"]').val());
+                jQuery('input[id*="ShipAddress"]').val(jQuery('input[id*="Address"]').val());
+                jQuery('input[id*="ShipAddress2"]').val(jQuery('input[id*="Address2"]').val());
+                jQuery('input[id*="ShipCity"]').val(jQuery('input[id*="City"]').val());
+                jQuery('select[id*="ShipState"]').val(jQuery('select[id*="State"]').val());
+                jQuery('select[id*="ShipCountry"]').val(jQuery('select[id*="Country"]').val());
+                jQuery('input[id*="ShipZip"]').val(jQuery('input[id*="Zip"]').val());
+            }
+        });
+
+
+        jQuery("#btnSubmit").click(function () {
+            jQuery("#Password").val('test123456');
+            jQuery("#ConfirmPassword").val('test123456');
+        });
+
+
+        jQuery("#Country").val("@Model.Country");
+
+        jQuery("#ShipCountry").val("@Model.ShipCountry");
+
+
+        //        jQuery("#Password").onkeypress(function () {
+
+        //            alert(jQuery("#Password").val());
+        //            var strength = 1;
+
+        //            /*length 5 characters or more*/
+        //            if (this.value.length >= 5) {
+        //                strength++;
+        //            }
+
+        //            /*contains lowercase characters*/
+        //            if (this.value.match(/[a-z]+/)) {
+        //                strength++;
+        //            }
+
+        //            /*contains digits*/
+        //            if (this.value.match(/[0-9]+/)) {
+        //                strength++;
+        //            }
+
+        //            /*contains uppercase characters*/
+        //            if (this.value.match(/[A-Z]+/)) {
+        //                strength++;
+        //            }
+
+        //            alert(strength);
+
+        //        });
+
+
+    });
+
+
+
+    //function to changee password...
+    function fnChangePassword() {
+
+        var oldPassword = jQuery("#OldPassword").val();
+        var password = jQuery("#txtPassword").val();
+        var cofirmPassword = jQuery("#txtConfirmPassword").val();
+
+        var hasError = false;
+        if (oldPassword) {
+
+            $("#spnOldPassword").text("");
+
+        } else {
+            hasError = true;
+            $("#spnOldPassword").text(".required");
+        }
+        if (password) {
+
+            if (!password.match(/^.*(?=.{6,})(?=.*[a-zA-Z])[a-zA-Z0-9]+$/) || password.length < 6) {
+                hasError = true;
+                $("#spnPassword").text('Password must contain 1 numeric character, 1 alpha character, and must be at least 6 characters long.');
+            } else {
+
+                $("#spnPassword").text("");
+            }
+
+        } else {
+            hasError = true;
+            $("#spnPassword").text(".required");
+        }
+        if (password != cofirmPassword) {
+            hasError = true;
+            $("#spnConfirmPassword").text('Password and confirm password are not same.');
+        }
+        else {
+            $("#spnConfirmPassword").text('');
+        }
+        if (!hasError) {
+
+
+            jQuery("#imgLoading").show();
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '@Url.Action("JsonChangePassword", "Account")',
+                data: {
+                    UserName: '@Model.UserName',
+                    OldPassword: jQuery("#OldPassword").val(),
+                    NewPassword: jQuery("#txtPassword").val()
+                },
+                success: function (data) {
+
+                    jQuery("#imgLoading").hide();
+
+                    if (data.success) {
+                        $("#spnConfirmPassword").text('Password has been changed successfully');
+                        $("#spnConfirmPassword").fadeIn('slow');
+                    } else {
+                        $("#spnConfirmPassword").text('Old password is not correct');
+                    }
+                }
+            });
+        }
+
+    }
+
+
+
+
+</script>
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<div id="createaccount">
+    <h1 class="main_heading">Account Details</h1>
+    @using (Html.BeginForm())
+    {
+        
+        @Html.ValidationSummary(true)
+        <div class="accountdetails">
+            <h2 class="sub_heading">Account Details
+            </h2>
+            @Html.HiddenFor(model => model.UserName)
+            <div class="editor-label">
+                <label for="ConfirmPassword">
+                    Old Password</label>
+            </div>
+            <div class="editor-field">
+                <input type="password" id="OldPassword" name="OldPassword" />
+                <span id="spnOldPassword" style="color: red"></span>
+            </div>
+            <div class="editor-label">
+                <label for="Password">
+                    New Password</label>
+            </div>
+            <div class="editor-field">
+                @Html.Password("txtPassword")
+                <span id="spnPassword" style="color: red"></span>
+
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.ConfirmPassword)
+            </div>
+            <div class="editor-field">
+                @Html.Password("txtConfirmPassword")
+                <span id="spnConfirmPassword" style="color: red"></span>
+                <p>
+                    <a href="javascript:fnChangePassword();" class="submit_btn">Change Password</a>
+                    <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                </p>
+            </div>
+        </div>
+        <span class="clr"></span>
+        <div id="creditcardandshipping">
+            <div class="creditcard">
+                <h2 class="sub_heading">Shipping Information</h2>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.FirstName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LastName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Address)
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address2)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Address2)
+                    @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.City)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.City)
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.State)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.State)
+                    @Html.ValidationMessageFor(model => model.State)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Zip)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Zip)
+                    @Html.ValidationMessageFor(model => model.Zip)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Country)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Country)
+                    @Html.ValidationMessageFor(model => model.Country)
+                </div>
+                <br />
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+                <br />
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.DayPhone)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.DayPhone)
+                    @Html.ValidationMessageFor(model => model.DayPhone)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Evening)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Evening)
+                    @Html.ValidationMessageFor(model => model.Evening)
+                </div>
+            </div>
+            <div class="shippinginformation">
+                <h2 class="sub_heading">Shipping Information
+                </h2>
+                <div>
+                    <div class="samebilling">
+                        <input type="checkbox" name="chkSameAs" id="chkSameAs" />
+                        <label>Same as Billing?</label>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipToName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipToName)
+                    @Html.ValidationMessageFor(model => model.ShipToName)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipAddress)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipAddress)
+                    @Html.ValidationMessageFor(model => model.ShipAddress)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipAddress2)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipAddress2)
+                    @Html.ValidationMessageFor(model => model.ShipAddress2)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipCity)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipCity)
+                    @Html.ValidationMessageFor(model => model.ShipCity)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipState)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipState)
+                    @Html.ValidationMessageFor(model => model.ShipState)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipZip)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipZip)
+                    @Html.ValidationMessageFor(model => model.ShipZip)
+                </div>
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipCountry)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipCountry)
+                    @Html.ValidationMessageFor(model => model.ShipCountry)
+                </div>
+                <br />
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipInstruc)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipInstruc)
+                    @Html.ValidationMessageFor(model => model.ShipInstruc)
+                </div>
+            </div>
+        </div> <span class="clr"></span>
+        <div class="salesbuybacks">
+            @Html.EditorFor(model => model.IsEmailOptIn)
+            @Html.LabelFor(model => model.IsEmailOptIn)
+            @Html.ValidationMessageFor(model => model.IsEmailOptIn)
+        </div>
+        <span class="clr"></span>
+        <p>
+            <br />
+            <input type="submit" style="float: right; margin-right: 80px;" value="Save" class="createusers_sbt" />
+        </p>
+   
+   
+    }
+</div>
+<script type="text/javascript">
+
+   
+
+</script>

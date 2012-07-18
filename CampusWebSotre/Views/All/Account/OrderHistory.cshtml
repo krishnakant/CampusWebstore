@@ -1,0 +1,188 @@
+﻿@model IEnumerable<CampusWebStore.Models.OrderViewModel>
+@{
+    ViewBag.Title = "OrderHistory";
+    
+    
+
+    var openOrders = Model.Where(m => m.Status.Equals("Open") || m.OrderId.Contains("OPEN")).ToList();
+
+    var closeOrders = Model.Where(m => !m.Status.Equals("Open") && m.OrderId.Contains("CLOSED")).ToList();
+
+    var i = 1;
+}
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/colorbox.css")" media="screen" />
+<script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+
+    //initialize colorbox...
+    jQuery(document).ready(function () {
+        jQuery(".divPrintInvoice").colorbox({
+            width: "600px",
+            inline: true,
+            href: "#divOrderDetail",
+            close: "Close",
+            onLoad: function () {
+                $("#divPrintButton").show();
+            },
+            onClosed: function () {
+                $("#divPrintButton").hide();
+            }
+        });
+
+    });
+
+
+    //Function to get the order detail by id
+    function fnShowOrderDetail(orderId, trid) {
+
+        var strHtml = jQuery("#" + trid).html();
+
+        $("#divPrintArea").html('');
+
+        $("#divLinkPrint").hide();
+
+        $("#imgLoading").show();
+
+        jQuery("#trOrderheader").html(strHtml);
+
+        $.ajax({
+            type: "POST",
+
+            url: '@Url.Action("JsonGetOrderDetail", "Account")',
+
+            data: { CustomerId: '@ViewBag.UserId', OrderId: orderId },
+
+            success: function (data, status, xhr) {
+
+                $("#imgLoading").hide();
+
+                $("#divPrintArea").html($("#divPrintArea").html() + data);
+
+                $("#divLinkPrint").show();
+
+
+            }
+        });
+    }
+
+    //Call print function
+    function fnPrint() {
+
+        var str = jQuery("#divPrintArea").html();
+
+        var winPrint = window.open('', '', 'left=0,top=0,width=800,height=400,toolbar=1,scrollbars=1,status=0');
+
+        winPrint.document.write(str);
+
+        winPrint.document.close();
+
+        winPrint.focus();
+
+        winPrint.print();
+
+        winPrint.close();
+
+        return false;
+    }
+</script>
+<h1 class="main_heading">
+    My Account - Order History</h1>
+    <div class="open-order-wrapper">
+        <table class="table table-bordered table-condensed orderhistory">
+            <tr>
+                <th colspan="4">
+                    Open Orders:
+                </th>
+            </tr>
+            <tr class="heding">
+                <th>
+                    Order Number
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+            </tr>
+            @foreach (var item in openOrders)
+            {
+                var trId = "tr_" + (i++) ;
+                    
+                <tr id="@trId">
+                    <td>
+                        <a href="javascript:fnShowOrderDetail('@item.OrderId','@trId');">@item.OrderId</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(molItem => item.DatePlaced)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <!-- <td>
+                        @Html.DisplayFor(modelItem => item.DateProcessed)
+                    </td>-->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        <table cellpadding="0" cellspacing="0" class="orderhistory" border="0">
+            <tr>
+                <th colspan="4">
+                    Close Orders:
+                </th>
+            </tr>
+            <tr class="heding">
+                <th>
+                    Order Number
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+            </tr>
+            @foreach (var item in closeOrders)
+            {
+                <tr>
+                    <td>
+                        <a href="javascript:fnShowOrderDetail('@item.OrderId');">@item.OrderId</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DatePlaced)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <!-- <td>
+                        @Html.DisplayFor(modelItem => item.DateProcessed)
+                    </td>-->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div id="divLinkPrint" style="text-align: center; display: none;">
+        <a class="divPrintInvoice" href="#">Click for Printer Version</a></div>
+    <div id="divOrderDetail" align="center" >
+    <div id="divPrintButton" style="display: none;">
+        <input type="button" value="Print" id="btnPrint" onclick="javascript:return fnPrint();" />
+    </div>
+    <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+    <div id="divPrintArea">
+      
+    </div>
+</div>

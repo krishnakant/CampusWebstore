@@ -1,0 +1,119 @@
+﻿@model IEnumerable<CampusWebStore.Models.CatalogViewModel>
+@{
+    ViewBag.Title = "MaintainCatalogs";
+    
+}
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/colorbox.css")" media="screen" />
+<script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+
+
+        jQuery(".divAddCatelogItem").colorbox({
+            width: "50%",
+            height: "50%",
+            inline: true,
+            href: "#divAddCatelogItem",
+            close: "Close"
+        });
+        $("#addCatalog").click(function () {
+
+            $("#divProcess").show();
+         
+            $(".divAddCatelogItem").hide();
+            $.ajax({
+                type: "GET",
+                data: { seletedvalue: $("#ddlCatList").val() },
+                url: '@Url.Action("JsonCreateCatalog", "Admin")',
+                success: function (data, status, xhr) {
+                    $("#divProcess").hide();
+                    $("#divAddCatelog").html(data);
+                   
+                }
+            });
+        });
+        $("#editCatalog").click(function () {
+            $("#divProcess").show();
+            $.ajax({
+                type: "GET",
+                data: { catId: $("#ddlCatList").val() },
+                url: '@Url.Action("JsonEditCatalog", "Admin")',
+                success: function (data, status, xhr) {
+                    $("#divProcess").hide();
+                    $("#divAddCatelog").html(data);
+                    $(".divAddCatelogItem").show();
+                  
+                }
+            });
+        });
+
+        $("#btnSearchItem").click(function () {
+            $("#processing").show();
+            $.ajax({
+                type: "GET",
+                data: { SKU: $("#txtSearchItem").val() },
+                url: '@Url.Action("JsonSearchCatalogItem", "Admin")',
+                success: function (data, status, xhr) {
+
+                    $("#searchedItems").html(data);
+                    $("#processing").hide();
+                }
+            });
+        });
+    });
+
+    function AddCatalogItem(itemId) {
+        $("#processing").show();
+                 $.ajax({
+                        type: "Post",
+                        data: { CatalogItemId: itemId,CatId:$("#ddlCatList").val() },
+                        url: '@Url.Action("JsonAddCatalogItems", "Admin")',
+                        success: function (data, status, xhr) {
+                            $("#processing").hide();
+                            $("#divCatalogItems").html(data);
+                        }
+                    });
+                }
+</script>
+<h1 class="main_heading">
+       
+    MaintainCatalogs</h1>
+    <center><div id="divProcess" style="display: none"><img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br></div> </center>
+   <div >
+       <div><div style="float: left" id="ddlCatalog">@Html.Partial("EditorTemplates/Admin/DropDownCatalog")
+               </div><div style="float: right">
+                       
+                                                                               <a href="javascript:void(0)" id="addCatalog">Create New Catalog </a></div>
+                          
+       </div>
+       <div style="clear: both;"></div>
+       <div>
+           <br/>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+           <a href="javascript:void(0)" id="editCatalog">Edit Catalog </a>
+       </div>
+       <br/>
+                           
+
+   <a class="divAddCatelogItem" style="display: none">AddItem</a>
+   </div>
+<div style="display: none">
+<div id="divAddCatelogItem" >
+    <input type="text" id="txtSearchItem"/>
+         
+    <input type="button" id="btnSearchItem" value="Search" style="margin-top:0px;"/> <div id="processing" style="display: none"> <img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br></div>
+    <div style="clear:both"></div>
+    <div id="searchedItems"></div>
+</div>
+</div>
+<div id="divAddCatelog">
+  
+
+</div>
+ 
+
+<div>
+</div>

@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "MyAccount";
+    
+
+    var acctype = Convert.ToString(Session["ACCTYPE"]);
+     
+}
+
+<h1 class="main_heading">Checkout</h1>
+
+<div class="my_account">
+    <div id="AEPS" class="AEPS">
+        <div id="BEPS" class="BEPS">
+            <div id="CEPS" class="CEPS"></div>
+            <div id="DEPS" class="DEPS">
+                Secure Order Form
+            </div>
+
+            <div style="padding-top:30px;"><strong>Important:</strong>&nbsp;&nbsp;Do not press the "back" button in your browser window or your order will not be completed.</div>
+            <div id="GEPS" class="GEPS"></div>
+        </div>
+
+        <div id="EEPS" class="EEPS">
+            <div id="HEPS" class="HEPS">
+                <br />
+                <iframe id="ccinfo" frameborder="0" style="border-width:0px;background-color:#fff;width:630px;height:500px;overflow:hidden;" runat="server" src="@ViewData["tansactionUrl"]"></iframe>                                               
+            </div>
+        </div>
+    </div>
+    <span class="clr_span"></span>
+</div>

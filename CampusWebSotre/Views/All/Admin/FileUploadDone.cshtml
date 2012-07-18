@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "FileUploadDone";
+
+    var toSend = "";
+
+    toSend += ("If you selected <b>GM</b>, your files have been uploaded to http://" + Request.Url.Host + "/MyGMImages/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("If you selected <b>TR</b>, your files have been uploaded to http://" + Request.Url.Host + "/MyTRImages/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("If you selected <b>TX</b>, your files have been uploaded to http://" + Request.Url.Host + "/MyTXImages/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("If you selected <b>Other</b>, your files have been uploaded to http://" + Request.Url.Host + "/OtherFiles/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("For example, if the file you uploaded was called <b>WordDocument1.doc</b>, and you selected <b>Other</b> then your file would be located at <b>http://" + Request.Url.Host.ToString() + "/OtherFiles/WordDocument1.doc</b>");
+}
+<link href="@Url.Content("~/Content/Bootstrap/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+<div>
+    <h1>
+        Your File(s) have been uploaded.
+    </h1>
+    <br /><br />
+    <div>
+        <h2>
+            View your galleries:
+        </h2>
+
+        <br />
+        <p>
+            @Html.ActionLink("View Generel Merchandise Gallery", "ViewFiles", "Admin", new { id = "MyGMImages" }, new { @class = "btn", @style = "width: 200px;" })
+            <br /><br />
+        </p>
+        <p>
+            @Html.ActionLink("View Trade Book Gallery", "ViewFiles", "Admin", new { id = "MyTRImages" }, new { @class = "btn", @style = "width: 200px;" })
+            <br /><br />
+        </p>
+        <p>
+            @Html.ActionLink("View Textbook Gallery", "ViewFiles", "Admin", new { id = "MyTXImages" }, new { @class = "btn", @style = "width: 200px;" })
+            <br /><br />
+        </p>
+        <p>
+            @Html.ActionLink("View Other Content Gallery", "ViewFiles", "Admin", new { id = "OtherFiles" }, new { @class = "btn", @style = "width: 200px;" })
+            <br /><br />
+        </p>
+        <p>
+            @Html.ActionLink("Click here to upload more files","FileUploader","Admin")
+            <br /><br />
+        </p>
+    </div>
+</div>

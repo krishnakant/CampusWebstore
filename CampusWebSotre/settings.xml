@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CWSAdminConfig ValidateCard="false" ShowISBN="true" ShowISBNIntegration="false"
+                ShowSubstitutionOption="true" ShowTradeISBN="false"
+                UseCatalogs="true" UseQuickLinks="true" EmailOrdersToAdmin="true"
+                FacultyAdminEmailAddress="shane.miller@total-computing.com"
+                FacultySecondaryEmailAddress="fred.tuttle@total-computing.com"
+                CurrentHomePage="Copy of Clothing" ShopAsGuest="false"
+                UseLiveShippingRates="false" FedExAccountNumber="261151707"
+                FedExMeterNumber="3302179" FedExCredentialKey="AHoA4G4GDPKfRsrI"
+                FedExCredentialPassword="bxT08dIMeBzDvj13bNLuFiNc1" />
+
+

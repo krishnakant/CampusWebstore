@@ -1,0 +1,75 @@
+﻿@using CampusWebStore.Models
+@model IEnumerable<PageViewModel>
+
+@if (Model!=null)
+{
+  
+    if (Model.Any())
+   {
+        <div class="showpages-wrapper">
+            <div class="selectedpage-wrapper"> 
+                Selected Front Page: 
+                <span style="color: Red; font-weight: bold;">
+                    @ViewBag.CurrentHome
+                </span>
+                <a href="#" onclick="javascript:SetHomePageBlank();">Use Blank Page</a>
+            </div>
+
+            <table class="table table-bordered table-condensed">
+                <tbody>
+                    <tr style="color: Black; background-color: #D3CEB7;">
+                        <th scope="col">
+                            &nbsp;
+                        </th>
+                        <th align="left" scope="col">
+                            Page Name/Click to view
+                        </th>
+                        <th align="left" scope="col">
+                            Description
+                        </th>
+                        <th scope="col">
+                            Policy?
+                        </th>
+                        <th scope="col">
+                            Front Page
+                        </th>
+                    </tr>
+                    @{ var chekId = 0; }
+                    @foreach (var m in Model)
+                    {
+                        chekId = chekId + 1;
+                        <tr>
+                            <td>
+                                <a href="#" onclick="javascript:EditPage('@m.PageName');" >Edit</a>&nbsp;<a href="#" onclick="javascript:DeletePage('@m.PageName');">Delete</a>
+                            </td>
+                            <td align="left">
+                                <a target="_blank" href="@Url.Action("GetPage", "Admin", new { PageName = @m.PageName })" id="">@m.PageName</a>
+                            </td>
+                            <td align="left">
+                                @m.PageDesc
+                            </td>
+                            <td>
+                                                                  
+                                <span title="0">
+                                @if (m.ChkPolicy)
+                                {
+                                    <input type="checkbox" name="@m.PageName" id="@chekId" checked onclick=" javascript:ChkPolicy('@chekId','@m.PageName')" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="@m.PageName" id="@chekId" onclick=" javascript:ChkPolicy('@chekId','@m.PageName')" />
+                                }
+                                    </span>
+                            </td>
+                            <td>
+                                <a href="#" onclick="javascript:ChangeFrontPage('@m.PageName');" id="">@m.IsSelected</a>
+                            </td>
+                        </tr>
+                                                            
+                                                               
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}

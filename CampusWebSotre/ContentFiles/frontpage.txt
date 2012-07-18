@@ -1,0 +1,9 @@
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p align="center"><span style="font-family: arial; font-size: large;"><img style="width: 206px; height: 257px; border-color: #ff0000; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-image: none;" src="https://bookstore.keene.edu/UserSettings/UserEditorImages/Clothing/SS_Hooded_Seal.jpg" alt="" width="256" height="407" border="2" /><br /> <br /> Check out some of our other clothing items:</span></p>
+<p align="center"><span style="font-family: arial; font-size: large;"><a href="http://bookstore.keene.edu/Catalogs/hats/103.aspx">Hats</a></span></p>
+<p align="center"><span style="font-family: arial; font-size: large;"><a href="http://bookstore.keene.edu/Catalogs/adult-tops/105.aspx">Adult Tops</a></span></p>
+<p align="center"><span style="font-family: arial; font-size: large;"><a href="http://bookstore.keene.edu/Catalogs/adult-bottoms/106.aspx">Adult Bottoms</a></span></p>
+<p align="center"><span style="font-family: arial; font-size: large;"><a href="http://bookstore.keene.edu/Catalogs/ksc-kids/107.aspx">KSC Kids</a></span></p>
+<p align="center"><span style="font-family: arial; font-size: large;"><a href="http://bookstore.keene.edu/Catalogs/sweatshirts/108.aspx">Sweatshirts</a></span></p>
+<p>&nbsp;</p>

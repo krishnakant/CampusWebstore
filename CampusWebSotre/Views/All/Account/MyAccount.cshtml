@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "MyAccount";
+    
+
+    var acctype = Convert.ToString(Session["ACCTYPE"]);
+     
+}
+
+<h1 class="main_heading">My account</h1>
+<div class="my_account">
+                                            
+                                             <p class="Account_Details">  @* <a href="@Url.Action("AccountDetails","Account")"><img src="@Url.Content("~/Content/images/accountdetail.png")" alt="" border="0" /></a>*@
+                                                <a href="@Url.Action("AccountDetails","Account")"><img src="@Url.Content("~/Content/images/accountdetail.png")" alt="accountdetail" border="0" />Account Details</a></p>
+												
+                                                <p class="orderhist">@*<a href="@Url.Action("OrderHistory","Account")"><img src="@Url.Content("~/Content/images/orderhist.png")" alt="orderhistory" border="0" /></a>*@
+                                                <a href="@Url.Action("OrderHistory","Account")"><img src="@Url.Content("~/Content/images/orderhist.png")" alt="accountdetail" border="0" />Order History</a></p>
+                                             @{
+                                                 if (acctype == "A")
+                                                 {
+                                                     <text>
+                                                       <p class="adminpanel">
+                                                             <a href="@Url.Action("index","Admin")"><img src="@Url.Content("~/Content/images/adminpanel.png")" alt="accountdetail" border="0" />Admin Panel</a>
+                                                         </p>
+														 
+                                                     </text>
+                                                 }
+                                             }
+                                           
+                                       
+                            
+                                             @{
+                                                 if (acctype == "F")
+                                                 {
+                                                     <text>
+                                                         <p class="faculty">
+                                                             <a href="#"><img src="@Url.Content("~/Content/images/faculty.png")" alt="accountdetail" border="0" />Faculty</a>
+                                                         </p>
+                                                     </text>
+                                                 }
+                                             }
+                                      
+<span class="clr_span"></span>
+</div>

@@ -1,0 +1,2198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://transaction.elementexpress.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="https://transaction.elementexpress.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="https://transaction.elementexpress.com">
+      <s:element name="HealthCheck">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Credentials">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AccountID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountToken" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AcceptorID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="NewAccountToken" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Application">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApplicationVersion" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="HealthCheckResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Response">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:ExpressResponse">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="HostResponseCode" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HostResponseMessage" type="s:string" />
+              <s:element minOccurs="0" maxOccurs="1" name="HostTransactionDateTime" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="Credentials" type="tns:Credentials" />
+              <s:element minOccurs="1" maxOccurs="1" name="Batch" type="tns:Batch" />
+              <s:element minOccurs="1" maxOccurs="1" name="Card" type="tns:Card" />
+              <s:element minOccurs="1" maxOccurs="1" name="Transaction" type="tns:Transaction" />
+              <s:element minOccurs="1" maxOccurs="1" name="PaymentAccount" type="tns:PaymentAccount" />
+              <s:element minOccurs="1" maxOccurs="1" name="Address" type="tns:Address" />
+              <s:element minOccurs="1" maxOccurs="1" name="ScheduledTask" type="tns:ScheduledTask" />
+              <s:element minOccurs="1" maxOccurs="1" name="DemandDepositAccount" type="tns:DemandDepositAccount" />
+              <s:element minOccurs="1" maxOccurs="1" name="TransactionSetup" type="tns:TransactionSetup" />
+              <s:element minOccurs="1" maxOccurs="1" name="Terminal" type="tns:Terminal" />
+              <s:element minOccurs="1" maxOccurs="1" name="AutoRental" type="tns:AutoRental" />
+              <s:element minOccurs="1" maxOccurs="1" name="Healthcare" type="tns:Healthcare" />
+              <s:element minOccurs="1" maxOccurs="1" name="Lodging" type="tns:Lodging" />
+              <s:element minOccurs="1" maxOccurs="1" name="BIN" type="tns:BIN" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ExpressResponse" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ExpressResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpressResponseMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpressTransactionDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpressTransactionTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpressTransactionTimezone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExtendedParameters" type="tns:ArrayOfExtendedParameters" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfExtendedParameters">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ExtendedParameters" type="tns:ExtendedParameters" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ExtendedParameters">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Key" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Value" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="Batch">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="BatchCloseType" type="tns:BatchCloseType" />
+          <s:element minOccurs="1" maxOccurs="1" name="BatchQueryType" type="tns:BatchQueryType" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostBatchID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostItemID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostBatchCount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostBatchAmount" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BatchGroupingCode" type="tns:BatchGroupingCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostReversalQueueID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostCreditSaleCount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostCreditSaleAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostCreditReturnCount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostCreditReturnAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostDebitSaleCount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostDebitSaleAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostDebitReturnCount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostDebitReturnAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostBatchItems" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BatchIndexCode" type="tns:BatchIndexCode" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="BatchCloseType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Regular" />
+          <s:enumeration value="Force" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="BatchQueryType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Totals" />
+          <s:enumeration value="Item" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="BatchGroupingCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="FullBatch" />
+          <s:enumeration value="SingleItem" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="BatchIndexCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="Current" />
+          <s:enumeration value="FirstPrevious" />
+          <s:enumeration value="SecondPrevious" />
+          <s:enumeration value="ThirdPrevious" />
+          <s:enumeration value="FourthPrevious" />
+          <s:enumeration value="FifthPrevious" />
+          <s:enumeration value="SixthPrevious" />
+          <s:enumeration value="SeventhPrevious" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Card">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Track1Data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Track2Data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Track3Data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MagneprintData" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TruncatedCardNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpirationMonth" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ExpirationYear" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardholderName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CVV" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CAVV" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="XID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PINBlock" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="KeySerialNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="EncryptedFormat" type="tns:EncryptionFormat" />
+          <s:element minOccurs="0" maxOccurs="1" name="EncryptedTrack1Data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EncryptedTrack2Data" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EncryptedCardData" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardDataKeySerialNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AVSResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CVVResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CAVVResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CardLogo" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="EncryptionFormat">
+        <s:restriction base="s:string">
+          <s:enumeration value="Default" />
+          <s:enumeration value="Format1" />
+          <s:enumeration value="Format2" />
+          <s:enumeration value="Format3" />
+          <s:enumeration value="Format4" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Transaction">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ClerkNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShiftID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OriginalAuthorizedAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TotalAuthorizedAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="SalesTaxAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TipAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApprovalNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReferenceNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TicketNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ReversalType" type="tns:ReversalType" />
+          <s:element minOccurs="1" maxOccurs="1" name="MarketCode" type="tns:MarketCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="AcquirerData" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CashBackAmount" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="BillPaymentFlag" type="tns:BooleanType" />
+          <s:element minOccurs="1" maxOccurs="1" name="DuplicateCheckDisableFlag" type="tns:BooleanType" />
+          <s:element minOccurs="1" maxOccurs="1" name="DuplicateOverrideFlag" type="tns:BooleanType" />
+          <s:element minOccurs="1" maxOccurs="1" name="RecurringFlag" type="tns:BooleanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="CommercialCardCustomerCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProcessorName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionStatusCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="HostTransactionID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="MerchantVerificationValue" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PartialApprovedFlag" type="tns:BooleanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="ApprovedAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CommercialCardResponseCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BalanceAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BalanceCurrencyCode" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ReversalType">
+        <s:restriction base="s:string">
+          <s:enumeration value="System" />
+          <s:enumeration value="Full" />
+          <s:enumeration value="Partial" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="MarketCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="Default" />
+          <s:enumeration value="AutoRental" />
+          <s:enumeration value="DirectMarketing" />
+          <s:enumeration value="ECommerce" />
+          <s:enumeration value="FoodRestaurant" />
+          <s:enumeration value="HotelLodging" />
+          <s:enumeration value="Petroleum" />
+          <s:enumeration value="Retail" />
+          <s:enumeration value="QSR" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="BooleanType">
+        <s:restriction base="s:string">
+          <s:enumeration value="False" />
+          <s:enumeration value="True" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="PaymentAccount">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentAccountID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PaymentAccountType" type="tns:PaymentAccountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="PaymentAccountReferenceNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="PASSUpdaterBatchStatus" type="tns:PASSUpdaterBatchStatus" />
+          <s:element minOccurs="1" maxOccurs="1" name="PASSUpdaterOption" type="tns:PASSUpdaterOption" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="PaymentAccountType">
+        <s:restriction base="s:string">
+          <s:enumeration value="CreditCard" />
+          <s:enumeration value="Checking" />
+          <s:enumeration value="Savings" />
+          <s:enumeration value="ACH" />
+          <s:enumeration value="Other" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PASSUpdaterBatchStatus">
+        <s:restriction base="s:string">
+          <s:enumeration value="Null" />
+          <s:enumeration value="IncludedInNextBatch" />
+          <s:enumeration value="NotIncludedInNextBatch" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="PASSUpdaterOption">
+        <s:restriction base="s:string">
+          <s:enumeration value="Null" />
+          <s:enumeration value="AutoUpdateEnabled" />
+          <s:enumeration value="AutoUpdateDisabled" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Address">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BillingName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingAddress1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingAddress2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingZipcode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BillingPhone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingAddress2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingZipcode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingEmail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ShippingPhone" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ScheduledTask">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="ScheduledTaskID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScheduledTaskRunLogID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScheduledTaskGroupID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScheduledTaskName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ScheduledTaskReferenceNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="RunFrequency" type="tns:RunFrequency" />
+          <s:element minOccurs="0" maxOccurs="1" name="RunStartDate" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="RunUntilCancelFlag" type="tns:BooleanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="RunCycles" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="ScheduledTaskStatus" type="tns:StatusType" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="RunFrequency">
+        <s:restriction base="s:string">
+          <s:enumeration value="OneTimeFuture" />
+          <s:enumeration value="Daily" />
+          <s:enumeration value="Weekly" />
+          <s:enumeration value="BiWeekly" />
+          <s:enumeration value="Monthly" />
+          <s:enumeration value="BiMonthly" />
+          <s:enumeration value="Quarterly" />
+          <s:enumeration value="SemiAnnually" />
+          <s:enumeration value="Yearly" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="StatusType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Active" />
+          <s:enumeration value="Disabled" />
+          <s:enumeration value="Removed" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="DemandDepositAccount">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DDAAccountType" type="tns:DDAAccountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RoutingNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CheckNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="CheckType" type="tns:CheckType" />
+          <s:element minOccurs="0" maxOccurs="1" name="TruncatedAccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TruncatedRoutingNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="DDAAccountType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Checking" />
+          <s:enumeration value="Savings" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="CheckType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Personal" />
+          <s:enumeration value="Business" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="TransactionSetup">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupAccountID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupAcceptorID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupApplicationID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupApplicationName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="TransactionSetupApplicationVersion" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TransactionSetupMethod" type="tns:TransactionSetupMethod" />
+          <s:element minOccurs="1" maxOccurs="1" name="Device" type="tns:Device" />
+          <s:element minOccurs="1" maxOccurs="1" name="Embedded" type="tns:BooleanType" />
+          <s:element minOccurs="1" maxOccurs="1" name="CVVRequired" type="tns:BooleanType" />
+          <s:element minOccurs="1" maxOccurs="1" name="AutoReturn" type="tns:BooleanType" />
+          <s:element minOccurs="0" maxOccurs="1" name="CompanyName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LogoURL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Tagline" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="WelcomeMessage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReturnURL" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ReturnURLTitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="OrderDetails" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ProcessTransactionTitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="ValidationCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DeviceInputCode" type="tns:DeviceInputCode" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="TransactionSetupMethod">
+        <s:restriction base="s:string">
+          <s:enumeration value="Null" />
+          <s:enumeration value="CreditCardSale" />
+          <s:enumeration value="CreditCardAuthorization" />
+          <s:enumeration value="CreditCardAVSOnly" />
+          <s:enumeration value="CreditCardForce" />
+          <s:enumeration value="DebitCardSale" />
+          <s:enumeration value="CheckSale" />
+          <s:enumeration value="PaymentAccountCreate" />
+          <s:enumeration value="PaymentAccountUpdate" />
+          <s:enumeration value="Sale" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="Device">
+        <s:restriction base="s:string">
+          <s:enumeration value="Null" />
+          <s:enumeration value="MagtekEncryptedSwipe" />
+          <s:enumeration value="EncryptedInputDevice" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="DeviceInputCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotUsed" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Terminal" />
+          <s:enumeration value="Keyboard" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Terminal">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TerminalID" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TerminalType" type="tns:TerminalType" />
+          <s:element minOccurs="1" maxOccurs="1" name="CardPresentCode" type="tns:CardPresentCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="CardholderPresentCode" type="tns:CardholderPresentCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="CardInputCode" type="tns:CardInputCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="CVVPresenceCode" type="tns:CVVPresenceCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="TerminalCapabilityCode" type="tns:TerminalCapabilityCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="TerminalEnvironmentCode" type="tns:TerminalEnvironmentCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="MotoECICode" type="tns:MotoECICode" />
+          <s:element minOccurs="1" maxOccurs="1" name="CVVResponseType" type="tns:CVVResponseType" />
+          <s:element minOccurs="1" maxOccurs="1" name="ConsentCode" type="tns:ConsentCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="TerminalSerialNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="TerminalEncryptionFormat" type="tns:EncryptionFormat" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="TerminalType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="PointOfSale" />
+          <s:enumeration value="ECommerce" />
+          <s:enumeration value="MOTO" />
+          <s:enumeration value="FuelPump" />
+          <s:enumeration value="ATM" />
+          <s:enumeration value="Voice" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="CardPresentCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Present" />
+          <s:enumeration value="NotPresent" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="CardholderPresentCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="Present" />
+          <s:enumeration value="NotPresent" />
+          <s:enumeration value="MailOrder" />
+          <s:enumeration value="PhoneOrder" />
+          <s:enumeration value="StandingAuth" />
+          <s:enumeration value="ECommerce" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="CardInputCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="MagstripeRead" />
+          <s:enumeration value="ContactlessMagstripeRead" />
+          <s:enumeration value="ManualKeyed" />
+          <s:enumeration value="ManualKeyedMagstripeFailure" />
+          <s:enumeration value="ChipRead" />
+          <s:enumeration value="ContactlessChipRead" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="CVVPresenceCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="NotProvided" />
+          <s:enumeration value="Provided" />
+          <s:enumeration value="Illegible" />
+          <s:enumeration value="CustomerIllegible" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="TerminalCapabilityCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="Unknown" />
+          <s:enumeration value="NoTerminal" />
+          <s:enumeration value="MagstripeReader" />
+          <s:enumeration value="ContactlessMagstripeReader" />
+          <s:enumeration value="KeyEntered" />
+          <s:enumeration value="ChipReader" />
+          <s:enumeration value="ContactlessChipReader" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="TerminalEnvironmentCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="NoTerminal" />
+          <s:enumeration value="LocalAttended" />
+          <s:enumeration value="LocalUnattended" />
+          <s:enumeration value="RemoteAttended" />
+          <s:enumeration value="RemoteUnattended" />
+          <s:enumeration value="ECommerce" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="MotoECICode">
+        <s:restriction base="s:string">
+          <s:enumeration value="UseDefault" />
+          <s:enumeration value="NotUsed" />
+          <s:enumeration value="Single" />
+          <s:enumeration value="Recurring" />
+          <s:enumeration value="Installment" />
+          <s:enumeration value="SecureECommerce" />
+          <s:enumeration value="NonAuthenticatedSecureTransaction" />
+          <s:enumeration value="NonAuthenticatedSecureECommerceTransaction" />
+          <s:enumeration value="NonSecureECommerceTransaction" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="CVVResponseType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Regular" />
+          <s:enumeration value="Extended" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="ConsentCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotUsed" />
+          <s:enumeration value="FaceToFace" />
+          <s:enumeration value="Phone" />
+          <s:enumeration value="Internet" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="AutoRental">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalAgreementNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalNoShowIndicator" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalExtraChargesDetail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalPickupDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalDropoffDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalCustomerName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalReturnCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalReturnState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalReturnLocationID" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalDuration" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalPickupLocation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalPickupCity" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalPickupState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalPickupCountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalPickupTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalReturnCountryCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalReturnDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalReturnTime" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AutoRentalVehicleClassCode" type="tns:AutoRentalVehicleClassCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalDistance" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AutoRentalDistanceUnit" type="tns:AutoRentalDistanceUnit" />
+          <s:element minOccurs="1" maxOccurs="1" name="AutoRentalAuditAdjustmentCode" type="tns:AutoRentalAuditAdjustmentCode" />
+          <s:element minOccurs="0" maxOccurs="1" name="AutoRentalAuditAdjustmentAmount" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="AutoRentalVehicleClassCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unused" />
+          <s:enumeration value="Mini" />
+          <s:enumeration value="Subcompact" />
+          <s:enumeration value="Economy" />
+          <s:enumeration value="Compact" />
+          <s:enumeration value="Midsize" />
+          <s:enumeration value="Intermediate" />
+          <s:enumeration value="Standard" />
+          <s:enumeration value="Fullsize" />
+          <s:enumeration value="Luxury" />
+          <s:enumeration value="Premium" />
+          <s:enumeration value="MiniVan" />
+          <s:enumeration value="Van12Passenger" />
+          <s:enumeration value="MovingVan" />
+          <s:enumeration value="Van15Passenger" />
+          <s:enumeration value="CargoVan" />
+          <s:enumeration value="Truck12Foot" />
+          <s:enumeration value="Truck20Foot" />
+          <s:enumeration value="Truck24Foot" />
+          <s:enumeration value="Truck26Foot" />
+          <s:enumeration value="Moped" />
+          <s:enumeration value="Stretch" />
+          <s:enumeration value="Regular" />
+          <s:enumeration value="Unique" />
+          <s:enumeration value="Exotic" />
+          <s:enumeration value="TruckSmallMedium" />
+          <s:enumeration value="TruckLarge" />
+          <s:enumeration value="SUVSmall" />
+          <s:enumeration value="SUVMedium" />
+          <s:enumeration value="SUVLarge" />
+          <s:enumeration value="SUVExotic" />
+          <s:enumeration value="FourWheelDrive" />
+          <s:enumeration value="Special" />
+          <s:enumeration value="Miscellaneous" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AutoRentalDistanceUnit">
+        <s:restriction base="s:string">
+          <s:enumeration value="Unused" />
+          <s:enumeration value="Miles" />
+          <s:enumeration value="Kilometers" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AutoRentalAuditAdjustmentCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="NoAdjustments" />
+          <s:enumeration value="MultipleAdjustments" />
+          <s:enumeration value="OneAdjustmentCardmemberNotified" />
+          <s:enumeration value="OneAdjustmentCardmemberNotNotified" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Healthcare">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFlag" type="tns:BooleanType" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFirstAccountType" type="tns:HealthcareAccountType" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFirstAmountType" type="tns:HealthcareAmountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareFirstCurrencyCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFirstAmountSign" type="tns:AmountSign" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareFirstAmount" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareSecondAccountType" type="tns:HealthcareAccountType" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareSecondAmountType" type="tns:HealthcareAmountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareSecondCurrencyCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareSecondAmountSign" type="tns:AmountSign" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareSecondAmount" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareThirdAccountType" type="tns:HealthcareAccountType" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareThirdAmountType" type="tns:HealthcareAmountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareThirdCurrencyCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareThirdAmountSign" type="tns:AmountSign" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareThirdAmount" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFourthAccountType" type="tns:HealthcareAccountType" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFourthAmountType" type="tns:HealthcareAmountType" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareFourthCurrencyCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="HealthcareFourthAmountSign" type="tns:AmountSign" />
+          <s:element minOccurs="0" maxOccurs="1" name="HealthcareFourthAmount" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="HealthcareAccountType">
+        <s:restriction base="s:string">
+          <s:enumeration value="NotSpecified" />
+          <s:enumeration value="Savings" />
+          <s:enumeration value="Checking" />
+          <s:enumeration value="CreditCard" />
+          <s:enumeration value="Universal" />
+          <s:enumeration value="StoredValueAccount" />
+          <s:enumeration value="CashBenefitsAccount" />
+          <s:enumeration value="FoodStampsAccount" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="HealthcareAmountType">
+        <s:restriction base="s:string">
+          <s:enumeration value="LedgerBalance" />
+          <s:enumeration value="AvailableBalance" />
+          <s:enumeration value="Healthcare" />
+          <s:enumeration value="Transit" />
+          <s:enumeration value="Copayment" />
+          <s:enumeration value="OriginalAmount" />
+          <s:enumeration value="PartialAuthorizedAmount" />
+          <s:enumeration value="Prescription" />
+          <s:enumeration value="Vision" />
+          <s:enumeration value="Clinic" />
+          <s:enumeration value="Dental" />
+          <s:enumeration value="CashOver" />
+          <s:enumeration value="OriginalCashOver" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="AmountSign">
+        <s:restriction base="s:string">
+          <s:enumeration value="Positive" />
+          <s:enumeration value="Negative" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="Lodging">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingAgreementNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingCheckInDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingCheckOutDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingRoomAmount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingRoomTax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingNoShowIndicator" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingDuration" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingCustomerName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingClientCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingExtraChargesDetail" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LodgingExtraChargesAmounts" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LodgingPrestigiousPropertyCode" type="tns:LodgingPrestigiousPropertyCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="LodgingSpecialProgramCode" type="tns:LodgingSpecialProgramCode" />
+          <s:element minOccurs="1" maxOccurs="1" name="LodgingChargeType" type="tns:LodgingChargeType" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="LodgingPrestigiousPropertyCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="NonParticipant" />
+          <s:enumeration value="DollarLimit500" />
+          <s:enumeration value="DollarLimit1000" />
+          <s:enumeration value="DollarLimit1500" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="LodgingSpecialProgramCode">
+        <s:restriction base="s:string">
+          <s:enumeration value="Default" />
+          <s:enumeration value="Sale" />
+          <s:enumeration value="NoShow" />
+          <s:enumeration value="AdvanceDeposit" />
+        </s:restriction>
+      </s:simpleType>
+      <s:simpleType name="LodgingChargeType">
+        <s:restriction base="s:string">
+          <s:enumeration value="Default" />
+          <s:enumeration value="Restaurant" />
+          <s:enumeration value="GiftShop" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="BIN">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BINTypeCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BINTypeValue" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BINDecorator" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="TimeCheck">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TimeCheckResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AccountTokenCreate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AccountTokenCreateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AccountTokenActivate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AccountTokenActivateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MagneprintDataDecrypt">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MagneprintDataDecryptResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TransactionSetup">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="transactionSetup" type="tns:TransactionSetup" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="1" maxOccurs="1" name="paymentAccount" type="tns:PaymentAccount" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TransactionSetupResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BINQuery">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BINQueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TransactionSetupExpire">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="transactionSetup" type="tns:TransactionSetup" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="TransactionSetupExpireResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardSale">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardSaleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAuthorization">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAuthorizationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAuthorizationCompletion">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAuthorizationCompletionResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardForce">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardForceResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardCredit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardCreditResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAdjustment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAdjustmentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardReversal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardReversalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardIncrementalAuthorization">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardIncrementalAuthorizationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardBalanceInquiry">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardBalanceInquiryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardVoid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardVoidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAVSOnly">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardAVSOnlyResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardReturn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CreditCardReturnResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitCardSale">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitCardSaleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitCardReturn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitCardReturnResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitCardReversal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="card" type="tns:Card" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DebitCardReversalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchClose">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="batch" type="tns:Batch" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchCloseResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchItemQuery">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="batch" type="tns:Batch" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchItemQueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchTotalsQuery">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="batch" type="tns:Batch" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="BatchTotalsQueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckSale">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="demandDepositAccount" type="tns:DemandDepositAccount" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="identification" type="tns:Identification" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Identification">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="TaxIDNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DriversLicenseNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DriversLicenseState" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="BirthDate" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="CheckSaleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckCredit">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="demandDepositAccount" type="tns:DemandDepositAccount" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="identification" type="tns:Identification" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckCreditResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckVerification">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="demandDepositAccount" type="tns:DemandDepositAccount" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="1" maxOccurs="1" name="identification" type="tns:Identification" />
+            <s:element minOccurs="1" maxOccurs="1" name="address" type="tns:Address" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckVerificationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckReturn">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckReturnResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckVoid">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckVoidResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckReversal">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="credentials" type="tns:Credentials" />
+            <s:element minOccurs="1" maxOccurs="1" name="application" type="tns:Application" />
+            <s:element minOccurs="1" maxOccurs="1" name="terminal" type="tns:Terminal" />
+            <s:element minOccurs="1" maxOccurs="1" name="transaction" type="tns:Transaction" />
+            <s:element minOccurs="0" maxOccurs="1" name="extendedParameters" type="tns:ArrayOfExtendedParameters" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CheckReversalResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="response" type="tns:Response" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="HealthCheckSoapIn">
+    <wsdl:part name="parameters" element="tns:HealthCheck" />
+  </wsdl:message>
+  <wsdl:message name="HealthCheckSoapOut">
+    <wsdl:part name="parameters" element="tns:HealthCheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="TimeCheckSoapIn">
+    <wsdl:part name="parameters" element="tns:TimeCheck" />
+  </wsdl:message>
+  <wsdl:message name="TimeCheckSoapOut">
+    <wsdl:part name="parameters" element="tns:TimeCheckResponse" />
+  </wsdl:message>
+  <wsdl:message name="AccountTokenCreateSoapIn">
+    <wsdl:part name="parameters" element="tns:AccountTokenCreate" />
+  </wsdl:message>
+  <wsdl:message name="AccountTokenCreateSoapOut">
+    <wsdl:part name="parameters" element="tns:AccountTokenCreateResponse" />
+  </wsdl:message>
+  <wsdl:message name="AccountTokenActivateSoapIn">
+    <wsdl:part name="parameters" element="tns:AccountTokenActivate" />
+  </wsdl:message>
+  <wsdl:message name="AccountTokenActivateSoapOut">
+    <wsdl:part name="parameters" element="tns:AccountTokenActivateResponse" />
+  </wsdl:message>
+  <wsdl:message name="MagneprintDataDecryptSoapIn">
+    <wsdl:part name="parameters" element="tns:MagneprintDataDecrypt" />
+  </wsdl:message>
+  <wsdl:message name="MagneprintDataDecryptSoapOut">
+    <wsdl:part name="parameters" element="tns:MagneprintDataDecryptResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionSetupSoapIn">
+    <wsdl:part name="parameters" element="tns:TransactionSetup" />
+  </wsdl:message>
+  <wsdl:message name="TransactionSetupSoapOut">
+    <wsdl:part name="parameters" element="tns:TransactionSetupResponse" />
+  </wsdl:message>
+  <wsdl:message name="BINQuerySoapIn">
+    <wsdl:part name="parameters" element="tns:BINQuery" />
+  </wsdl:message>
+  <wsdl:message name="BINQuerySoapOut">
+    <wsdl:part name="parameters" element="tns:BINQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="TransactionSetupExpireSoapIn">
+    <wsdl:part name="parameters" element="tns:TransactionSetupExpire" />
+  </wsdl:message>
+  <wsdl:message name="TransactionSetupExpireSoapOut">
+    <wsdl:part name="parameters" element="tns:TransactionSetupExpireResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardSaleSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardSale" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardSaleSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardSaleResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAuthorizationSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardAuthorization" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAuthorizationSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardAuthorizationResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAuthorizationCompletionSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardAuthorizationCompletion" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAuthorizationCompletionSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardAuthorizationCompletionResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardForceSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardForce" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardForceSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardForceResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardCreditSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardCredit" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardCreditSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardCreditResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAdjustmentSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardAdjustment" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAdjustmentSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardAdjustmentResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardReversalSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardReversal" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardReversalSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardReversalResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardIncrementalAuthorizationSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardIncrementalAuthorization" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardIncrementalAuthorizationSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardIncrementalAuthorizationResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardBalanceInquirySoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardBalanceInquiry" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardBalanceInquirySoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardBalanceInquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardVoidSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardVoid" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardVoidSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardVoidResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAVSOnlySoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardAVSOnly" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardAVSOnlySoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardAVSOnlyResponse" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardReturnSoapIn">
+    <wsdl:part name="parameters" element="tns:CreditCardReturn" />
+  </wsdl:message>
+  <wsdl:message name="CreditCardReturnSoapOut">
+    <wsdl:part name="parameters" element="tns:CreditCardReturnResponse" />
+  </wsdl:message>
+  <wsdl:message name="DebitCardSaleSoapIn">
+    <wsdl:part name="parameters" element="tns:DebitCardSale" />
+  </wsdl:message>
+  <wsdl:message name="DebitCardSaleSoapOut">
+    <wsdl:part name="parameters" element="tns:DebitCardSaleResponse" />
+  </wsdl:message>
+  <wsdl:message name="DebitCardReturnSoapIn">
+    <wsdl:part name="parameters" element="tns:DebitCardReturn" />
+  </wsdl:message>
+  <wsdl:message name="DebitCardReturnSoapOut">
+    <wsdl:part name="parameters" element="tns:DebitCardReturnResponse" />
+  </wsdl:message>
+  <wsdl:message name="DebitCardReversalSoapIn">
+    <wsdl:part name="parameters" element="tns:DebitCardReversal" />
+  </wsdl:message>
+  <wsdl:message name="DebitCardReversalSoapOut">
+    <wsdl:part name="parameters" element="tns:DebitCardReversalResponse" />
+  </wsdl:message>
+  <wsdl:message name="BatchCloseSoapIn">
+    <wsdl:part name="parameters" element="tns:BatchClose" />
+  </wsdl:message>
+  <wsdl:message name="BatchCloseSoapOut">
+    <wsdl:part name="parameters" element="tns:BatchCloseResponse" />
+  </wsdl:message>
+  <wsdl:message name="BatchItemQuerySoapIn">
+    <wsdl:part name="parameters" element="tns:BatchItemQuery" />
+  </wsdl:message>
+  <wsdl:message name="BatchItemQuerySoapOut">
+    <wsdl:part name="parameters" element="tns:BatchItemQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="BatchTotalsQuerySoapIn">
+    <wsdl:part name="parameters" element="tns:BatchTotalsQuery" />
+  </wsdl:message>
+  <wsdl:message name="BatchTotalsQuerySoapOut">
+    <wsdl:part name="parameters" element="tns:BatchTotalsQueryResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckSaleSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckSale" />
+  </wsdl:message>
+  <wsdl:message name="CheckSaleSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckSaleResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckCreditSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckCredit" />
+  </wsdl:message>
+  <wsdl:message name="CheckCreditSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckCreditResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckVerificationSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckVerification" />
+  </wsdl:message>
+  <wsdl:message name="CheckVerificationSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckVerificationResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckReturnSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckReturn" />
+  </wsdl:message>
+  <wsdl:message name="CheckReturnSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckReturnResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckVoidSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckVoid" />
+  </wsdl:message>
+  <wsdl:message name="CheckVoidSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckVoidResponse" />
+  </wsdl:message>
+  <wsdl:message name="CheckReversalSoapIn">
+    <wsdl:part name="parameters" element="tns:CheckReversal" />
+  </wsdl:message>
+  <wsdl:message name="CheckReversalSoapOut">
+    <wsdl:part name="parameters" element="tns:CheckReversalResponse" />
+  </wsdl:message>
+  <wsdl:portType name="ExpressSoap">
+    <wsdl:operation name="HealthCheck">
+      <wsdl:input message="tns:HealthCheckSoapIn" />
+      <wsdl:output message="tns:HealthCheckSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TimeCheck">
+      <wsdl:input message="tns:TimeCheckSoapIn" />
+      <wsdl:output message="tns:TimeCheckSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountTokenCreate">
+      <wsdl:input message="tns:AccountTokenCreateSoapIn" />
+      <wsdl:output message="tns:AccountTokenCreateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AccountTokenActivate">
+      <wsdl:input message="tns:AccountTokenActivateSoapIn" />
+      <wsdl:output message="tns:AccountTokenActivateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MagneprintDataDecrypt">
+      <wsdl:input message="tns:MagneprintDataDecryptSoapIn" />
+      <wsdl:output message="tns:MagneprintDataDecryptSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TransactionSetup">
+      <wsdl:input message="tns:TransactionSetupSoapIn" />
+      <wsdl:output message="tns:TransactionSetupSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BINQuery">
+      <wsdl:input message="tns:BINQuerySoapIn" />
+      <wsdl:output message="tns:BINQuerySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="TransactionSetupExpire">
+      <wsdl:input message="tns:TransactionSetupExpireSoapIn" />
+      <wsdl:output message="tns:TransactionSetupExpireSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardSale">
+      <wsdl:input message="tns:CreditCardSaleSoapIn" />
+      <wsdl:output message="tns:CreditCardSaleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAuthorization">
+      <wsdl:input message="tns:CreditCardAuthorizationSoapIn" />
+      <wsdl:output message="tns:CreditCardAuthorizationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAuthorizationCompletion">
+      <wsdl:input message="tns:CreditCardAuthorizationCompletionSoapIn" />
+      <wsdl:output message="tns:CreditCardAuthorizationCompletionSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardForce">
+      <wsdl:input message="tns:CreditCardForceSoapIn" />
+      <wsdl:output message="tns:CreditCardForceSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardCredit">
+      <wsdl:input message="tns:CreditCardCreditSoapIn" />
+      <wsdl:output message="tns:CreditCardCreditSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAdjustment">
+      <wsdl:input message="tns:CreditCardAdjustmentSoapIn" />
+      <wsdl:output message="tns:CreditCardAdjustmentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardReversal">
+      <wsdl:input message="tns:CreditCardReversalSoapIn" />
+      <wsdl:output message="tns:CreditCardReversalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardIncrementalAuthorization">
+      <wsdl:input message="tns:CreditCardIncrementalAuthorizationSoapIn" />
+      <wsdl:output message="tns:CreditCardIncrementalAuthorizationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardBalanceInquiry">
+      <wsdl:input message="tns:CreditCardBalanceInquirySoapIn" />
+      <wsdl:output message="tns:CreditCardBalanceInquirySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardVoid">
+      <wsdl:input message="tns:CreditCardVoidSoapIn" />
+      <wsdl:output message="tns:CreditCardVoidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAVSOnly">
+      <wsdl:input message="tns:CreditCardAVSOnlySoapIn" />
+      <wsdl:output message="tns:CreditCardAVSOnlySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardReturn">
+      <wsdl:input message="tns:CreditCardReturnSoapIn" />
+      <wsdl:output message="tns:CreditCardReturnSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardSale">
+      <wsdl:input message="tns:DebitCardSaleSoapIn" />
+      <wsdl:output message="tns:DebitCardSaleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardReturn">
+      <wsdl:input message="tns:DebitCardReturnSoapIn" />
+      <wsdl:output message="tns:DebitCardReturnSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardReversal">
+      <wsdl:input message="tns:DebitCardReversalSoapIn" />
+      <wsdl:output message="tns:DebitCardReversalSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BatchClose">
+      <wsdl:input message="tns:BatchCloseSoapIn" />
+      <wsdl:output message="tns:BatchCloseSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BatchItemQuery">
+      <wsdl:input message="tns:BatchItemQuerySoapIn" />
+      <wsdl:output message="tns:BatchItemQuerySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="BatchTotalsQuery">
+      <wsdl:input message="tns:BatchTotalsQuerySoapIn" />
+      <wsdl:output message="tns:BatchTotalsQuerySoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckSale">
+      <wsdl:input message="tns:CheckSaleSoapIn" />
+      <wsdl:output message="tns:CheckSaleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckCredit">
+      <wsdl:input message="tns:CheckCreditSoapIn" />
+      <wsdl:output message="tns:CheckCreditSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckVerification">
+      <wsdl:input message="tns:CheckVerificationSoapIn" />
+      <wsdl:output message="tns:CheckVerificationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckReturn">
+      <wsdl:input message="tns:CheckReturnSoapIn" />
+      <wsdl:output message="tns:CheckReturnSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckVoid">
+      <wsdl:input message="tns:CheckVoidSoapIn" />
+      <wsdl:output message="tns:CheckVoidSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckReversal">
+      <wsdl:input message="tns:CheckReversalSoapIn" />
+      <wsdl:output message="tns:CheckReversalSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ExpressSoap" type="tns:ExpressSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HealthCheck">
+      <soap:operation soapAction="https://transaction.elementexpress.com/HealthCheck" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimeCheck">
+      <soap:operation soapAction="https://transaction.elementexpress.com/TimeCheck" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountTokenCreate">
+      <soap:operation soapAction="https://transaction.elementexpress.com/AccountTokenCreate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountTokenActivate">
+      <soap:operation soapAction="https://transaction.elementexpress.com/AccountTokenActivate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MagneprintDataDecrypt">
+      <soap:operation soapAction="https://transaction.elementexpress.com/MagneprintDataDecrypt" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransactionSetup">
+      <soap:operation soapAction="https://transaction.elementexpress.com/TransactionSetup" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BINQuery">
+      <soap:operation soapAction="https://transaction.elementexpress.com/BINQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransactionSetupExpire">
+      <soap:operation soapAction="https://transaction.elementexpress.com/TransactionSetupExpire" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardSale">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardSale" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAuthorization">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardAuthorization" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAuthorizationCompletion">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardAuthorizationCompletion" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardForce">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardForce" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardCredit">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardCredit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAdjustment">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardAdjustment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardReversal">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardReversal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardIncrementalAuthorization">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardIncrementalAuthorization" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardBalanceInquiry">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardBalanceInquiry" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardVoid">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardVoid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAVSOnly">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardAVSOnly" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardReturn">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CreditCardReturn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardSale">
+      <soap:operation soapAction="https://transaction.elementexpress.com/DebitCardSale" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardReturn">
+      <soap:operation soapAction="https://transaction.elementexpress.com/DebitCardReturn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardReversal">
+      <soap:operation soapAction="https://transaction.elementexpress.com/DebitCardReversal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchClose">
+      <soap:operation soapAction="https://transaction.elementexpress.com/BatchClose" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchItemQuery">
+      <soap:operation soapAction="https://transaction.elementexpress.com/BatchItemQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchTotalsQuery">
+      <soap:operation soapAction="https://transaction.elementexpress.com/BatchTotalsQuery" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckSale">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CheckSale" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckCredit">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CheckCredit" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckVerification">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CheckVerification" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckReturn">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CheckReturn" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckVoid">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CheckVoid" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckReversal">
+      <soap:operation soapAction="https://transaction.elementexpress.com/CheckReversal" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="ExpressSoap12" type="tns:ExpressSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="HealthCheck">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/HealthCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TimeCheck">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/TimeCheck" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountTokenCreate">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/AccountTokenCreate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AccountTokenActivate">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/AccountTokenActivate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MagneprintDataDecrypt">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/MagneprintDataDecrypt" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransactionSetup">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/TransactionSetup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BINQuery">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/BINQuery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransactionSetupExpire">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/TransactionSetupExpire" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardSale">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardSale" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAuthorization">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardAuthorization" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAuthorizationCompletion">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardAuthorizationCompletion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardForce">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardForce" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardCredit">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardCredit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAdjustment">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardAdjustment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardReversal">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardReversal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardIncrementalAuthorization">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardIncrementalAuthorization" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardBalanceInquiry">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardBalanceInquiry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardVoid">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardVoid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardAVSOnly">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardAVSOnly" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CreditCardReturn">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CreditCardReturn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardSale">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/DebitCardSale" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardReturn">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/DebitCardReturn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DebitCardReversal">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/DebitCardReversal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchClose">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/BatchClose" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchItemQuery">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/BatchItemQuery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BatchTotalsQuery">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/BatchTotalsQuery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckSale">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CheckSale" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckCredit">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CheckCredit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckVerification">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CheckVerification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckReturn">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CheckReturn" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckVoid">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CheckVoid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckReversal">
+      <soap12:operation soapAction="https://transaction.elementexpress.com/CheckReversal" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="Express">
+    <wsdl:port name="ExpressSoap" binding="tns:ExpressSoap">
+      <soap:address location="https://certtransaction.elementexpress.com/express.asmx" />
+    </wsdl:port>
+    <wsdl:port name="ExpressSoap12" binding="tns:ExpressSoap12">
+      <soap12:address location="https://certtransaction.elementexpress.com/express.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

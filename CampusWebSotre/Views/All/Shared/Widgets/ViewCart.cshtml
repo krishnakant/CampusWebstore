@@ -1,0 +1,36 @@
+﻿@using System.Globalization
+@using CampusWebStore.Shared.Models
+@{
+    var count = 0.00;
+    string totalstring = "$0.00";
+    bool showTotal = false;
+  
+    var lstCartItems =(List<ShoppingCartModel>) ViewData["CarTItems"]??(new List<ShoppingCartModel>());
+     double total = 0;
+    if(lstCartItems!=null)
+    {
+        count = lstCartItems.Count;
+        foreach (var item in lstCartItems)
+        {
+            total += item.Total;
+            totalstring = String.Format("{0:C}", total);
+            showTotal = true;
+        }
+    }
+    else
+    {
+        lstCartItems = new List<ShoppingCartModel>();
+    }
+}
+
+
+<a href=@Url.Action("ViewCartDetail","Home")>
+    <img alt="View Cart" style="width: 20px;height:21px;" src="@Url.Content("~/App_Themes/" + ViewBag.Theme + "/img/desktop/search.png")" />
+</a>
+@MvcHtmlString.Create(@lstCartItems.Count.ToString()) Items(s) @{ if (showTotal) { <text>Total</text> @totalstring } }
+@if (count > 0) {
+    <text> </text> @Html.ActionLink("CheckOut", "checkout", "account")
+}
+
+
+

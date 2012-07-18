@@ -1,0 +1,189 @@
+﻿@{
+    ViewBag.Title = "SellBack";
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+<style>
+    span.select
+    {
+        position: absolute;
+        width: 90px; /* With the padding included, the width is 190 pixels: the actual width of the image. */
+        height: 22px;
+        color: #000;
+        cursor: pointer;
+        font: 12px/21px arial,sans-serif;
+        overflow: hidden;
+    }
+    
+    .styled
+    {
+        position: absolute !important;
+        width: 161px; /* With the padding included, the width is 190 pixels: the actual width of the image. */
+        height: 22px;
+        padding: 4px 0 5px 1px;
+        color: #000;
+        cursor: pointer;
+    }
+    
+    select.styled
+    {
+        opacity: 0;
+        position: relative;
+        width: 150px;
+        z-index: 5;
+        margin: 0px;
+    }
+    
+    .selectbg
+    {
+        background: url(@Url.Content("~/Content/Images/Elements/select_main_bg.png")) no-repeat;
+        width: 160px;
+        height: 22px;
+        padding: 4px 0 5px 7px;
+    }
+    
+    .third
+    {
+        width: 161%;
+        float: left;
+    }
+</style>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            $("#processing").removeAttr("style");
+            var isbns = $("#txtIsbn").val();
+
+            $.mobile.changePage("#page2", "flip", true, false);
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("SellBackBooks", "Home")',
+
+                data: { Isbn: isbns },
+
+                success: function (data, status, xhr) {
+                    //alert(data);
+                 //   $("#processing").attr("style", "visibility:hidden;display:block;");
+                    $("#viewSellBack").html(data);
+                    $.mobile.changePage("#page3", "flip", true, false);
+
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+          
+        });
+
+        $("#btnBack").click(function(){
+          $.mobile.changePage("#page1", "flip", true, false);
+
+        });
+
+    });
+
+
+
+</script>
+  <script src="@Url.Content("~/Scripts/jquery.mobile-1.0b3.js")" type="text/javascript"></script>
+<section id="page1" data-role="page">
+          
+            <div data-role="content" class="content">
+<div id="headerproduct">
+    <!--header-->
+    <img src="@Url.Content("~/Content/Images/bar_top.png")" style="vertical-align: top;" width="181" />
+</div>
+<!--//header-->
+<div class="cartcontainer">
+    <!--container-->
+    <div id="dialog">
+    </div>
+    <form id="frmCourse" runat="server">
+    @Html.Partial("EditorTemplates/MobileHeader")
+    <div class="clear">
+    </div>
+    <div class="bradecumpro">
+        <a href="#" class="left">@ViewBag.Title</a>
+    </div>
+    <div id="contentBodyDivInner">
+        <p id="title">
+        </p>
+        <div class="sellbackbooks">
+            <p>
+                <span style="font-size: Smaller;">***Enter "DEMO" into the ISBN field to view a demo
+                    of the Buyback module</span>
+            </p>
+            <span style="font-size: Smaller;" class="enter_space">(Enter ISBN's seperated by newline or space)</span>
+            <a>What's an ISBN?</a>
+            <center>
+            <input type="text" style="height: 43px; width: 209px; font-size: 18px;visibility:true" class="textboxinput"
+                id="txtIsbn" cols="20" rows="2" /></center>
+           
+            <input type="button" class="btnCommonButton" class="FlatCSSButton" id="btnSearch"
+                value="Search">
+            <br>
+            <div>
+            </div>
+           
+            </div>
+           
+        </div>
+   
+    
+    </form>
+</div>
+</div></section>
+
+
+<section id="page3" data-role="page">
+          
+            <div data-role="content" class="content">
+<div id="headerproduct">
+    <!--header-->
+    <img src="@Url.Content("~/Content/Images/bar_top.png")" style="vertical-align: top;" width="181" />
+</div>
+ 
+<!--//header-->
+<div class="cartcontainer">
+    <!--container-->
+    <div id="dialog">
+    </div>
+    <form id="frmCourse" runat="server">
+    @Html.Partial("EditorTemplates/MobileHeader")
+    <div class="clear">
+    </div>
+    <div class="bradecumpro">
+        <a href="#" class="left">@ViewBag.Title</a>
+    </div>
+
+    <div id="viewSellBack">
+    </div>
+    </form></div><input type="button" class="btnCommonButton" class="FlatCSSButton" id="btnBack"
+                value="Back"></div></section>
+
+ <section id="page2" data-role="page">
+          
+            <div data-role="content" class="content">
+<div class="cartcontainer">
+    <img  src="@Url.Content("~/Content/Images/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore" id="logo"/>
+    <!--container-->
+    <div id="dialog">
+    </div>
+    <div id="form">
+        <form id="form1" runat="server">
+            @Html.Partial("EditorTemplates/MobileHeader")
+            <div class="clear">
+            </div>
+            <div class="bradecumpro">
+                <a href="#" class="left">@ViewBag.Title</a>
+            </div>
+            
+            </form>
+            </div> <div  id="processing">
+            <center>                <img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"/><br /><b>Searching...</b></center>
+
+            </div></div></div></section>

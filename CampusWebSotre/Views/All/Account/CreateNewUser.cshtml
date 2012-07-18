@@ -1,0 +1,191 @@
+﻿@model CampusWebStore.Models.AccountSettingsViewModel
+@{
+   
+    
+}
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        //function to fill Billing Informaton to Shipping Information 
+        jQuery('input[id*="chkSameAs"]').click(function () {
+            var status = jQuery('input[id*="chkSameAs"]').is(":checked") ? "on" : "off";
+            if (status == "on") {
+                jQuery('input[id*="ShipToName"]').val(jQuery('input[id*="FirstName"]').val() + ' ' + jQuery('input[id*="LastName"]').val());
+                jQuery('input[id*="ShipAddress"]').val(jQuery('input[id*="Address"]').val());
+                jQuery('input[id*="ShipAddress2"]').val(jQuery('input[id*="Address2"]').val());
+                jQuery('input[id*="ShipCity"]').val(jQuery('input[id*="City"]').val());
+                jQuery('input[id*="ShipState"]').val(jQuery('input[id*="State"]').val());
+                jQuery('select[id*="ShipCountry"]').val(jQuery('select[id*="Country"]').val());
+                jQuery('input[id*="ShipZip"]').val(jQuery('input[id*="Zip"]').val());
+            }
+        });
+
+    });
+
+    //function to check availability of username....
+    function fnCheckAvailability() {
+        if (jQuery("#Password").val() == jQuery("#ConfirmPassword").val()) {
+
+            jQuery("#spanMessage").hide();
+
+            jQuery("#imgLoading").show();
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '@Url.Action("JsonCheckUserAvailability", "Account")',
+                data: {
+                    UserName: jQuery("#UserName").val()
+                },
+                success: function (data) {
+
+                    jQuery("#imgLoading").hide();
+
+                    if (data.success) {
+                        jQuery("#spanMessage").css("color", "green");
+
+                        jQuery("#spanMessage").text('That username is available');
+
+                    } else {
+                        jQuery("#spanMessage").css("color", "red");
+
+                        jQuery("#spanMessage").text('That username is taken');
+                    }
+
+                    jQuery("#spanMessage").show();
+                }
+            });
+        }
+
+    }
+
+</script>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div id="createaccount">
+       
+            <h1 class="main_heading">
+                Create an Account</h1>
+         
+  <div id="create_account">   
+      
+            <h2 class="sub_heading">
+                Account Details </h2>
+        <div class="accountdetails">
+          
+            @Html.LabelFor(model => model.UserName)
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)           
+                
+                <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                <span id="spanMessage" style="display: none;"></span>
+           
+            @Html.LabelFor(model => model.Password)
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+            @Html.LabelFor(model => model.ConfirmPassword)
+            @Html.EditorFor(model => model.ConfirmPassword)
+            @Html.ValidationMessageFor(model => model.ConfirmPassword)
+        </div>
+        <div style="float: left; margin-top: 5px;">
+           <a href="javascript:fnCheckAvailability();">Check Availability</a>
+        </div>
+        <span class="clr"></span>
+        <div id="creditcardandshipping">
+            <div class="creditcard">
+                <h2 class="sub_heading">
+                    Credit Card Billing info</h2>
+               
+                @Html.LabelFor(model => model.FirstName)
+                @Html.EditorFor(model => model.FirstName)
+                @Html.ValidationMessageFor(model => model.FirstName)
+
+                @Html.LabelFor(model => model.LastName)
+                @Html.EditorFor(model => model.LastName)
+                @Html.ValidationMessageFor(model => model.LastName)
+                @Html.LabelFor(model => model.Address)
+                @Html.EditorFor(model => model.Address)
+                @Html.ValidationMessageFor(model => model.Address)
+                @Html.LabelFor(model => model.Address2)
+                @Html.EditorFor(model => model.Address2)
+                @Html.ValidationMessageFor(model => model.Address2)
+                @Html.LabelFor(model => model.City)
+                @Html.EditorFor(model => model.City)
+                @Html.ValidationMessageFor(model => model.City)
+                @Html.LabelFor(model => model.State)
+                @Html.Partial("EditorTemplates/DropDownStates", new ViewDataDictionary {{ "Class", "ShipState required" }, { "Name", "ShipState" }, { "Id", "ShipState" }})
+                <br /><br />
+                @Html.LabelFor(model => model.Zip)
+                @Html.EditorFor(model => model.Zip)
+                @Html.ValidationMessageFor(model => model.Zip)
+                @Html.LabelFor(model => model.Country)
+                @Html.EditorFor(model => model.Country)
+                @Html.ValidationMessageFor(model => model.Country)
+                <br /><br />
+                @Html.LabelFor(model => model.Email)
+                @Html.EditorFor(model => model.Email)
+                @Html.ValidationMessageFor(model => model.Email)
+                @Html.LabelFor(model => model.DayPhone)
+                @Html.EditorFor(model => model.DayPhone)
+                @Html.ValidationMessageFor(model => model.DayPhone)
+                @Html.LabelFor(model => model.Evening)
+                @Html.EditorFor(model => model.Evening)
+                @Html.ValidationMessageFor(model => model.Evening)
+            </div>
+            <div class="shippinginformation">
+                <h2 class="sub_heading">
+                    Shipping Information</h2>
+              
+                   <span class="samebilling">
+                <input type="checkbox" id="chkSameAs" name="chkSameAs" />
+             
+               <label>Same as Billing?</label></span>
+               <br />
+               <span class="clr"></span>
+             
+                @Html.LabelFor(model => model.ShipToName)
+                @Html.EditorFor(model => model.ShipToName)
+                @Html.ValidationMessageFor(model => model.ShipToName)
+                @Html.LabelFor(model => model.ShipAddress)
+                @Html.EditorFor(model => model.ShipAddress)
+                @Html.ValidationMessageFor(model => model.ShipAddress)
+                @Html.LabelFor(model => model.ShipAddress2)
+                @Html.EditorFor(model => model.ShipAddress2)
+                @Html.ValidationMessageFor(model => model.ShipAddress2)
+                @Html.LabelFor(model => model.ShipCity)
+                @Html.EditorFor(model => model.ShipCity)
+                @Html.ValidationMessageFor(model => model.ShipCity)
+                @Html.LabelFor(model => model.ShipState)
+                @Html.Partial("EditorTemplates/DropDownStates", new ViewDataDictionary {{ "Class", "ShipState required" }, { "Name", "ShipState" }, { "Id", "ShipState" }})
+                <br /><br />
+                @Html.ValidationMessageFor(model => model.ShipState)
+                @Html.LabelFor(model => model.ShipZip)
+                @Html.EditorFor(model => model.ShipZip)
+                @Html.ValidationMessageFor(model => model.ShipZip)
+                @Html.LabelFor(model => model.ShipCountry)
+                @Html.EditorFor(model => model.ShipCountry)
+                @Html.ValidationMessageFor(model => model.ShipCountry)
+                <br /><br />
+                @Html.LabelFor(model => model.ShipInstruc)
+                @Html.EditorFor(model => model.ShipInstruc)
+                @Html.ValidationMessageFor(model => model.ShipInstruc)
+            </div>
+            <span class="clr"></span>
+        </div>
+        
+        <p class="salesbuybacks">
+            @Html.EditorFor(model => model.IsEmailOptIn)
+            @Html.LabelFor(model => model.IsEmailOptIn)
+        </p>
+        <span class="clr"></span>
+      
+            <input type="submit" style="float: right; margin-right: 80px;" value="Create User"  class="createusers_sbt" />
+			 <span class="clr"></span>
+      </div>
+    </div>
+}

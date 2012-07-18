@@ -1,0 +1,314 @@
+﻿@model CampusWebStore.Models.UConnViewModel
+@{
+    ViewBag.Title = "UconnActivation";
+    
+}
+@*<h2>UconnActivation</h2>*@
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")"></script>
+<script type="text/javascript ">
+    
+      //**** check if already activated *****
+    function clickToCheck() {
+
+        $("#tblEnterInfo").hide();
+        $("#tblCheckActivation").show();
+        $("#divFail").hide();
+        $("#divSuccess").hide();
+        $("#divAlreadyMember").hide();
+       }
+
+    jQuery(document).ready(function () {
+    
+    //***** Hiding checkActivation table on page load ****
+   $("#tblCheckActivation").hide();
+   $("#divSuccess").hide();
+   $("#tblEnterInfo").show();
+   $("#divFail").hide();
+   $("#divAlreadyMember").hide();
+    $("#divAlreadyMember").hide();
+     $("#hlGoToCheckoutAnyway").hide();
+
+   //***** here showing checkActivation table and hiding others *****
+       $('#checkActivation').click(function () 
+       {
+              $("#tblEnterInfo").hide();
+               $("#tblAlreadyActivatedText").hide();
+                $("#tblCheckActivation").show();
+             });
+             
+ //***** here hiding checkActivation table and showing others *****
+$('#aBack').click(function () 
+       {
+              $("#tblEnterInfo").show();
+               $("#tblAlreadyActivatedText").show();
+                $("#tblCheckActivation").hide();
+                
+             });
+
+
+    });           
+</script>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        $('#btnCheckActivation').click(function () {
+
+            doActivation();
+        });
+
+        $('#btnActivate').click(function () {
+
+            doActivation();
+        });
+        
+        function doActivation() {
+
+
+            var MemberIdCheck = document.getElementById('MemberIdCheck').value;
+            var EmailList = false;
+
+            if ($("#EmailList").is(':checked')) {
+                EmailList = true;
+            }
+
+            //****** jQuery post to check uConn Activation using MemberID *****
+            //alert(MemberIdCheck + ":" + EmailList);
+
+            $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")"> Please Wait...<br>');
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("JsonCheckUConnActivation", "Account")',
+
+                data: { MemberIDCheck: MemberIdCheck, EmailLIST: EmailList },
+
+                success: function (data, status, xhr) {
+
+                    //alert(data.Activated);
+
+                    if (data.Activated == "1") {
+
+                        $("#divSuccess").show();
+                        $("#tblEnterInfo").hide();
+                        $("#divFail").hide();
+                        $("#divAlreadyMember").hide();
+
+                        if (data.CheckOutFlag) {
+
+                            $("#divSuccess").show();
+                        }
+
+                        //**** Auto redirect after 5 seconds *****
+                        autoRedirect();
+
+                    }
+                    else if (data.Activated == "2") {
+                        $("#tblEnterInfo").hide();
+                        $("#divFail").hide();
+                        $("#divAlreadyMember").show();
+                        $("#divSuccess").hide();
+
+                        if (data.CheckOutFlag) {
+
+                            $("#divAlreadyMember").show();
+                        }
+
+                        //**** Auto redirect after 5 seconds *****
+                        autoRedirect();
+                    } else if (data.Activated == "0") {
+
+                        $("#tblEnterInfo").hide();
+                        $("#divFail").show();
+                        $("#divAlreadyMember").hide();
+                        $("#divSuccess").hide();
+
+                    } else {
+                        alert("Please login and try again");
+                        $("#processing").html("");
+                    }
+                    $("#processing").html("");
+                },
+                error: function (xhr, status, error) {
+
+                    alert(xhr);
+                }
+
+            });
+        }
+    }); 
+</script>
+<script type="text/javascript">
+    
+    var varCounter = 0;
+    var varName = function(){
+     if(varCounter == 0) {
+          varCounter++;
+         window.location.href = '@Url.Action("CheckOut", "Account", new { checkout = "1go" })';
+     } else {
+          clearInterval(varName);
+     }
+};
+
+//***** redirect to checkout page with in 5 seconds *****
+    function autoRedirect() {
+      
+        setInterval(varName, 5000);
+
+    }
+    
+  
+                      
+</script>
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    <div id="processing" class="image_process">
+    </div>
+    
+    <fieldset>
+        @*<legend>UConnViewModel</legend>*@
+        <table id="tblEnterInfo">
+            <tr>
+                <td>@Html.LabelFor(model => model.MemberID)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.MemberID)
+                    @Html.ValidationMessageFor(model => model.MemberID)
+                </td>
+                <td>
+                    <input type="button" value="Activate!" id="btnActivate" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    We will send you emails about special events, sales and other member benefits unless
+                    you opt out below:
+                </td>
+            </tr>
+            <tr>
+                <td>@Html.LabelFor(model => model.EmailList)
+                </td>
+                <td>@Html.EditorFor(model => model.EmailList)
+                </td>
+                <td>@Html.ValidationMessageFor(model => model.EmailList)
+                </td>
+            </tr>
+        </table>
+        <table id="tblAlreadyActivatedText">
+            <tr>
+                <td>
+                    Think you have already activated before? <a id="checkActivation" onclick="javascript:clickToCheck();" href="#">Click to check
+                        here </a>
+                </td>
+            </tr>
+        </table>
+        <table id="tblCheckActivation">
+            <tr>
+                <td>
+                    <a id="aBack" href="#">Back to Activation </a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.MemberIdCheck)
+                </td>
+                <td>
+                    @Html.EditorFor(model => model.MemberIdCheck)
+                    @Html.ValidationMessageFor(model => model.MemberIdCheck)
+                </td>
+                <td>
+                    <input type="button" value="Check my Activation" id="btnCheckActivation" />
+                </td>
+            </tr>
+        </table>
+        <div id="divSuccess" visible="false">
+            <table>
+                <tr>
+                    <td>
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/UconnImages/success.png")" alt="Success" style="display: none;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            YOU WILL BE RE-DIRECT TO CHECKOUT IN 5 SECONDS</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="@Url.Action("CheckOut", "Account", new { checkout = "1go" })">CLICK
+                            HERE IF YOU HAVE NOT BEEN RE-DIRECTED TO CHECKOUT</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="divAlreadyMember" visible="false">
+            <table>
+                <tr>
+                    <td>
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/UconnImages/member.png")" alt="Already Member" style="display: none;"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>
+                            YOU WILL BE RE-DIRECT TO CHECKOUT IN 5 SECONDS</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="@Url.Action("CheckOut", "Account", new { checkout = "1go" })">CLICK
+                            HERE IF YOU HAVE NOT BEEN RE-DIRECTED TO CHECKOUT</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="hlGoToCheckoutAnyway" visible="false">
+             <a href="@Url.Action("CheckOut", "Account", new { checkout = "1go" })">CLICK
+                            CLICK HERE TO GO BACK TO CHECKOUT</a>
+            <br />
+        </div>
+
+        <div id="divFail" visible="false">
+            <table>
+                <tr>
+                    <td>
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/UconnImages/fail.png")" alt="Failed" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="@Url.Action("CheckOut", "Account", new { checkout = "1go" })">CLICK
+                            HERE TO GO BACK TO CHECKOUT</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a  href="@Url.Action("UconnActivation", "Account")">
+                            TRY TO ACTIVE AGAIN</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <p>
+            @*  <input type="submit" value="Create" />*@
+        </p>
+    </fieldset>
+}
+<div>
+    @* @Html.ActionLink("Back to List", "Index")*@
+</div>
+<script type="text/javascript " language="javascript ">
+    
+    jQuery(document).ready(function () {
+
+      
+});
+
+</script>

@@ -1,0 +1,706 @@
+﻿@using CampusWebStore.Shared.Models
+@model IEnumerable<StoreModel>
+@{
+    ViewBag.Title = "Course Search";
+    
+}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="keywords" content="checkbox, radio button, select, option, list, html, javascript, example" />
+<meta name="description" content="Custom form elements to style HTML checkboxes, radio buttons and select lists." />
+<link href="@Url.Content("~/Content/OldSite.css")" rel="stylesheet" type="text/css" />
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/colorbox.css")" media="screen" />
+<script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    if (typeof String.prototype.trim !== 'function') {
+        String.prototype.trim = function () {
+            return this.replace(/^\s+|\s+$/g, '');
+        }
+    }
+
+
+
+    function clearContentArea() {
+        $(".course-area").css("display", "block");
+        $(".book-area").html("");
+
+        /*var current = $(".course-area").html();
+
+        if (current.indexOf("Course List") == -1) {
+            $(".book-area").html("");
+
+            var content = '<h1>Course List</h1>\
+                        <table id="viewBooks" style="width: 660px;">\
+                            <tr>\
+                                <th style="text-align: center;">\
+                                    Campus\
+                                </th>\
+                                <th style="text-align: center;">\
+                                    Term\
+                                </th>\
+                                <th style="text-align: center;">\
+                                    Department\
+                                </th>\
+                                <th style="text-align: center;">\
+                                    Course\
+                                </th>\
+                                <th style="text-align: center;">\
+                                    Section\
+                                </th>\
+                                <th>\
+                                </th>\
+                            </tr>\
+                        </table>\
+                        <div class="view-link">\
+                            <span>\
+                                View Books\
+                            </span>\
+                        </div>\
+                        <span class="clrspan">&nbsp;</span>';
+
+            $(".course-area").html(content);
+            setViewBooks();
+        }*/
+    }
+
+    /**
+    * viewbooks event
+    */
+    function setViewBooks() {
+        $(".view-link").click(function () {
+
+            // Set processing spinner
+            $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")"> Please Wait...<br>');
+
+            // Clear out book-list div
+            $(".book-area").html("");
+            $(".course-area").css("display", "none");
+
+            // Get data object for post
+            $(".course-selection").each(function (i) {
+                var storeId = ($(this).find(".course-selection-campus")).attr('value');
+                var storeText = (($(this).find(".course-selection-campus")).text()).trim();
+                var termId = ($(this).find(".course-selection-term")).attr('value');
+                var termText = (($(this).find(".course-selection-term")).text()).trim();
+                var deptId = ($(this).find(".course-selection-department")).attr('value');
+                var deptText = (($(this).find(".course-selection-department")).text()).trim();
+                var courseId = ($(this).find(".course-selection-course")).attr('value');
+                var courseText = (($(this).find(".course-selection-course")).text()).trim();
+                var sectionId = ($(this).find(".course-selection-section")).attr('value');
+                var sectionText = (($(this).find(".course-selection-section")).text()).trim();
+                var newTesting = "";
+
+                // Setup post string
+                var postString = storeId + "," + storeText + "," + termId + "," + termText + "," + deptId + "," + deptText + "," + courseId + "," + courseText + "," + sectionId + "," + sectionText + "_";
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetBooks", "Home")',
+                    data: { items: postString },
+                    success: function (data, status, xhr) {
+
+                        newTesting += '<div class="course-books">';
+                        newTesting += '<h2>' + sectionText + '</h2>';
+                        newTesting += '<img style="border-width:0px;" src="@Url.Content("~/Content/images/DeskTop/outofstock.gif")" > = Out Of Stock&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img style="border-width:0px;" src="@Url.Content("~/Content/images/Desktop/cart-buy.gif")" id=""> = Add item to cart<br />';
+                        newTesting += '<div class="clear"></div>';
+                        newTesting += '<table>';
+
+                        if (data.courseBookModels != "" && data.courseBookModels != null) {
+                            for (var i = 0; i < data.courseBookModels.length; i++) {
+                                var detail = data.courseBookModels[i].Class;
+
+                                for (var j = 0; j < data.courseBookModels[i].ItemModels.length; j++) {
+                                    var image = data.courseBookModels[i].ItemModels[j].Image;
+                                    var title = data.courseBookModels[i].ItemModels[j].Title.replace('"', "'");
+                                    var reqFlag = data.courseBookModels[i].ItemModels[j].ReqFlag;
+                                    var author = data.courseBookModels[i].ItemModels[j].Author;
+                                    var edition = data.courseBookModels[i].ItemModels[j].Edition;
+                                    var copyright = data.courseBookModels[i].ItemModels[j].Copyright;
+                                    var isbn = data.courseBookModels[i].ItemModels[j].Isbn;
+                                    var binding = data.courseBookModels[i].ItemModels[j].Binding;
+                                    var newPrice = data.courseBookModels[i].ItemModels[j].NewPrice;
+                                    var usedPrice = data.courseBookModels[i].ItemModels[j].UsedPrice;
+                                    var rentalPrice = data.courseBookModels[i].ItemModels[j].RentalPrice;
+                                    var ebookPrice = data.courseBookModels[i].ItemModels[j].EbookPrice;
+                                    var usedPrice = data.courseBookModels[i].ItemModels[j].UsedPrice;
+                                    var newQoh = data.courseBookModels[i].ItemModels[j].NewQoh;
+                                    var usedQoh = data.courseBookModels[i].ItemModels[j].UsedQoh;
+                                    var typeUsed = "USED";
+                                    var typeNew = "NEW";
+                                    var typeRental = "RENTAL";
+                                    var typeEbook = "EBOOK";
+                                    var newId = "new" + isbn;
+                                    var usedId = "used" + isbn;
+                                    var rentalId = "rental" + isbn;
+                                    var ebookId = "ebook" + isbn;
+                                    var newImage = '<img id="' + newId + '" src="@Url.Content("~/content/images/Desktop/cart-buy.gif")" />';
+                                    var usedImage = '<img id="' + usedId + '" src="@Url.Content("~/content/images/Desktop/cart-buy.gif")" />';
+                                    var rentalImage = '<img id="' + rentalId + '" src="@Url.Content("~/content/images/Desktop/cart-buy.gif")" />';
+                                    var ebookImage = '<img id="' + ebookId + '" src="@Url.Content("~/content/images/Desktop/cart-buy.gif")" />';
+
+                                    if (newQoh == "0") {
+                                        typeNew = "OOS";
+                                        newImage = '<img id="' + newId + '" src="@Url.Content("~/Content/images/DeskTop/outofstock.gif")" />';
+                                    }
+
+                                    if (newPrice == "0.00") {
+                                        typeNew = "OOS";
+                                        newImage = '<img id="' + newId + '" src="@Url.Content("~/Content/images/DeskTop/outofstock.gif")" />';
+                                    }
+
+                                    if (usedQoh == "0") {
+                                        typeUsed = "OOS";
+                                        usedImage = '<img id="' + usedId + '" src="@Url.Content("~/Content/images/DeskTop/outofstock.gif")" />';
+                                    }
+
+                                    if (usedPrice == "0.00") {
+                                        typeUsed = "OOS";
+                                        usedImage = '<img id="' + usedId + '" src="@Url.Content("~/Content/images/DeskTop/outofstock.gif")" />';
+                                    }
+
+                                    var extraOptions = "";
+
+                                    if (rentalPrice != "0.00") {
+                                        extraOptions += '<li>\
+                                                            Rental Price:' + rentalPrice + ' <div class="book-buy-image" href="#" onclick=\'javascript:AddToCart("' + isbn + '","' + typeRental + '");\'>' + rentalImage + '</div>\
+                                                            <div class="clear"></div>\
+                                                         </li>';
+                                    }
+                                    if (ebookPrice != "0.00") {
+                                        extraOptions += '<li>\
+                                                            Rental Price: ' + ebookPrice + ' <div class="book-buy-image" href="#" onclick=\'javascript:AddToCart("' + isbn + '","' + typeEbook + '");\'>' + ebookImage + '</div>\
+                                                            <div class="clear"></div>\
+                                                         </li>';
+
+                                    }
+
+                                    newTesting += '<tr class="book">\
+                                                    <td>\
+                                                        <div class="book-image">\
+                                                            <div class="book-placeholder-image">\
+                                                                <img src="http://placehold.it/90x90&text=No+Image" alt="No image available">\
+                                                            </div>\
+                                                            <img class="book-actual-image" src="' + image + '" alt="' + title + '">\
+                                                        </div>\
+                                                    </td>\
+                                                    <td>\
+                                                        <div class="book-info">\
+                                                            <p>\
+                                                                <span class="book-title">' + title + '</span>\
+                                                            </p>\
+                                                            <p>\
+                                                                ' + reqFlag + '\
+                                                            </p>\
+                                                            <p>\
+                                                                Author:' + author + '\
+                                                            </p>\
+                                                            <p>\
+                                                                Edition: ' + edition + '\
+                                                            </p>\
+                                                            <p>\
+                                                                Binding: ' + binding + '\
+                                                            </p>\
+                                                            <p>\
+                                                                Copyright: ' + copyright + '\
+                                                            </p>\
+                                                            <p>\
+                                                                ISBN: ' + isbn + '</span>\
+                                                            </p>\
+                                                        </div>\
+                                                    </td>\
+                                                    <td>\
+                                                        <div class="book-prices">\
+                                                            <ul>\
+                                                                <li>\
+                                                                    New Price: ' + newPrice + ' <div class="book-buy-image" href="#" onclick=\'javascript:AddToCart("' + isbn + '","' + typeNew + '");\'>' + newImage + '</div>\
+                                                                    <div class="clear"></div>\
+                                                                </li>\
+                                                                <li>\
+                                                                    Used Price: ' + usedPrice + ' <div class="book-buy-image" href="#" onclick=\'javascript:AddToCart("' + isbn + '","' + typeUsed + '");\'>' + usedImage + '</div>\
+                                                                    <div class="clear"></div>\
+                                                                </li>\
+                                                                ' + extraOptions + '\
+                                                            </ul>\
+                                                        </div>\
+                                                    </td>\
+                                                </tr>';
+                                }
+                                newTesting += "</table></div><br /><br />";
+                            }
+                        }
+                        current = $(".book-area").html();
+                        current += newTesting;
+                        $(".book-area").html(current);
+                    },
+                    error: function (xhr, status, error) {
+                        alert("error");
+                    }
+                });
+            });
+
+            $("#processing").html("");
+        });
+    }
+
+    var itemGrid = '<tr><th width="40%">Title </th><th>Term</th><th>Dept</th><th>Course</th><th>Section</th> </tr>';
+    var gridViewItemsWithName = '';
+    var itemToFillGrid = '';
+    var clase = "";
+    var items = "";
+    var $openDialog;
+
+
+    $(document).ready(function () {
+        jQuery(".divSearchTips").colorbox({
+            width: "600px",
+            height: "350px",
+            inline: true,
+            href: "#divSearchTips",
+            close: "Close"
+        });
+        setViewBooks();
+
+        //Clear all the testbox
+
+        $("#ddlStore").removeAttr("class");
+
+        /**
+        * ddlStore change event
+        */
+        $("#ddlStore").change(function () {
+            clearContentArea();
+            $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")"> Please Wait...<br>');
+            var storeId = document.getElementById('ddlStore').value;
+
+            $("#ddlStore").focus();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTerms", "Home")',
+                data: { StoreId: storeId },
+                success: function (data, status, xhr) {
+                    $('#ddlCourse >option').remove();
+                    $('#ddlSection >option').remove();
+                    $('#ddlDepartment >option').remove();
+                    $('#ddlTerm >option').remove();
+
+                    if (data != "" && data != null) {
+                        for (var i = 0; i < data.termModels.length; i++) {
+                            $("<option value='" + data.termModels[i].TermId + "'>" + data.termModels[i].Name + "</option>").appendTo("#ddlTerm");
+                        }
+                    }
+
+                    $("#ddlTerm").focus();
+                    $("#processing").html("");
+                    $("#ddlTerm").removeAttr("disabled");
+                },
+                error: function (xhr, status, error) {
+                    alert("error");
+                }
+
+            });
+        });
+
+        /**
+        * ddlTerm change event
+        */
+        $("#ddlTerm").change(function () {
+            clearContentArea();
+            $("#ddlTerm").focus();
+
+            var storeId = $('#ddlStore').val();
+
+            if (
+                storeId != null && storeId != "NULL" && storeId != ""
+            ) {
+
+                $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")"> Please Wait...<br>');
+                var termId = document.getElementById('ddlTerm').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetDepartments", "Home")',
+                    data: { StoreId: storeId, TermId: termId },
+                    success: function (data, status, xhr) {
+                        $('#ddlCourse >option').remove();
+                        $('#ddlSection >option').remove();
+                        $('#ddlDepartment >option').remove();
+
+                        if (data != "" && data != null) {
+                            for (var i = 0; i < data.departmentModels.length; i++) {
+                                $("<option value='" + data.departmentModels[i].DepartmentId + "'>" + data.departmentModels[i].Name + "</option>").appendTo("#ddlDepartment");
+                            }
+                        }
+
+                        $("#processing").html("");
+                        $("#ddlDepartment").focus();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("error");
+                    }
+                });
+            }
+        });
+
+        /**
+        * ddlDepartment change event
+        */
+        $("#ddlDepartment").change(function () {
+            clearContentArea();
+            $("#ddlDepartment").focus();
+
+            var storeId = $('#ddlStore').val();
+            var termId = $('#ddlTerm').val();
+            var deptId = $('#ddlDepartment').val();
+
+            if (
+                storeId != null && storeId != "NULL" && storeId != ""
+                && termId != null && termId != ""
+            ) {
+
+                $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")"> Please Wait...<br>');
+                $('#ddlCourse >option').remove();
+                $('#ddlSection >option').remove();
+
+                // derp
+                var storeId = document.getElementById('ddlStore').value;
+                var termId = document.getElementById('ddlTerm').value;
+                var deptId = document.getElementById('ddlDepartment').value;
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetCourses", "Home")',
+                    data: { StoreId: storeId, TermId: termId, DeptId: deptId },
+                    success: function (data, status, xhr) {
+                        $('#ddlCourse >option').remove();
+                        $('#ddlSection >option').remove();
+
+                        if (data != "" && data != null) {
+                            for (var i = 0; i < data.courseModels.length; i++) {
+                                $("<option value='" + data.courseModels[i].CourseId + "'>" + data.courseModels[i].Name + "</option>").appendTo("#ddlCourse");
+                            }
+                        }
+
+                        $("#processing").html("");
+                        $("#ddlCourse").focus();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("error");
+                    }
+                });
+            }
+        });
+
+        /**
+        * ddlCourse change event
+        */
+        $("#ddlCourse").change(function () {
+            clearContentArea();
+            $("#ddlCourse").focus();
+
+            var storeId = $('#ddlStore').val();
+            var termId = $('#ddlTerm').val();
+            var deptId = $('#ddlDepartment').val();
+
+            if (
+                storeId != null && storeId != "NULL" && storeId != ""
+                && termId != null && termId != ""
+                && deptId != null && deptId != ""
+            ) {
+                $("#processing").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")"> Please Wait...<br>'); var storeId = document.getElementById('ddlStore').value;
+
+                var termId = document.getElementById('ddlTerm').value;
+                var courseId = document.getElementById('ddlCourse').value;
+                var deptId = document.getElementById('ddlDepartment').value;
+                $('#ddlSection >option').remove();
+
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetSections", "Home")',
+                    data: { StoreID: storeId, TermID: termId, DeptID: deptId, CourseID: courseId },
+                    success: function (data, status, xhr) {
+                        $('#ddlSection >option').remove();
+
+                        if (data != "" && data != null) {
+                            for (var i = 0; i < data.sectionModels.length; i++) {
+                                $("<option value='" + data.sectionModels[i].SectionId + "'>" + data.sectionModels[i].Name + "</option>").appendTo("#ddlSection");
+                            }
+                        }
+
+                        $("#processing").html("");
+                        $("#ddlSection").focus();
+                    },
+                    error: function (xhr, status, error) {
+                        alert("error");
+                    }
+                });
+            }
+        });
+
+        /**
+        * ddlSection change event
+        */
+        $("#ddlSection").change(function () {
+            clearContentArea();
+            $("#ddlSection").focus();
+
+            var storeId = $('#ddlStore').val();
+            var termId = $('#ddlTerm').val();
+            var courseId = $('#ddlCourse').val();
+            var deptId = $('#ddlDepartment').val();
+            var sectionId = $('#ddlSection').val();
+
+            if (
+                storeId != null && storeId != "NULL" && storeId != ""
+                && termId != null && termId != ""
+                && deptId != null && deptId != ""
+                && courseId != null && courseId != ""
+            ) {
+                var id = $("#ddlSection option:selected").text();
+                id = id.replace(/\s/g, '_');
+
+                if ($("#" + id).length == 0) {
+                    courselist = $("#viewBooks").html();
+                    newLine = '<tr id="' + id + '" class="course-selection">\
+                                <td class="course-selection-campus" value="' + storeId + '">\
+                                    ' + $("#ddlStore option:selected").text() + '\
+                                </td>\
+                                <td class="course-selection-term" value="' + termId + '">\
+                                    ' + $("#ddlTerm option:selected").text() + '\
+                                </td>\
+                                <td class="course-selection-department" value="' + deptId + '">\
+                                    ' + $("#ddlDepartment option:selected").text() + '\
+                                </td>\
+                                <td class="course-selection-course" value="' + courseId + '">\
+                                    ' + $("#ddlCourse option:selected").text() + '\
+                                </td>\
+                                <td class="course-selection-section" value="' + sectionId + '">\
+                                    ' + $("#ddlSection option:selected").text() + '\
+                                </td>\
+                                <td>\
+                                    <span class="remove-button" onclick="removeItem(\'' + id + '\')">Remove</span>\
+                                </td>\
+                            </tr>';
+                    courselist += newLine;
+                    $("#viewBooks").html(courselist);
+                }
+            }
+        });
+    });
+
+    /**
+    * Static functions
+    */
+    var strViewBooks = "";
+
+    function removeItem(id) {
+        $("#" + id).remove();
+    }
+
+    function Delete(i) {
+        if (confirm("Are you sure?")) {
+            gridViewItemsWithName = gridViewItemsWithName.replace($("#hdn" + i).val() + "_", '');
+            ShowItemGrid(gridViewItemsWithName);
+            $("#ddlSection").val(0);
+            $('#selectddlSection').text('Select One');
+        }
+    }
+
+    function BackButton() {
+        $("#processingImage").html('<img src="@Url.Content("~/Content/images/Desktop/loading_normal_up.gif")">Please Wait...<br>');
+        setTimeout(show, 4000);
+        $("#viewBooks").html("");
+        $("#processingImage").html("");
+        $("#backButton").html("");
+    }
+
+    function show() {
+        $("#frmCourse").show().delay(4000);
+    }
+
+    function ShowItemGrid(value) {
+        var items = value.split("_");
+        var itemGrid = '<tr><th width="40%">Title </th><th>Term</th><th>Dept</th><th>Course</th><th>Section</th> </tr>';
+
+        if (items.length < 2) {
+            $("#viewBookButton").html("");
+            itemGrid = "";
+        }
+        else {
+            $("#btnViewBooks").show();
+        }
+
+        for (var i = 0; i < items.length - 1; i++) {
+            if (i % 2 == 0) {
+                clase = 'even';
+            }
+            else {
+                clase = 'odd';
+            }
+
+            var item = items[i].split(",");
+            var section = item[9].replace(/\s/g, "-");
+            var course = item[7].replace(/\s/g, "-");
+
+            itemGrid += '<tr id=tr' + section + course + ' class="' + clase + '"><td><input id="hdn' + section + course + '" value="' + items[i] + '" type="hidden">' + item[1] + '</td><td>' + item[3] + '</td><td>' + item[5] + '</td><td>' + item[7] + '</td><td class="lastborder">' + item[9] + '<a href="#" id="' + section + course + '" onclick="javascript:Delete(this.id);" class="crose"><img src="@Url.Content("~/Content/Images/Desktop/Delete_Black.png")"></a></td></tr>';
+
+        }
+
+        $("#itemGrid").html("");
+        $("#itemGrid").html(itemGrid);
+    }
+
+    //Function will clear all the list box
+    function ClearAllListBox() {
+        $('#ddlCourse >option').remove();
+        $('#ddlSection >option').remove();
+        $('#ddlDepartment >option').remove();
+        $('#ddlTerm >option').remove();
+    }
+</script>
+@{
+    var ddlItems = new List<SelectListItem> { new SelectListItem() };
+    var selectListItems = (IEnumerable<SelectListItem>)ViewData["lstStoreList"];
+}
+<h1 class="main_heading">Course Selection</h1>
+<div id="headerproduct">
+    <!--header-->
+</div>
+<!--//header-->
+<div class="cartcontainer">
+    <!--container-->
+
+    <div id="form">
+        <form id="frmCourse" runat="server">
+        <div class="clear">
+        </div>
+
+        <div>
+            <div class="selectcampus">
+                <br />
+                @Html.Partial("EditorTemplates/StoresDropdown")
+                <div class="fl linksr"><a href="#" onclick="javascript:ClearAllListBox();">Reset Search Fields</a> |  <a href="#" class="divSearchTips">Search Tips</a></div>
+            </div>
+            <span class="clrspan">&nbsp;</span>
+            <div>
+                <div class="course_selection_item">
+                    <h2 class="sub_heading">Term</h2>
+                    @Html.ListBox("ddlTerm", ddlItems, new { @tooltip = "Term", @style = "width:150px;height:110px;" })
+                </div>
+                <div class="course_selection_item">
+                    <h2 class="sub_heading">Department</h2>
+                    @Html.ListBox("ddlDepartment", ddlItems, new { @tooltip = "Department", @style = "width:150px;height:110px;" })
+                </div>
+                <div class="course_selection_item">
+                    <h2 class="sub_heading">Course</h2>
+                    @Html.ListBox("ddlCourse", ddlItems, new { @tooltip = "Course", @style = "width:150px;height:110px;" })
+                </div>
+                <div class="course_selection_item">
+                    <h2 class="sub_heading">Section</h2>
+                    @Html.ListBox("ddlSection", ddlItems, new { @tooltip = "Section", @style = "width:150px;height:110px;" })
+                </div>
+                <span class="clrspan">&nbsp;</span>
+            </div>
+
+            <div style="width: 660px;">
+                <br />
+                <div style="height: 32px;" id="processing" class="image_process"></div>
+                <br />
+                <div class="course-area">
+                    <h1>Course List</h1>
+                    <table id="viewBooks" style="width: 660px;">
+                        <tr>
+                            <th style="text-align: center;">
+                                Campus
+                            </th>
+                            <th style="text-align: center;">
+                                Term
+                            </th>
+                            <th style="text-align: center;">
+                                Department
+                            </th>
+                            <th style="text-align: center;">
+                                Course
+                            </th>
+                            <th style="text-align: center;">
+                                Section
+                            </th>
+                            <th>
+                            </th>
+                        </tr>
+                    </table>
+                    <div class="view-link">
+                        <span>
+                            View Books
+                        </span>
+                    </div>
+                    <span class="clrspan">&nbsp;</span>
+                </div>
+                <div class="book-area"></div>
+            </div>
+        </div>
+        <span class="clrspan">&nbsp;</span>
+        <div style="float: right;">
+            <table id="itemGrid" cellpadding="0" cellspacing="0" border="0" class="tXtBook carttable">
+            </table>
+            <div id='viewBookButton' class="Add">
+            </div>
+        </div>
+        <div class="clear">
+        </div>
+
+        <div class="footerTextbook productfoot">
+        </div>
+        @Html.Hidden("hdnddlTerm")
+        @Html.Hidden("hdnddlCourse")
+        @Html.Hidden("hdnddlSection")
+        </form>
+    </div>
+    <div class="grid">
+        <div id="processingImage">
+        </div>
+        <div id="backButton">
+        </div>
+
+    </div>
+    <span class="clr"></span>
+</div>
+<div style="display: none">
+    <div id="divSearchTips" class="news" style="color: #000000;">
+        <h1 align="center">Search Tips:</h1>
+        <div style="overflow-y: scroll; height: 222px;">
+            <p>Some tips on using this search method:</p>
+            <ul>
+                <li>
+                    Start by clicking the Campus you attend. Once this is selected, the page will load
+                    the available terms for you. You can then click on your term and continue this process
+                    through to your section.
+                </li>
+                <li>
+                    To buy a book, just click the "buy" image. This book will then be added to your
+                    shopping cart. If you would like to change your used/new selection, just click your
+                    new selection, and your cart will automatically be updated. The book will not be
+                    added twice. If you need more than one book, please view your cart, and make quantity
+                    changes there.
+                </li>
+                <li>
+                    While viewing your books for the selected class, you can click on the title of the
+                    book to view more details about it. You will also see an image of the book if it
+                    is available.
+                </li>
+                <li>
+                    After you are done searching for a class, you can select a new class from the search
+                    boxes. There is no need to hit your back button, as this will result in resetting
+                    your searches. For example: When viewing your books for a certain class, and you
+                    need to change to a new department, just click the new selection from the department
+                    search box. Your new courses will load in the course search box.
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />

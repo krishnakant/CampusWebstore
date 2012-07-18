@@ -1,0 +1,746 @@
+﻿@using System.Globalization
+@using CampusWebStore.Shared.Models
+@model IEnumerable<CampusWebStore.Shared.Models.ShoppingCartModel>
+@{
+    ViewBag.Title = "CheckOut";
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+
+    var cartTotal = 0.0;
+}
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        // enable
+
+        //Show Custom shipping info box.. 
+        jQuery('input[id*="chkShippingThisTime"]').click(function () {
+
+            var status = jQuery('input[id*="chkShippingThisTime"]').is(":checked") ? "on" : "off";
+
+            if (status == "on") {
+
+                jQuery("#divAddress").hide();
+
+                jQuery("#divShipping").show();
+
+            } else {
+
+                jQuery("#divAddress").show();
+
+                jQuery("#divShipping").hide();
+            }
+
+        });
+
+        //Do Payment after finalize order....
+        jQuery('input[id*="btnMakePayment"]').click(function () {
+
+            if (jQuery('input[id*="chkPolicyAgree"]').is(":checked")) {
+
+                jQuery("#imgLoading").show();
+
+                jQuery("#spanError").hide();
+
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '@Url.Action("JsonDoPayment", "Shipping")',
+                    data: {
+                        CardType: jQuery("#ddlPayCardType").val(),
+                        ExpiryDate: jQuery("#ddlPayExpMonth").val() + jQuery("#ddlPayExpMonth").val().substr(2, 2),
+                        CardNo: jQuery("#txtCardNo").val(),
+                        CIDNo: jQuery("#txtPayCIDNumber").val(),
+                        PromoCode: jQuery("#txtPromoCode").val(),
+                        SubTotal: jQuery("#spnSubTotal").text()
+                    },
+                    success: function (data) {
+                        if (data.success) {
+                            jQuery("#imgLoading").show();
+
+                            window.location.href = "";
+                        }
+                    }
+                });
+            } else {
+
+
+                jQuery("#spanError").show();
+
+                jQuery("#spanError").html("Please read and agree to checkout policy.");
+            }
+        });
+    });
+    fnGetShippingMethods();
+    var status = "off";
+
+    //function to get Shipping Methods details.....
+    function fnGetShippingMethods() {
+        $("#divDeatil").show();
+        jQuery("#imgLoading").show();
+
+        jQuery("#divAddress").hide();
+
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonGetShippingMethodDetails", "Shipping")',
+            data: {
+                IsAllowSubscription: jQuery('input[id*="chkShippingThisTime"]').is(":checked"),
+                IsShippingThisTime: jQuery('input[id*="chkShippingThisTime"]').is(":checked"),
+                ShipToName: jQuery("#txtShipToName").val(),
+                ShipAddress: jQuery("#txtShipToAddress").val(),
+                ShipAddress2: jQuery("#txtShipToName").val(),
+                ShipCity: jQuery("#txtShipToAddress").val(),
+                ShipState: jQuery("#txtShipToName").val(),
+                ShipZip: jQuery("#txtShipToAddress").val(),
+                ShipCountry: jQuery("#txtShipToAddress").val(),
+                ShipInstructions: jQuery("#txtShipInstructions").val()
+            },
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                jQuery("#divShipping").hide();
+
+                if (data.success) {
+
+
+                    var strTable = '<div class="content-primary"><ul class="ui-listview" data-divider-theme="d" data-theme="d" data-role="listview"><li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Select Shipping Mehtod<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"></span></li>';
+
+
+
+                    for (var i = 0; i < data.ShippingMethods.length; i++) {
+                        strTable += '<li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">';
+
+                        strTable += '<div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href=' + "'" + 'javascript:fnGetTax("' + data.ShippingMethods[i].Display + '","' + data.ShippingMethods[i].Amount + '","' + data.ShippingMethods[i].Table + '");' + "'" + ' class="ui-link-inherit">' + data.ShippingMethods[i].Display + '   ' + data.ShippingMethods[i].Amount + '</a></div></div> </li>';
+
+                        //                        strTable += '<p class="ui-li-desc">' + data.ShippingMethods[i].Amount + "</p></a></div></div>";
+                        //                        strTable+='<a data-transition="slideup" data-rel="dialog" href=' + "'" + 'javascript:fnGetTax("' + data.ShippingMethods[i].Display + '","' + data.ShippingMethods[i].Amount + '","' + data.ShippingMethods[i].Table + '");' + "'" + ' title="Purchase album'+
+                        //			            '" class="ui-li-link-alt ui-btn ui-btn-up-c ui-btn-icon-notext" data-corners="false" data-shadow="false" data-iconshadow="true" '+
+                        //    			         'data-wrapperels="span" data-icon="false" data-iconpos="notext" data-theme="c"><span class="ui-btn-inner"><span class="ui-btn-text">'+
+                        //                        '</span><span data-corners="true" data-shadow="true" data-iconshadow="true" data-wrapperels="span" data-icon="gear" data-iconpos="notext"'+
+                        //                         'data-theme="d" title="" class="ui-btn ui-btn-up-d ui-shadow ui-btn-corner-all ui-btn-icon-notext"><span class="ui-btn-inner ui-btn-corner-all">'+
+                        //                         '<span class="ui-btn-text"></span><span class="ui-icon ui-icon-gear ui-icon-shadow">&nbsp;</span></span></span></span></a></li>';
+
+                        //                        strTable += "<td><a href=" + '"' + "javascript:fnGetTax('" + data.ShippingMethods[i].Display + "','" + data.ShippingMethods[i].Amount + "','" + data.ShippingMethods[i].Table + "');" + '"' + ">Select</a></td>";
+
+                        //  strTable += "</tr>";
+
+                    }
+
+                    strTable += '<li id="divViewCart" data-corners="false" style="display:none" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a  href="#page8" data-rel="dialog" class="ui-link-inherit">View Cart Total</a></div></div></li></ul>';
+
+                    jQuery("#divShippingSelection").html(strTable);
+
+                    jQuery("#divShippingSelection").show();
+
+                    jQuery("#divShippingThisTime").hide();
+
+                    $("#divLoading").hide();
+                    $("#divDeatial").show();
+
+                } else {
+
+                }
+            }
+        });
+    }
+
+    //function to get tax
+    function fnGetTax(name, amt, table) {
+        $.mobile.changePage("#LoadingDetail", "flip", true, false);
+        jQuery("#imgLoading").show();
+
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonGetShippingTax", "Shipping")',
+            data: {
+                ShipName: name,
+                Amount: amt,
+                Table: table
+            },
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                jQuery("#divShipping").hide();
+
+                if (data.success) {
+
+                    var tax = data.objTaxModel.Tax;
+
+                    var subTotal;
+
+                    jQuery("#spnTax").html(tax);
+
+                    jQuery("#spnShippingCost").html(amt);
+
+                    subTotal = parseFloat(jQuery("#spnCartTotal").text().replace('$', '')) + parseFloat(tax.replace('$', '')) + parseFloat(amt.replace('$', ''));
+
+                    jQuery("#spnSubTotal").html("$" + subTotal.toFixed(2));
+
+                    for (var i = 0; i < data.objTaxModel.PaymentMethods.length; i++) {
+
+                        jQuery("<option value='" + data.objTaxModel.PaymentMethods[i].Tender + "'>" + data.objTaxModel.PaymentMethods[i].Type + "</option>").appendTo("#ddlPayCardType");
+                    }
+                    $("#divViewCart").hide();
+                    $("#divPage7").html('<div class="clear"></div><div data-type="horizontal" data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-horizontal">' +
+                                                '<center><a data-icon="plus" style="width:50%" data-role="button"  href="#page8" data-theme="c" class="ui-btn ui-corner-left ui-btn-up-c">' +
+                                                    '<span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">View Cart</span></span></a><a style="width:50%" data-role="button"  href="#page1" data-theme="c" class="ui-btn ui-corner-right ui-btn-up-c">' +
+                                                  '<span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">Back</span></span></a></center></div>');
+                    jQuery("#imgLoading").hide();
+
+                    jQuery("#tblPayment").show();
+                    $.mobile.changePage("#page7", "flip", true, false);
+
+                } else {
+
+                }
+            }
+        });
+    }
+   
+</script>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+        $("#p3").click(function () {
+            setTimeout($.mobile.changePage("#page3", "flip", true, false), 4000);
+            //  $.mobile.changePage("#page3", "flip", true, false);
+        });
+
+        $('a[href$="#page1"]').click(function () {
+            //    $.mobile.pageloading();
+            $.mobile.changePage("#page1", "flip", true, false);
+        });
+    });
+</script>
+<script src="@Url.Content("~/Scripts/jquery.mobile-1.0b3.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/jquery.mobile-1.0b2.css")" rel="stylesheet" type="text/css" />
+<link href="@Url.Content("~/Content/styles/Mobile/jquery.mobile.css")" rel="stylesheet" />
+
+<div id="divLoading" >
+    <div class="cartcontainer">
+        <img  src="@Url.Content("~/Content/Images/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore" id="logo"/>
+        <!--container-->
+        <div id="dialog">
+        </div>
+        <div id="form">
+            <form id="form1" runat="server">
+            @Html.Partial("EditorTemplates/MobileHeader")
+            <div class="clear">
+            </div>
+            <div class="bradecumpro">
+                <a href="#" class="left">@ViewBag.Title</a>
+            </div>
+            <center>
+                <div style="clear: both;">
+                </div>
+                <div id="processing" style="width: 64px;height:210px;">
+                    <br /><br />
+                    <img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"><br /><b>Please - wait<br />
+                                                                                                 Loading...</b><br />
+                </div>
+            </center>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="divDeatial" style="display: none;">
+    <section id="page1" data-role="page">
+               <div id="headerproduct">
+    <!--header-->
+    <img  src="@Url.Content("~/Content/images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore" id="logo"/>
+</div>
+                <div class="cartcontainer">
+                    <div >
+                        <form  runat="server">
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro minheight">
+                                <a href="#" class="left">Checkout Process</a>
+                            </div>
+        <div class="clear">
+        </div>
+  
+                <div data-role="content" class="content">
+                       
+                    <div class="content-primary">
+                        <ul class="ui-listview" data-role="listview">
+                          
+                            <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" 
+                                class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                                <div class="ui-btn-inner ui-li">
+                                    <div class="ui-btn-text">
+                                        <a  href="#page3"  data-rel="page"  data-trasition="flip" class="ui-link-inherit">1. Verify Address</a>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" 
+                                class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                                <div class="ui-btn-inner ui-li">
+                                    <div class="ui-btn-text">
+                                        <a href="#page7"  id="selectShip"  data-trasition="flip" data-rel="page"  class="ui-link-inherit">2. Select Shipping Method</a>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                            <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" 
+                                class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                                <div class="ui-btn-inner ui-li">
+                                    <div class="ui-btn-text">
+                                        <a href="#"  data-rel="dialog"  class="ui-link-inherit">3. Make Payment/Finalize Order</a>
+                                    </div>
+                                    
+                                </div>
+                            </li>
+                        </ul></div>
+                                   
+                </div>
+                   </form></div></div>    
+                   
+            </section>
+    <section id="page2" data-role="page">
+             <div class="cartcontainer">
+                    <div >
+                        <form >
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro minheight">
+                                <a href="#" class="left">Checkout Process</a>
+                            </div>
+        <div class="clear">
+        </div>
+        
+                           
+                <div data-role="content" class="content">
+                                                                                <table cellpadding="0" cellspacing="0" border="0" class="tXtBook carttable">
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <input type="checkbox" checked="checked" id="chkAllowSubscription"><label for="chkAllowSubscription">
+                                                                                                                                                                   Allow Substitutions on this order
+                                                                                                                                                               </label>
+                                                                                            <img style="border-width: 0px;" src="#" id="imageSubHelp" alt="" />
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                    <tr>
+                                                                                        <th>
+                                                                                            Item
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Detail
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Type
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Price
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Qty
+                                                                                        </th>
+                                                                                        <th>
+                                                                                            Ext
+                                                                                        </th>
+                                                                                    </tr>
+                                                                                    @foreach (var m in Model)
+                                                                                    {
+                                                                                        cartTotal = m.Total;
+                
+                                                                                        <tr>
+                                                                                            <td>@MvcHtmlString.Create(m.Title)
+                                                                                            </td>
+                                                                                            <td>@m.Detail
+                                                                                            </td>
+                                                                                            <td>@m.Type
+                                                                                            </td>
+                                                                                            <td>@m.ActualPrice
+                                                                                            </td>
+                                                                                            <td>@m.Qty
+                                                                                            </td>
+                                                                                            <script type="text/javascript">$("#"+@m.Id).val(@m.Qty); </script>
+                                                                                            <td>@m.Total
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    }
+                                                                                    <tr>
+                                                                                        <td colspan="6" style="text-align: right;">@Html.ActionLink("Modify Items", "ViewCartDetail", "Home")
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </table>  <p> <a href="#page1">Pre</a> | <a href="#page3">Next</a></p></div>   </form></div></div>    
+                </section>
+    <section id="page3" data-trasition="flip" data-role="page">
+                 <div class="cartcontainer">
+                    <div >
+                        <form >
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro minheight">
+                                <a href="#" class="left">Billing Information</a>
+                            </div>
+        <div class="clear">
+        </div>
+                @* <div data-role="navbar">
+                       <ul>
+                           <li><a href="#page1"  class="ui-btn-active ui-state-persist backbttn">Back</a></li></ul></div>*@
+        
+                <div data-role="content" class="content">
+                                                                                   
+                                                                               
+                    @{
+                        var objUserModel = (UserModel)Session["USERINFO"];
+                        
+                    }
+                    <div>
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                        <div id="divAddress">
+                            <ul class="ui-listview" data-divider-theme="d" data-theme="d" data-role="listview">
+                             @*   <li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count">Billing Information<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"></span></li>*@
+                                <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#" class="ui-link-inherit"><p class="ui-li-aside ui-li-desc"><strong></strong></p>
+				
+                                                                                                                                                                                                                                                                                                                  <h3 class="ui-li-heading">@objUserModel.FirstName</h3>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong>@objUserModel.Address</strong></p>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong>@objUserModel.Address2</strong></p>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong>@objUserModel.City , @objUserModel.State @objUserModel.Zip</strong></p>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong> @objUserModel.Country</strong></p>
+                                                                                                                                                                                                                                                                                                              </a></div></div></li>
+                                                                                                   
+                                <li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count" style="font-size: 12;font-weight: bold">Shipping Information<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"></span></li>
+                                <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#" class="ui-link-inherit"><p class="ui-li-aside ui-li-desc"><strong></strong></p>
+				
+                                                                                                                                                                                                                                                                                                                  <h3 class="ui-li-heading"><strong>@objUserModel.ShipToName</strong></h3>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong>@objUserModel.ShipAddress</strong></p>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong>@objUserModel.ShipAddress2</strong></p>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong> @objUserModel.ShipCity , @objUserModel.ShipState @objUserModel.ShipZip</strong></p>
+                                                                                                                                                                                                                                                                                                                  <p class="ui-li-desc"><strong> @objUserModel.ShipCountry</strong> </p>
+                                                                                                                                                                                                                                                                                                              </a></div></div></li>  
+                              @*  <li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count"> @Html.ActionLink("Change Your Address On File", "AccountDetails", "Account")<!--<span class="ui-li-count ui-btn-up-c ui-btn-corner-all"></span>--></li>*@
+                            </ul>                 
+                                                                                                   
+                            <br />
+                                                                                                   
+                        </div>
+                        <span></span>
+                        <div id="divShipping" style="display: none;">
+                            <span style="font-weight: bold; font-size: 18px">Custom Shipping Address:</span>
+                            <table cellpadding="0" cellspacing="0" border="0" class="tXtBook carttable">
+                                <tr>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    Ship To Name:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToName" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Address:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToAddress" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Address2:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToAddress2" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    City:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToCity" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    State:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtState" name="txtState" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Zip:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtZip" name="txtZip" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Country:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtCountry" name="txtCountry" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Ship Instructions:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipInstructions" name="txtShipInstructions" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                                                                                               
+                        <div id="divShippingThisTime" class="billingcheckwrap">
+                            <input type="checkbox" id="chkShippingThisTime" name="chkShippingThisTime"/>
+                            <label for="chkShippingThisTime">Check to use a 'this time only' shipping address</label>
+                        </div>
+                        
+                    </div>
+                                                                                       
+                                                                                      
+                </div>   </form><div class="clear">
+
+                                            </div>
+                                              <div data-type="horizontal" data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-horizontal">
+                                     <center><a data-icon="plus" data-role="button" href="@Url.Action("AccountDetails", "Account")" id="btnContinueShopping"
+                                           style="background: #F39C24;float:none;" data-theme="c" class="ui-btn ui-corner-left ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">Edit Add.</span></span>
+											</a> 
+											
+            <a data-icon="minus" data-role="button" style="background: #F39C24;float:none; border-radius:0 !important; " id="submit" href="#page1" data-theme="c"
+               class="ui-btn ui-btn-up-c ui-corner-undefined ui-controlgroup-last">
+                <span class="ui-btn-inner ui-corner-right ui-controlgroup-last" style="border-radius:0 !important;"><span class="ui-btn-text">
+                                                                                    Back</span></span></a>
+                                                                                           <a data-icon="minus" data-role="button" style="background: #F39C24; float:none;margin-right: -5px !important;" id="btnGoToShipping" href="#page7" data-theme="c" class="ui-btn ui-btn-up-c ui-corner-right ui-controlgroup-last">
+                                            <span class="ui-btn-inner ui-corner-right ui-controlgroup-last" style="margin-right:-5px !important;"><span class="ui-btn-text" >
+                                                                                                               Shipping</span></span></a></center>   
+                                    
+                                      
+                                    </div>
+                                            </div></div>    
+            </section>
+    <section id="page7" data-trasition="flip" data-role="page">
+                 <div class="cartcontainer">
+                    <div >
+                        <form >
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro minheight">
+                                <a href="#" class="left">Chekout Process</a>
+                            </div>
+        <div class="clear">
+        </div>
+                @* <div data-role="navbar">
+                       <ul>
+                           <li><a href="#page1"  class="ui-btn-active ui-state-persist backbttn">Back</a></li></ul></div>*@
+                <div data-role="content" class="content"> <div id="divShippingSelection" >
+                                                              <!--Fill by Ajax  -->
+                                                          </div></div> </form>@*<div id="divPage7" data-role="navbar">
+                       <ul>
+                           <li><a href="#page1"  class="ui-btn-active ui-state-persist backbttn">Back</a></li></ul></div>*@
+                    <div class="clear"></div><div id="divPage7" data-type="horizontal" data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-horizontal">
+                                                 <center><a data-icon="plus" data-role="button" href="#page1" id="btnContinueShopping"
+                                           style="background: #F39C24;float:none;width:90%;" data-theme="c" class="ui-btn ui-corner-left ui-corner-right  ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">Back</span></span>
+											</a>   </center></div>
+                    </div></div>    
+            </section>
+    <section id="page4" data-role="page">
+                <div class="cartcontainer">
+                    <div >
+                        <form  >
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro minheight">
+                                <a href="#" class="left">Payment</a>
+                            </div>
+        <div class="clear">
+        </div>
+                @* *@
+                <div data-role="content" class="content">   
+				<div class="billingcheckwrap">  <input type="checkbox" id="chkPolicyAgree" class="shipping"/><label for="chkPolicyAgree">I Agree</label></div>
+                    <div style="clear: both;"></div>
+                    <table cellpadding="0" cellspacing="0" border="0" id="tblPayment">
+                        <tr>
+                            <td style="vertical-align: top;">
+                                                                                          
+                                                                              
+                                <br/>
+                            </td>
+                            <td>
+                                <table cellpadding="0" cellspacing="0" border="0" class="PaymentBox">
+                                    <tbody>
+                                        <tr>
+                                            <td class="textalignleft">
+                                                Type:
+                                            </td>
+                                            <td class="textalignright">
+                                                <select id="ddlPayCardType">
+                                                                                                            
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="textalignleft">
+                                                Card#:
+                                            </td>
+                                            <td class="textalignright">
+                                                <input type="text" id="txtCardNo" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="textalignleft">
+                                                Exp Date:
+                                            </td>
+                                            <td class="textalignright">
+                                                <select id="ddlPayExpMonth">
+                                                    <option value="01" selected="selected">01 - Jan</option>
+                                                    <option value="02">02 - Feb</option>
+                                                    <option value="03">03 - Mar</option>
+                                                    <option value="04">04 - Apr</option>
+                                                    <option value="05">05 - May</option>
+                                                    <option value="06">06 - Jun</option>
+                                                    <option value="07">07 - Jul</option>
+                                                    <option value="08">08 - Aug</option>
+                                                    <option value="09">09 - Sep</option>
+                                                    <option value="10">10 - Oct</option>
+                                                    <option value="11">11 - Nov</option>
+                                                    <option value="12">12 - Dec</option>
+                                                </select>
+                                                <select id="ddlPayExpYear">
+                                                    <option value="2012" selected="selected">2012</option>
+                                                    <option value="2013">2013</option>
+                                                    <option value="2014">2014</option>
+                                                    <option value="2015">2015</option>
+                                                    <option value="2016">2016</option>
+                                                    <option value="2017">2017</option>
+                                                    <option value="2018">2018</option>
+                                                    <option value="2019">2019</option>
+                                                    <option value="2020">2020</option>
+                                                    <option value="2021">2021</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="textalignleft">
+                                                CID
+                                            </td>
+                                            <td class="textalignright">
+                                                <input type="text" id="txtPayCIDNumber">
+                                                <img src="#" id="imgHelpCID" alt="" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="textalignleft">
+                                                Promo Code:
+                                            </td>
+                                            <td class="textalignright">
+                                                <input type="text" id="txtPromoCode" />
+                                            </td>
+                                        </tr>
+                       
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </table><div style="clear:both"></div><p> <div id="divMakePayment">
+                                                                 @* <input type="button" id="btnMakePayment" value="Make Payment"  classs="backshiip"/>*@
+                                                                  <span id="spanError"></span>
+                                                              </div><br/>  </p></div>  </form> <div class="clear"></div><div data-type="horizontal" data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-horizontal">
+                                                <center><a data-icon="plus" data-role="button" href="#page1"
+                                           style="float:none;width:30%;" data-theme="c" class="ui-btn ui-corner-left   ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">Home</span></span></a><a data-icon="plus" data-role="button" href="" id="btnMakePayment"
+                                           style="background: #F39C24;float:none;width:30%;" data-theme="c" class="ui-btn ui-corner-undefined  ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-undefined"><span class="ui-btn-text">Pay</span></span></a><a data-icon="plus" data-role="button" href="#page8"
+                                           style="background: #F39C24;float:none;width:30%;" data-theme="c" class="ui-btn  ui-corner-right  ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-right"><span class="ui-btn-text">Back</span></span>
+											</a>  </center></div>
+                 </div></div>    
+            </section>
+    <section id="page8" data-role="page">
+                <div class="cartcontainer">
+                    <div id="form">
+                        <form id="frmCourse" runat="server">
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro minheight">
+                                <a href="#" class="left">Chekout Process</a>
+                            </div>
+                            <div class="clear">
+                            </div>
+                            @*  <div data-role="navbar">    <ul>
+                           <li><a href="#page7" class="ui-btn-active ui-state-persist backbttn">Back</a></li><li><a href="#page1" class="ui-btn-active ui-state-persist">Home</a></li></ul></div>*@
+                            <div data-role="content" class="content">
+                                <ul class="ui-listview" data-divider-theme="d" data-theme="d" data-role="listview">
+                                    <li data-role="list-divider" role="heading" class="ui-li ui-li-divider ui-bar-d ui-li-has-count"><b>Cart Total</b><span class="ui-li-count ui-btn-up-c ui-btn-corner-all"></span></li>
+                                    <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="d" class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-d"><div class="ui-btn-inner ui-li"><div class="ui-btn-text"><a href="#" class="ui-link-inherit"><p class="ui-li-aside ui-li-desc"><strong></strong></p>
+                                                                                                                                                                                                                                                                                                                      <h3 class="ui-li-heading"><span id="spnCartTotal">Cart Total: @cartTotal.ToString("C", new CultureInfo("en-us"))</span></h3>
+                                                                                                                                                                                                                                                                                                                      <h3 class="ui-li-heading"> <b>Shipping:   <span id="spnShippingCost">N/A</span></b></h3>
+                                                                                                                                                                                                                                                                                                                      <h3 class="ui-li-desc"><b>Tax:  <span id="spnTax">N/A</span></b></h3>
+                                                                                                                                                                                                                                                                                                                      <h3 class="ui-li-desc"><b> Subtotal: <span id="spnSubTotal">N/A</span></b></h3>
+					
+                                                                                                                                                                                                                                                                                                                  </a></div></div></li>
+                                
+                                </ul>
+
+                                                                      
+                            </div>  </form> <div class="clear"></div><div data-type="horizontal" data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-horizontal">
+                                     <center><a data-icon="plus" data-role="button" href="#page4" 
+                                           style="background: #F39C24;float:none;width:90%;" data-theme="c" class="ui-btn ui-corner-left ui-corner-right ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">Make Payment</span></span>
+											</a> 
+											
+           </center>   
+                                    
+                                      
+                                    </div>
+                </div></div>    
+            </section>
+    <section id="LoadingDetail" data-role="page">
+          
+          
+<div class="cartcontainer">
+    <img  src="@Url.Content("~/Content/Images/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore" id="logo"/>
+    <!--container-->
+    <div id="dialog">
+    </div>
+    <div id="form">
+        <form id="form1" runat="server">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+            <div class="bradecumpro">
+                <a href="#" class="left">@ViewBag.Title</a>
+            </div>
+            <center> <div style="clear:both;"></div><div id="processing" style="width: 64px;height:210px;">
+                    <br /><br />
+                    <img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"><br /><b>Please - wait<br />
+                                                                                                 selecting...</b><br />
+                </div></center></form>
+        </div>  <div data-role="content" class="content"></div></div></section>
+    <span class="clr"></span>
+    <br />
+    <div style="clear: both">
+    </div>
+    <span class="clr"></span>
+</div>

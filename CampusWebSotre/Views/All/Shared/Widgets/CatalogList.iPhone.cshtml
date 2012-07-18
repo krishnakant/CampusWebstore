@@ -1,0 +1,22 @@
+﻿@using CampusWebStore.Shared.Models
+@{
+   
+    var lstCatalogs = (IEnumerable<CatalogModel>)ViewData["CatalogList"];
+   
+}
+
+<div class="content-primary">
+    <ul data-role="listview" class="ui-listview">
+        @foreach (var m in lstCatalogs)
+        {
+
+            <li data-theme="c" class="ui-li-has-arrow ui-li ui-li-has-thumb ui-btn-up-c">
+                <div class="ui-btn-inner ui-li">
+                    <div class="ui-btn-text">
+                        <a href="@Url.Action("CatalogProduct", "catalogs", new { CatId = @m.CatalogId, Title = @m.SeoUrl })" class="ui-link-inherit">@m.SeoUrl</a>
+                    </div>
+               </div>
+            </li>
+        }
+    </ul>
+</div>

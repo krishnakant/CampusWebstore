@@ -1,0 +1,83 @@
+﻿@using CampusWebStore.Models
+@model PageViewModel
+
+@if (Model != null)
+{
+    
+    <div class="setl">
+        <fieldset id="addPages" class="CheckGroup1">
+            <legend>Edit your custom page </legend>
+            <table cellspacing="0" cellpadding="0" border="0">
+                <tbody>
+                    <tr>
+                        <td>
+                            <table cellspacing="5" cellpadding="5" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td valign="top">
+                                            Page Name:
+                                        </td>
+                                        <td valign="top">
+                                            <span style="font-size: 12px;" id="">@Model.PageName</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            Page Description:
+                                        </td>
+                                        <td valign="top">
+                                            <span style="font-size: 12px;" id="">@Model.PageDesc</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td>
+                            <table cellspacing="5" cellpadding="5" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td valign="top">
+                                            <span style="font-size: 12px;" id="">Rename this page to:</span>
+                                        </td>
+                                        <td valign="top">
+                                            <input type="text" style="width: 120px;" class="inputsmallstyle" id="txtReNamePage" name="bRename">
+                                        </td>
+                                        <td valign="top">
+                                            <input type="submit" style="font-size: 12px;" onclick="javascript:JsonCopyOrRenamePage('@Model.PageName','ReName');" value="Rename" name="btnRename">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            <span style="font-size: 12px;" id="">Copy this page to:</span>
+                                        </td>
+                                        <td valign="top">
+                                            <input type="text" style="width: 120px;" class="inputsmallstyle" id="txtNewPageName" name="bCopy">
+                                        </td>
+                                        <td valign="top">
+                                            <input type="submit" style="font-size: 12px;" onclick="javascript:JsonCopyOrRenamePage('@Model.PageName','Copy');" value="Copy" name="btnCopy"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
+    <div id="editor">
+    @Html.Partial("EditorTemplates/admin/RichEditorControl",Model.PageContent)
+    </div>
+    @Html.HiddenFor(model => model.PageContent)
+    <br />
+    
+    <input type="submit" style="font-size:12px;" onclick="javascript:SavePageContents('@Model.PageName','@Model.PageDesc');" id="btnSave" value="Save" name="Backup"/>
+    
+    <input type="submit" style="font-size: 12px;" onclick="javascript:CancelEdit();" value="Cancel" name="Cancel" />
+
+    <input type="submit" style="font-size: 12px;" onclick="javascript:ViewBackUp('@Model.PageName');" value="View Backup" name="Backup" />
+    
+    <input type="submit" style="font-size: 12px;" onclick="javascript:RestoreBackUp('@Model.PageName');" value="Restore From Backup"
+        name="Backup" />
+
+}

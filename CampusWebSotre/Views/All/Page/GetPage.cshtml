@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "GetPage";
+    
+}
+<div>
+    <div id="page-title">
+        <h1 align="center">
+            @ViewBag.header
+        </h1>
+    </div>
+    <br /><br />
+    <div class="page-content">
+        @MvcHtmlString.Create(ViewBag.content)
+    </div>
+    <br /><br />
+</div>

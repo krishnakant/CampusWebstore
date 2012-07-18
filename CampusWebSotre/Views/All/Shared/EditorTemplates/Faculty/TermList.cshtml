@@ -1,0 +1,54 @@
+﻿@using CampusWebStore.Models
+@model IEnumerable<FacultyTermViewModel>
+@if (Model.Any())
+{
+    <table>
+        <tr>
+            <th>
+            </th>
+            <th>
+                Id
+            </th>
+            <th>
+                Desc
+            </th>
+            <th>
+                StoreId
+            </th>
+            <th>
+                StoreDesc
+            </th>
+        </tr>
+        @foreach (var m in Model)
+        {
+            <tr>
+                <td>
+                    <a href="#" onclick="javascript:DeleteTerm(@m.Id);">Delete</a>
+                </td>
+                <td>
+                    @m.Id
+                </td>
+                <td>
+                    @m.Desc
+                </td>
+                <td>
+                    @m.StoreId
+                </td>
+                <td>
+                    @m.StoreDesc
+                </td>
+            </tr>
+
+        }
+    </table>
+    
+    <br />
+    
+    <a href="#" onclick="javascript:AddNewTerm();">Add a new term</a>
+    <br />   <br />   <br />
+      
+    <div id="AddNewTerm">
+    </div>
+    
+    
+}
