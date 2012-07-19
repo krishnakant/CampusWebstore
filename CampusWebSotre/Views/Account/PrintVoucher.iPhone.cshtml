@@ -1,0 +1,68 @@
+﻿@using System.Globalization
+@using CampusWebSotre.Models
+@model CampusWebSotre.Models.PrintVoucherViewModel
+@{
+    ViewBag.Title = "PrintVoucher";
+}
+@{
+    var baseConfig = (BaseMainConfigAdmin) ViewData["objBaseMainConfigAdmin"];
+    }
+@if (Model.SellBackModel != null)
+{
+    @Html.ValidationSummary(true)
+    
+    @Html.Label("Name : ")  @Model.UserModel.FirstName <text> </text> @Model.UserModel.LastName
+    <br />
+    @Html.Label("Email : ") @Model.UserModel.Email
+
+    
+    <br />
+    
+    @Html.Label("Phone : ") @Model.UserModel.DayPhone
+    <br />
+    @Html.Label("Voucher No : ")    @ViewData["VoucherNo"]
+    <br />
+    @Html.Label("Date : ") @DateTime.Now.Date
+    <br />
+    
+    <img src="@Url.Content("~/Content/images/barcode_sellback.jpg")" alt="barcode" />
+    
+    <table class="tXtBook carttable">
+        <tr>
+            <th>
+                Title
+            </th>
+            @* IWEB.BuyBack bbConfig = System.Configuration.ConfigurationManager.GetSection("buybackConfig") as IWEB.BuyBack;
+        GridView1.Columns[1].Visible = bbConfig.StoreCredit;*@
+            @if(baseConfig.IwebBuyBackConfig.StoreCredit)
+            {
+                        <th>
+                Store Credit
+            </th>
+            }
+            <th>
+                Cash Price
+            </th>
+            <th>
+                Type
+            </th>
+        </tr>
+        @foreach (var m in Model.SellBackModel)
+        {
+           
+            <tr>
+                <td>@MvcHtmlString.Create(@m.Title)
+                </td>
+                <td>@m.StoreCredit.ToString("C", new CultureInfo("en-us"))
+                </td>
+                  @if (true)
+                  {
+                <td>@m.CashPrice.ToString("C", new CultureInfo("en-us"));
+                </td>}
+                <td>@m.Type
+                </td>
+            </tr>
+        
+        }
+    </table>
+}

@@ -1,0 +1,98 @@
+﻿@{
+    ViewBag.Title = "GetPage";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>     
+
+td.maincontent h1 span {
+    color: #808080;
+    font-family: Verdana;
+    font-size: 2em;
+    padding-bottom: 5px; font-weight:bold;
+}
+td.maincontent h5 span{background-color: #EAEAEA;
+    color: #404040;
+    font-family: Verdana;
+    font-size: 1em; margin:0px; padding:0px; font-weight: bold;
+}
+</style>
+
+
+<table cellpadding="0" cellspacing="0" border="0" class="mainheader">
+    <tr>
+        <td valign="top">
+            <center>
+                <h3>
+                    @{
+                        var viewbackup = Request.QueryString["Backup"] ?? "";
+
+                        var pagename1 = Request.QueryString["PageName"] ?? "";
+
+                        var pageext = ".desc";
+
+                        if (viewbackup == "backup")
+                        {
+                            pageext = ".descbackup";
+                        }
+                        else if (viewbackup == "preview")
+                        {
+                            pageext = ".previewdesc";
+                        }
+                        else
+                        {
+                            pageext = ".desc";
+                        }
+
+                        var sr1 = new StreamReader(Server.MapPath("~/CustomPages/" + pagename1 + pageext));
+
+                        var heading = sr1.ReadToEnd();
+
+                        sr1.Close();
+                    }
+                    @*<%--content will go here--%>*@
+                    @MvcHtmlString.Create(heading)
+                </h3>
+            </center>
+        </td>
+    </tr>
+</table>
+<table cellpadding="2" cellspacing="2" border="0" align="center" class="maincontent">
+    <tr>
+        <td valign="top" class="maincontent">
+            @{
+
+                var viewbackup1 = Request.QueryString["Backup"] ?? "";
+
+                var pagename = Request.QueryString["PageName"] ?? "";
+
+                var pageext1 = ".cws";
+
+                if (viewbackup1 == "backup")
+                {
+                    pageext1 = ".backup";
+                }
+                else if (viewbackup1 == "preview")
+                {
+                    pageext1 = ".preview";
+                }
+                else
+                {
+                    pageext1 = ".cws";
+                }
+
+                
+                var sr = new StreamReader(Server.MapPath("~/CustomPages/" + pagename + pageext1));
+
+                //Reading the file data
+                var str = @sr.ReadToEnd().ToString();
+
+                sr.Close();
+                                      
+                                     
+            }
+            @*<%--content will go here--%>*@
+            @MvcHtmlString.Create(str);
+        </td>
+    </tr>
+</table>

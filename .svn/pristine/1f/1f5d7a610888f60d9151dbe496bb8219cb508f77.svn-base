@@ -1,0 +1,110 @@
+﻿@using CampusWebSotre.Models
+@model IEnumerable<PageViewModel>
+
+@if (Model!=null)
+{
+  
+    if (Model.Any())
+   {
+        <table width="70%" cellspacing="0" cellpadding="0" border="0">
+            <tbody>
+                <tr>
+                    <td width="70%">
+                        <div style="width: auto" >
+                        
+                            <legend>Current pages you have added to your site </legend>
+                            <table cellspacing="6" cellpadding="5" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <table cellspacing="2" cellpadding="2" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td align="left">
+                                                            Selected Front Page: <span style="color: White; background-color: Green; font-size: 12px;"
+                                                                                       id=""> </span><span style="color: Red; font-size: Large; font-weight: bold;"
+                                                                                                                   id="">@ViewBag.CurrentHome</span>
+                                                        </td>
+                                                        <td align="right">
+                                                            <a href="#" onclick="javascript:SetHomePageBlank();">Use Blank Page</a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div id="cpageadmin" class="news">
+                                                <div>
+                                                    <table cellspacing="0" border="0" style="background-color: Transparent; border-color: Transparent;
+                                                                                                                                                 border-width: 0px; font-size: 12px; width: 700px; border-collapse: collapse;"
+                                                           id="" font-familty="arial" rules="cols">
+                                                        <tbody>
+                                                            <tr style="color: Black; background-color: #D3CEB7;">
+                                                                <th scope="col">
+                                                                    &nbsp;
+                                                                </th>
+                                                                <th align="left" scope="col">
+                                                                    Page Name/Click to view
+                                                                </th>
+                                                                <th align="left" scope="col">
+                                                                    Description
+                                                                </th>
+                                                                <th scope="col">
+                                                                    Policy?
+                                                                </th>
+                                                                <th scope="col">
+                                                                    Front Page
+                                                                </th>
+                                                            </tr>
+                                                           @{ var chekId = 0; }
+                                                            @foreach (var m in Model)
+                                                            {
+                                                                chekId = chekId + 1;
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="#" onclick="javascript:EditPage('@m.PageName');" >Edit</a>&nbsp;<a href="#" onclick="javascript:DeletePage('@m.PageName');">Delete</a>
+                                                                    </td>
+                                                                    <td align="left">
+                                                                        <a target="_blank" href="@Url.Action("GetPage", "Admin", new { PageName = @m.PageName })" id="">@m.PageName</a>
+                                                                    </td>
+                                                                    <td align="left">
+                                                                        @m.PageDesc
+                                                                    </td>
+                                                                    <td>
+                                                                  
+                                                                        <span title="0">
+                                                                       @if (m.ChkPolicy)
+                                                                       {
+                                                                           <input type="checkbox" name="@m.PageName" id="@chekId" checked onclick=" javascript:ChkPolicy('@chekId','@m.PageName')" />
+                                                                       }
+                                                                       else
+                                                                       {
+                                                                            <input type="checkbox" name="@m.PageName" id="@chekId" onclick=" javascript:ChkPolicy('@chekId','@m.PageName')" />
+                                                                       }
+                                                                           </span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="#" onclick="javascript:ChangeFrontPage('@m.PageName');" id="">@m.IsSelected</a>
+                                                                    </td>
+                                                                </tr>
+                                                            
+                                                               
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                      
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    }
+}

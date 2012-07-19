@@ -1,0 +1,59 @@
+﻿@using CampusWebSotre.Models
+@model IEnumerable<CatalogItemViewModel>
+@{
+    ViewBag.Title = ViewBag.Title;
+     Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1 class="main_heading">
+    Catalog Items</h1>
+<div class="catalogproducts">
+    @for (var i = 1; i <= Model.ToList().Count(); i++)
+    {
+        var val = " </div><div style='clear:both;'>";
+        var objItem = @Model.ElementAt(i - 1);
+        var image = objItem.Images.Contains("http");
+        var catId = objItem.CatId;
+        var title = objItem.SeoUrl;
+        var sku = objItem.Sku;
+        var source = objItem.Source;
+        var delc = objItem.Desc;
+        <div class="catalogproduct">
+            <center>
+                <a style="font-size: 12px;" href="@Url.Action("CatalogProductItems", "catalogs", new { Title = title, Sku = sku, Source = source, Delc = delc })">
+                    @{
+        if (image)
+        {
+                        @MvcHtmlString.Create("<img style='border-width: 0px;width:140px;height:180px;' src=" + objItem.Images + ">")
+
+        }
+
+        else
+        {
+                        @MvcHtmlString.Create("<img style='border-width: 0px;width:140px;height:180px;' src=http://demo.campuswebstore.com/" + objItem.Images + ">")
+        }
+                    }
+                </a>
+            </center>
+            <br />
+            <center>
+                <a style="font-size: 10px; font-family: Verdana; font-size: 1.0em; color: black;"
+                                                                                     href="@Url.Action("CatalogProductItems", "catalogs", new { Title = title, Sku = sku, Source = source, Delc = delc })">
+                    <span class="productcontents">@MvcHtmlString.Create(objItem.Title)</span></a>
+                <a style="font-size: 12px; font-family: Verdana; font-size: .8em; color: black;"
+                                                                                       href="@Url.Action("CatalogProductItems", "catalogs", new { Title = title, Sku = sku, Source = source, Delc = delc })">
+                    <span class="productcontents">@objItem.Price</span></a><br>
+            </center>
+            @if (i % 3 == 0)
+            {
+                @MvcHtmlString.Create(val);
+
+            }
+        </div>
+                                                                   
+                                                                   
+    }
+</div>
+<div name="item" id="item">
+    <div>
+    </div>
+</div>

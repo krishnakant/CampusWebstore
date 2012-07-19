@@ -1,0 +1,4 @@
+﻿@{
+    var selectListItems = (IEnumerable<SelectListItem>) ViewData["lstStoreList"];
+}
+@Html.DropDownList("ddlStore", selectListItems,new {@class="styled"})

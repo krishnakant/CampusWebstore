@@ -1,0 +1,278 @@
+﻿@using CampusWebSotre.Models
+@model OrderDetailViewModel
+@if (Model != null)
+{
+    <table cellspacing="0" border="0" style="width: 100%; border-collapse: collapse;"
+        id="">
+        <tbody>
+            <tr>
+                <td>
+                    <div style="padding: 10px;" >
+                        <center>
+                            <div>
+                            </div>
+                            <br>
+                            <table width="80%" cellspacing="0" cellpadding="0" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td width="50%">
+                                            <center>
+                                                <div>
+                                                    <table cellspacing="0" border="1" style="height: 50px; width: 75%; border-collapse: collapse;"
+                                                        id="" rules="all" class="TestCSS2">
+                                                        <tbody>
+                                                            <tr style="font-weight: bold;">
+                                                                <td colspan="2">
+                                                                    Billing Info:
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Name:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.Name
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Address:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.Address1
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Address:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.Address2
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    City:
+                                                                </td>
+                                                                <td align="left">
+                                                                     @Model.City
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    State:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.State
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Zip:
+                                                                </td>
+                                                                <td align="left">
+                                                                  @Model.Zip
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Country:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.Country
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </center>
+                                        </td>
+                                        <td width="50%">
+                                            <center>
+                                                <div>
+                                                    <table cellspacing="0" border="1" style="height: 50px; width: 75%; border-collapse: collapse;"
+                                                        id="" rules="all" class="TestCSS2">
+                                                        <tbody>
+                                                            <tr style="font-weight: bold;">
+                                                                <td colspan="2">
+                                                                    Shipping Info:
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Name:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.ShipToName
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Address:
+                                                                </td>
+                                                                <td align="left">
+                                                                 @Model.ShipAddress1
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Address:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.ShipAddress2
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    City:
+                                                                </td>
+                                                                <td align="left">
+                                                                   @Model.ShipCity
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    State:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.ShipState
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Zip:
+                                                                </td>
+                                                                <td align="left">
+                                                                   @Model.ShipZip
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="left">
+                                                                    Country:
+                                                                </td>
+                                                                <td align="left">
+                                                                    @Model.ShipCountry
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </center>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </center>
+                        <br>
+                        <center>
+                            <div>
+                                <table cellspacing="0" border="1" style="background-color: Transparent; font-size: 12px;
+                                    width: 75%; border-collapse: collapse;" id=""
+                                    font-familty="arial" rules="cols" class="TestCSS2">
+                                    <tbody>
+                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                            <th align="left" scope="col">
+                                                Title
+                                            </th>
+                                            <th align="left" scope="col">
+                                                Author
+                                            </th>
+                                            <th align="left" scope="col">
+                                                Memo
+                                            </th>
+                                            <th align="left" scope="col">
+                                                Type
+                                            </th>
+                                            <th align="right" scope="col">
+                                                QTY
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Price
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Ext Price
+                                            </th>
+                                        </tr>
+                                        @foreach (var m in Model.OrderItemDetail)
+                                        {
+                                            <tr>
+                                                <td align="left">
+                                                    @m.Title
+                                                </td>
+                                                <td align="left">
+                                                    @m.Author
+                                                </td>
+                                                <td align="left">
+                                                    @m.Memo
+                                                </td>
+                                                <td align="left">
+                                                    @m.Type
+                                                </td>
+                                                <td align="right">
+                                                    @m.Qty
+                                                </td>
+                                                <td align="right">
+                                                    @m.Price
+                                                </td>
+                                                <td align="right">
+                                                    @m.ExtPrice
+                                                </td>
+                                            </tr>
+                                        }
+                                       
+                                 
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                            <div>
+                                <table cellspacing="0" border="1" style="background-color: Transparent; font-size: 12px;
+                                    width: 75%; border-collapse: collapse;" id=""
+                                    font-familty="arial" rules="cols" class="TestCSS2">
+                                    <tbody>
+                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                            <th align="right" scope="col">
+                                                Code:
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Sub Total
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Tax
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Freight
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Total
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">
+                                                &nbsp;
+                                            </td>
+                                            <td align="right">
+                                               @Model.SubTotal
+                                            </td>
+                                            <td align="right">
+                                                @Model.Tax
+                                            </td>
+                                            <td align="right">
+                                               @Model.Frieght
+                                            </td>
+                                            <td align="right">
+                                              @Model.Total
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <br>
+                        </center>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+}

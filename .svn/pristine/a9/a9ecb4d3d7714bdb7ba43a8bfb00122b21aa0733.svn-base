@@ -1,0 +1,276 @@
+﻿@model CampusWebSotre.Models.AccountSettingsViewModel
+
+@{
+    ViewBag.Title = "CreateNewUser";
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        //function to fill Billing Informaton to Shipping Information 
+        jQuery('input[id*="chkSameAs"]').click(function () {
+            var status = jQuery('input[id*="chkSameAs"]').is(":checked") ? "on" : "off";
+            if (status == "on") {
+                jQuery('input[id*="ShipToName"]').val(jQuery('input[id*="FirstName"]').val() + ' ' + jQuery('input[id*="LastName"]').val());
+                jQuery('input[id*="ShipAddress"]').val(jQuery('input[id*="Address"]').val());
+                jQuery('input[id*="ShipAddress2"]').val(jQuery('input[id*="Address2"]').val());
+                jQuery('input[id*="ShipCity"]').val(jQuery('input[id*="City"]').val());
+                jQuery('input[id*="ShipState"]').val(jQuery('input[id*="State"]').val());
+                jQuery('select[id*="ShipCountry"]').val(jQuery('select[id*="Country"]').val());
+                jQuery('input[id*="ShipZip"]').val(jQuery('input[id*="Zip"]').val());
+            }
+        });
+
+    });
+
+    //function to check availability of username....
+    function fnCheckAvailability() {
+        if (jQuery("#Password").val() == jQuery("#ConfirmPassword").val()) {
+
+            jQuery("#spanMessage").hide();
+
+            jQuery("#imgLoading").show();
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '@Url.Action("JsonCheckUserAvailability","Account")',
+                data: {
+                    UserName: jQuery("#UserName").val()
+                },
+                success: function (data) {
+
+                    jQuery("#imgLoading").hide();
+
+                    if (data.success) {
+                        jQuery("#spanMessage").css("color", "green");
+
+                        jQuery("#spanMessage").text('That username is available');
+
+                    } else {
+                        jQuery("#spanMessage").css("color", "red");
+
+                        jQuery("#spanMessage").text('That username is taken');
+                    }
+
+                    jQuery("#spanMessage").show();
+                }
+            });
+        }
+
+    }
+
+</script>
+<h2>CreateNewUser</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>AccountSettingsViewModel</legend>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+            
+            <p>
+               <a href="javascript:fnCheckAvailability();">Check Availability</a>
+                <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                <span id="spanMessage" style="display: none;"></span>
+          </p>
+
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Password)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Password)
+            @Html.ValidationMessageFor(model => model.Password)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ConfirmPassword)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ConfirmPassword)
+            @Html.ValidationMessageFor(model => model.ConfirmPassword)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FirstName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.FirstName)
+            @Html.ValidationMessageFor(model => model.FirstName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.LastName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.LastName)
+            @Html.ValidationMessageFor(model => model.LastName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Address)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Address)
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Address2)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Address2)
+            @Html.ValidationMessageFor(model => model.Address2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.City)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.City)
+            @Html.ValidationMessageFor(model => model.City)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.State)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.State)
+            @Html.ValidationMessageFor(model => model.State)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Zip)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Zip)
+            @Html.ValidationMessageFor(model => model.Zip)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Country)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Country)
+            @Html.ValidationMessageFor(model => model.Country)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Email)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DayPhone)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DayPhone)
+            @Html.ValidationMessageFor(model => model.DayPhone)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Evening)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Evening)
+            @Html.ValidationMessageFor(model => model.Evening)
+        </div>
+         <div class="editor-label">
+            <input type="checkbox" id="chkSameAs" name="chkSameAs"  /> <label for="chkSameAs">Same as Billing?</label>
+        </div>
+        <div class="editor-field">
+           
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipToName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipToName)
+            @Html.ValidationMessageFor(model => model.ShipToName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipAddress)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipAddress)
+            @Html.ValidationMessageFor(model => model.ShipAddress)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipAddress2)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipAddress2)
+            @Html.ValidationMessageFor(model => model.ShipAddress2)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipCity)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipCity)
+            @Html.ValidationMessageFor(model => model.ShipCity)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipState)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipState)
+            @Html.ValidationMessageFor(model => model.ShipState)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipZip)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipZip)
+            @Html.ValidationMessageFor(model => model.ShipZip)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipCountry)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipCountry)
+            @Html.ValidationMessageFor(model => model.ShipCountry)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ShipInstruc)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ShipInstruc)
+            @Html.ValidationMessageFor(model => model.ShipInstruc)
+        </div>
+       
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsEmailOptIn)
+             @Html.LabelFor(model => model.IsEmailOptIn)
+        </div>
+          
+        <p>
+            <input type="submit" value="Create User" />
+        </p>
+    </fieldset>
+}
+

@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "MyAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var acctype = Convert.ToString(Session["ACCTYPE"]);
+     
+}
+
+<h1 class="main_heading">My account</h1>
+<div>
+                                            <center>
+                                               @* <a href="@Url.Action("AccountDetails","Account")"><img src="Images/accountdetail.png" alt="accountdetail" border="0" /></a>*@
+                                                <a href="@Url.Action("AccountDetails","Account")">Account Details</a>
+                                            &nbsp;      &nbsp;      &nbsp;
+                                                @*<a href="@Url.Action("OrderHistory","Account")"><img src="Images/orderhist.png" alt="orderhistory" border="0" /></a>*@
+                                                <a href="@Url.Action("OrderHistory","Account")">Order History</a>
+                                        
+                          
+                           </center>
+                                             @{
+                                                 if (acctype == "A")
+                                                 {
+                                                     <text>
+                                                         <center>
+                                                             <a href="#"><img src="Images/adminpanel.png"  alt="admin" border="0" /></a>
+                                                             <a href="#">Admin Panel</a>
+                                                         </center>
+                                                     </text>
+                                                 }
+                                             }
+                                           
+                                       
+                            
+                                             @{
+                                                 if (acctype == "F")
+                                                 {
+                                                     <text>
+                                                         <center>
+                                                             <a href="#"><img src="Images/faculty.png"  alt="admin" border="0" /></a>
+                                                             <a href="#">Faculty</a>
+                                                         </center>
+                                                     </text>
+                                                 }
+                                             }
+                                      
+
+</div>

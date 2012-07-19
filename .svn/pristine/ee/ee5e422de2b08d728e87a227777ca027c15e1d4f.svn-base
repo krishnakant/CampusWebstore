@@ -1,0 +1,186 @@
+﻿@model IEnumerable<CampusWebSotre.Models.OrderViewModel>
+@{
+    Layout = null;
+}
+@if (Model.Any())
+{
+   <text>
+           
+                <legend><b>Order History</b> </legend>
+                <center>
+                    <br>
+                    <table width="70%" cellspacing="0" cellpadding="0" border="0">
+                        <tbody>
+                            <tr>
+                                <td class="orderhistorybg">
+                                    <font color="white">
+                                        <center>
+                                            <b>Open Orders:</b></center>
+                                    </font>
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td class="orderhistorybg">
+                                    <font color="white">
+                                        <center>
+                                            <b>Closed Orders:</b></center>
+                                    </font>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <center>
+                                        <div>
+                                        <table cellspacing="0" border="1" style="background-color: Transparent; font-size: 12px;
+                                                     border-collapse: collapse;" id="" font-familty="arial" rules="cols">
+                                                    <tbody>
+                                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                                            <th scope="col">
+                                                                Order Number
+                                                            </th>
+                                                            <th scope="col">
+                                                                Date
+                                                            </th>
+                                                            <th scope="col">
+                                                                Amount
+                                                            </th>
+                                                            <th scope="col">
+                                                                Status
+                                                            </th>
+                                                        </tr>
+                                            @foreach (var m in Model)
+                                            {
+                                                if (!m.Status.ToLower().Equals("processed"))
+                                                {
+                                                
+                                                        <tr>
+                                                            <td>
+                                                                <a href="#" onclick="javascript:ShowCustomerOrderDetail('@m.UserId','@m.OrderId');">@m.OrderId</a>
+                                                            </td>
+                                                            <td>
+                                                                @m.DatePlaced
+                                                            </td>
+                                                            <td>
+                                                                @m.Amount
+                                                            </td>
+                                                            <td>
+                                                                @m.Status
+                                                            </td>
+                                                        </tr>
+                                                   
+                                                }
+                                                else
+                                                {
+                                                    if (m.ConfNumber.Equals("NO OPEN ORDERS"))
+                                                    {
+                                                        
+                                                                <tr>
+                                                                    <td>
+                                                                        <a href="#" onclick="javascript:ShowCustomerOrderDetail('df','dfd');">
+                                                                            NO OPEN ORDERS</a>
+                                                                    </td>
+                                                                    <td>
+                                                                        -
+                                                                    </td>
+                                                                    <td>
+                                                                        -
+                                                                    </td>
+                                                                    <td>
+                                                                        -
+                                                                    </td>
+                                                                </tr>
+                                                          
+                                                    }
+                                                }
+                                            }
+                                             </tbody>
+                                                </table>
+                                        </div>
+                                    </center>
+                                </td>
+                                <td>
+                                    &nbsp;
+                                </td>
+                                <td valign="top">
+                                    <center>
+                                        <div>
+                                         <table cellspacing="0" border="1" style="background-color: Transparent; font-size: 12px;
+                                                    border-collapse: collapse;" id=""
+                                                    font-familty="arial" rules="cols">
+                                                    <tbody>
+                                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                                            <th scope="col">
+                                                              Order Number
+                                                            </th>
+                                                            <th scope="col">
+                                                                Date
+                                                            </th>
+                                                            <th scope="col">
+                                                                Amount
+                                                            </th>
+                                                            <th scope="col">
+                                                                Status
+                                                            </th>
+                                                        </tr>
+                                            @foreach (var m in Model)
+                                            {
+                                                if (m.Status.ToLower().Equals("processed"))
+                                                {
+                                               
+                                                        <tr>
+                                                            <td>
+                                                                <a href="#" onclick="javascript:ShowCustomerOrderDetail('@m.UserId','@m.OrderId');">
+                                                                    @m.OrderId</a>
+                                                            </td>
+                                                            <td>
+                                                                @m.DateProcessed
+                                                            </td>
+                                                            <td>
+                                                                @m.Amount
+                                                            </td>
+                                                            <td>
+                                                                @m.Status
+                                                            </td>
+                                                        </tr>
+                                                  
+                                                }
+                                                else
+                                                {
+                                                    if (m.ConfNumber.Equals("NO CLOSE ORDERS"))
+                                                    {
+                                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                                                    <th scope="col">
+                                                                        Order Number
+                                                                    </th>
+                                                                    <th scope="col">
+                                                                        -
+                                                                    </th>
+                                                                    <th scope="col">
+                                                                       -
+                                                                    </th>
+                                                                    <th scope="col">
+                                                                       -
+                                                                    </th>
+                                                                </tr>@*<tr>
+				<td><a href="javascript:__doPostBack('ctl00$ContentPlaceHolder1$gvOrderList','GETDETAIL$0')">NO Close ORDERS</a></td><td>-</td><td>-</td><td>-</td>
+			</tr>*@
+                                                          
+                                                    }
+                                                }
+                                                
+                                            }
+                                              </tbody>
+                                                </table>
+                                        </div>
+                                    </center>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </center>
+                <br>
+        </text>
+     }
+    
+

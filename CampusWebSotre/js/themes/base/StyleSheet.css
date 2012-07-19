@@ -1,0 +1,47 @@
+﻿body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 80%;
+    padding: 0;
+    margin: 0;
+}
+
+h1{
+    color: #0093c0;
+}
+
+#wrapper{
+    background-color: #c1dfde;
+    padding: 10px;
+    width: 800px;
+    margin: auto;
+    min-height: 600px;
+}
+
+#electronics, #automation{
+    min-height: 400px;
+}
+
+#electronics{
+    background-color: #8ec1da;
+    width: 650px;
+    float: left;
+}
+
+#automation{
+    background-color: #ffe8d3;
+}
+
+#electronicsnav{
+    background-color: #fff;
+    min-height: 400px;
+    width: 150px;
+    float: left;
+}
+
+#automationnav{
+    background-color: #dedede;
+}
+
+#automation h3{
+    color: #997d63;
+}

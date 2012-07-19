@@ -1,0 +1,136 @@
+﻿@using CampusWebSotre.Models
+@model OrderDetailViewModel
+@if (Model != null)
+{
+ 
+ <ul class="showdetails">
+ <li class=" heading">Billing Info:</li>
+ <li>
+              
+             	<p> <b>Name: </b> @Model.Name</p>
+                <p> <b>Address:</b>@Model.Address1</p>
+                <p> <b>Address:</b> @Model.Address2</p>
+               <p> <b> City:</b> @Model.City</p>
+                <p> <b>State:</b>@Model.State</p>
+               <p> <b> Zip:</b> @Model.Zip</p>
+                <p> <b>Country:</b>@Model.Country</p>
+ </li>
+ 
+ <li class=" heading"> Shipping Info:</li>
+ <li>                                                            
+			   
+                <p> <b>Name:  </b>@Model.ShipToName</p>
+                <p> <b>Address:  </b> @Model.ShipAddress1</p>
+                 <p> <b>Address: </b>@Model.ShipAddress2</p>
+                 <p> <b>City: </b> @Model.ShipCity</p>
+                 <p> <b> State:  </b>@Model.ShipState</p>
+               <p> <b>  Zip: </b> @Model.ShipZip</p>
+                <p> <b>Country: </b>@Model.ShipCountry</p>
+    
+</li>                                                       
+</ul>         
+
+
+
+ <div class="shippingbelow">
+<table cellspacing="0" border="1" rules="cols" class="TestCSS2">
+                                    <tbody>
+                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                            <th scope="col">
+                                                Title
+                                            </th>
+                                            <th  scope="col">
+                                                Author
+                                            </th>
+                                            <th  scope="col">
+                                                Memo
+                                            </th>
+                                            <th  scope="col">
+                                                Type
+                                            </th>
+                                            <th  scope="col">
+                                                QTY
+                                            </th>
+                                            <th  scope="col">
+                                                Price
+                                            </th>
+                                            <th align="right" scope="col">
+                                                Ext Price
+                                            </th>
+                                        </tr>
+                                        @foreach (var m in Model.OrderItemDetail)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @m.Title
+                                                </td>
+                                                <td >
+                                                    @m.Author
+                                                </td>
+                                                <td>
+                                                    @m.Memo
+                                                </td>
+                                                <td>
+                                                    @m.Type
+                                                </td>
+                                                <td>
+                                                    @m.Qty
+                                                </td>
+                                                <td>
+                                                    @m.Price
+                                                </td>
+                                                <td>
+                                                    @m.ExtPrice
+                                                </td>
+                                            </tr>
+                                        }
+                                       
+                                 
+                                    </tbody>
+                                </table>
+ </div>
+                          
+ <div  class="shippingbelow">
+ <table  cellspacing="0" border="1" rules="cols" class="TestCSS2" >
+                                    <tbody>
+                                        <tr style="color: Black; background-color: #D3CEB7;">
+                                            <th scope="col">
+                                                Code:
+                                            </th>
+                                            <th scope="col">
+                                                Sub Total
+                                            </th>
+                                            <th  scope="col">
+                                                Tax
+                                            </th>
+                                            <th  scope="col">
+                                                Freight
+                                            </th>
+                                            <th  scope="col">
+                                                Total
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <td >
+                                                &nbsp;
+                                            </td>
+                                            <td >
+                                               @Model.SubTotal
+                                            </td>
+                                            <td>
+                                                @Model.Tax
+                                            </td>
+                                            <td >
+                                               @Model.Frieght
+                                            </td>
+                                            <td>
+                                              @Model.Total
+                                            </td>
+                                        </tr>
+                                    </tbody>
+             </table>
+ </div>
+ <br/>
+
+          
+}

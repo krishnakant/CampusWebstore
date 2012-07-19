@@ -1,0 +1,810 @@
+﻿@model CampusWebSotre.Models.AccountSettingsViewModel
+
+@{
+    ViewBag.Title = "AccountDetails";
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+
+}
+
+
+<script type="text/javascript">
+    setTimeout(function () { window.scrollTo(0, 1) }, 100);
+    jQuery(document).ready(function () {
+        jQuery('input[id*="chkSameAs"]').click(function () {
+            var status = jQuery('input[id*="chkSameAs"]').is(":checked") ? "on" : "off";
+            if (status == "on") {
+                jQuery('input[id*="ShipToName"]').val(jQuery('input[id*="FirstName"]').val() + ' ' + jQuery('input[id*="LastName"]').val());
+                jQuery('input[id*="ShipAddress"]').val(jQuery('input[id*="Address"]').val());
+                jQuery('input[id*="ShipAddress2"]').val(jQuery('input[id*="Address2"]').val());
+                jQuery('input[id*="ShipCity"]').val(jQuery('input[id*="City"]').val());
+                jQuery('select[id*="ShipState"]').val(jQuery('select[id*="State"]').val());
+                jQuery('select[id*="ShipCountry"]').val(jQuery('select[id*="Country"]').val());
+                jQuery('input[id*="ShipZip"]').val(jQuery('input[id*="Zip"]').val());
+            }
+        });
+
+
+        jQuery("#btnSubmit").click(function () {
+            jQuery("#Password").val('test123456');
+            jQuery("#ConfirmPassword").val('test123456');
+        });
+
+
+        jQuery("#Country").val("@Model.Country");
+
+        jQuery("#ShipCountry").val("@Model.ShipCountry");
+
+    });
+
+    //function to changee password...
+    function fnChangePassword() {
+
+        if (jQuery("#OldPassword").val().length > 0 && jQuery("#Password").val().length > 0 && jQuery("#ConfirmPassword").val().length > 0) {
+
+            if (jQuery("#Password").val() == jQuery("#ConfirmPassword").val()) {
+
+                jQuery("#imgLoading").show();
+
+                jQuery.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    url: '@Url.Action("JsonChangePassword","Account")',
+                    data: {
+                        UserName: '@Model.UserName',
+                        OldPassword: jQuery("#OldPassword").val(),
+                        NewPassword: jQuery("#Password").val()
+                    },
+                    success: function (data) {
+
+                        jQuery("#imgLoading").hide();
+
+                        if (data.success) {
+                            alert('Password has been changed successfully');
+                        } else {
+                            alert('Old password is not correct');
+                        }
+                    }
+                });
+            } else {
+                alert("Password and confirm password do not match");
+            }
+        }
+    }
+
+</script>
+
+   
+
+   <script src="@Url.Content("~/Scripts/jquery.mobile-1.0b3.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/jquery.mobile-1.0b2.css")" rel="stylesheet" type="text/css" />
+@using (Html.BeginForm("AccountDetails","Account")) {@Html.ValidationSummary(true)
+     @Html.HiddenFor(model => model.UserName)
+       @* <section id="page1" data-role="page" style="display: none">
+	  
+            <header data-role="header" class="viewshead">
+					<h1>Change Password</h1></header>
+			<div class="cartcontainer">
+			<span class="clr_span"></span>
+			
+            <div data-role="content" class="content accountdetail_wrap">           
+              
+                <div class="editor-label">
+                    <label for="ConfirmPassword">Old Password</label>  
+                </div>
+                <div class="editor-field">
+                    <input type="password" id="OldPassword" name="OldPassword"/>
+                </div>
+
+                <div class="editor-label">
+                    <label for="Password">New Password</label> 
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password)
+         
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ConfirmPassword)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ConfirmPassword)
+                    @Html.ValidationMessageFor(model => model.ConfirmPassword)
+                    <p>
+                        <a href="javascript:fnChangePassword();">Change Password</a>
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                    </p>
+                </div>
+            </div>
+			</div>
+			
+			</section>*@
+        <section id="Shipping" data-role="page">
+		<p align="center"> <img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></p>
+            <header data-role="header" class="viewshead"><h1>Verify Address</h1></header>
+            <div data-role="content" class="content accountdetail_wrap">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.FirstName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.FirstName)
+                    @Html.ValidationMessageFor(model => model.FirstName)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LastName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.LastName)
+                    @Html.ValidationMessageFor(model => model.LastName)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Address)
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address2)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Address2)
+                    @Html.ValidationMessageFor(model => model.Address2)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.City)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.City)
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.State)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.State)
+                    @Html.ValidationMessageFor(model => model.State)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Zip)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Zip)
+                    @Html.ValidationMessageFor(model => model.Zip)
+                </div>
+
+                <div class="editor-label country ">
+                    @Html.LabelFor(model => model.Country)
+                </div>
+                <div class="editor-field">
+                  <select name="Country" id="Country"  data-val="true"><option value="US">United States</option>
+<option value="AF">Afghanistan</option>
+<option value="AL">Albania</option>
+<option value="DZ">Algeria</option>
+<option value="AS">American Samoa</option>
+<option value="AD">Andorra</option>
+<option value="AO">Angola</option>
+<option value="AI">Anguilla</option>
+<option value="AQ">Antarctica</option>
+<option value="AG">Antigua And Barbuda</option>
+<option value="AR">Argentina</option>
+<option value="AM">Armenia</option>
+<option value="AW">Aruba</option>
+<option value="AU">Australia</option>
+<option value="AT">Austria</option>
+<option value="AZ">Azerbaijan</option>
+<option value="BS">Bahamas</option>
+<option value="BH">Bahrain</option>
+<option value="BB">Barbados</option>
+<option value="BY">Belarus</option>
+<option value="BE">Belgium</option>
+<option value="BZ">Belize</option>
+<option value="BJ">Benin</option>
+<option value="BM">Bermuda</option>
+<option value="BT">Bhutan</option>
+<option value="BO">Bolivia</option>
+<option value="BA">Bosnia And Herzegowina</option>
+<option value="BW">Botswana</option>
+<option value="BV">Bouvet Island</option>
+<option value="BR">Brazil</option>
+<option value="IO">British Indian Ocean Territory</option>
+<option value="BN">Brunei Darussalam</option>
+<option value="BG">Bulgaria</option>
+<option value="BF">Burkina Faso</option>
+<option value="BI">Burundi</option>
+<option value="KH">Cambodia</option>
+<option value="CM">Cameroon</option>
+<option value="CA">Canada</option>
+<option value="CV">Cape Verde</option>
+<option value="KY">Cayman Islands</option>
+<option value="CF">Central African Republic</option>
+<option value="TD">Chad</option>
+<option value="CL">Chile</option>
+<option value="CN">China</option>
+<option value="CX">Christmas Island</option>
+<option value="CC">Cocos (Keeling) Islands</option>
+<option value="CO">Colombia</option>
+<option value="KM">Comoros</option>
+<option value="CG">Congo</option>
+<option value="CK">Cook Islands</option>
+<option value="CR">Costa Rica</option>
+<option value="CI">Cote D'Ivoire</option>
+<option value="HR">Croatia (Local Name: Hrvatska)</option>
+<option value="CU">Cuba</option>
+<option value="CY">Cyprus</option>
+<option value="CZ">Czech Republic</option>
+<option value="DK">Denmark</option>
+<option value="DJ">Djibouti</option>
+<option value="DM">Dominica</option>
+<option value="DO">Dominican Republic</option>
+<option value="TP">East Timor</option>
+<option value="EC">Ecuador</option>
+<option value="EG">Egypt</option>
+<option value="SV">El Salvador</option>
+<option value="GQ">Equatorial Guinea</option>
+<option value="ER">Eritrea</option>
+<option value="EE">Estonia</option>
+<option value="ET">Ethiopia</option>
+<option value="FK">Falkland Islands (Malvinas)</option>
+<option value="FO">Faroe Islands</option>
+<option value="FJ">Fiji</option>
+<option value="FI">Finland</option>
+<option value="FR">France</option>
+<option value="GF">French Guiana</option>
+<option value="PF">French Polynesia</option>
+<option value="TF">French Southern Territories</option>
+<option value="GA">Gabon</option>
+<option value="GM">Gambia</option>
+<option value="GE">Georgia</option>
+<option value="DE">Germany</option>
+<option value="GH">Ghana</option>
+<option value="GI">Gibraltar</option>
+<option value="GR">Greece</option>
+<option value="GL">Greenland</option>
+<option value="GD">Grenada</option>
+<option value="GP">Guadeloupe</option>
+<option value="GU">Guam</option>
+<option value="GT">Guatemala</option>
+<option value="GN">Guinea</option>
+<option value="GW">Guinea-Bissau</option>
+<option value="GY">Guyana</option>
+<option value="HT">Haiti</option>
+<option value="HM">Heard And Mc Donald Islands</option>
+<option value="VA">Holy See (Vatican City State)</option>
+<option value="HN">Honduras</option>
+<option value="HK">Hong Kong</option>
+<option value="HU">Hungary</option>
+<option value="IS">Icel And</option>
+<option value="IN">India</option>
+<option value="ID">Indonesia</option>
+<option value="IR">Iran (Islamic Republic Of)</option>
+<option value="IQ">Iraq</option>
+<option value="IE">Ireland</option>
+<option value="IL">Israel</option>
+<option value="IT">Italy</option>
+<option value="JM">Jamaica</option>
+<option value="JP">Japan</option>
+<option value="JO">Jordan</option>
+<option value="KZ">Kazakhstan</option>
+<option value="KP">Korea, Dem People'S Republic</option>
+<option value="KR">Korea, Republic Of</option>
+<option value="KW">Kuwait</option>
+<option value="KG">Kyrgyzstan</option>
+<option value="LA">Lao People'S Dem Republic</option>
+<option value="LV">Latvia</option>
+<option value="LB">Lebanon</option>
+<option value="LS">Lesotho</option>
+<option value="LR">Liberia</option>
+<option value="LY">Libyan Arab Jamahiriya</option>
+<option value="LI">Liechtenstein</option>
+<option value="LT">Lithuania</option>
+<option value="LU">Luxembourg</option>
+<option value="MO">Macau</option>
+<option value="MK">Macedonia</option>
+<option value="MG">Madagascar</option>
+<option value="MW">Malawi</option>
+<option value="MY">Malaysia</option>
+<option value="MV">Maldives</option>
+<option value="ML">Mali</option>
+<option value="MT">Malta</option>
+<option value="MH">Marshall Islands</option>
+<option value="MQ">Martinique</option>
+<option value="MR">Mauritania</option>
+<option value="MU">Mauritius</option>
+<option value="YT">Mayotte</option>
+<option value="MX">Mexico</option>
+<option value="FM">Micronesia, Federated States</option>
+<option value="MD">Moldova, Republic Of</option>
+<option value="MC">Monaco</option>
+<option value="MN">Mongolia</option>
+<option value="MS">Montserrat</option>
+<option value="MA">Morocco</option>
+<option value="MZ">Mozambique</option>
+<option value="MA">Morocco</option>
+<option value="MZ">Mozambique</option>
+<option value="MM">Myanmar</option>
+<option value="NA">Namibia</option>
+<option value="MM">Myanmar</option>
+<option value="NA">Namibia</option>
+<option value="NR">Nauru</option>
+<option value="NP">Nepal</option>
+<option value="NL">Netherlands</option>
+<option value="AN">Netherlands Ant Illes</option>
+<option value="NC">New Caledonia</option>
+<option value="NZ">New Zealand</option>
+<option value="NI">Nicaragua</option>
+<option value="NE">Niger</option>
+<option value="NG">Nigeria</option>
+<option value="NU">Niue</option>
+<option value="NF">Norfolk Island</option>
+<option value="MP">Northern Mariana Islands</option>
+<option value="NO">Norway</option>
+<option value="OM">Oman</option>
+<option value="PK">Pakistan</option>
+<option value="PW">Palau</option>
+<option value="PA">Panama</option>
+<option value="PG">Papua New Guinea</option>
+<option value="PY">Paraguay</option>
+<option value="PE">Peru</option>
+<option value="PH">Philippines</option>
+<option value="PN">Pitcairn</option>
+<option value="PL">Poland</option>
+<option value="PT">Portugal</option>
+<option value="PR">Puerto Rico</option>
+<option value="QA">Qatar</option>
+<option value="RE">Reunion</option>
+<option value="RO">Romania</option>
+<option value="RU">Russian Federation</option>
+<option value="RW">Rwanda</option>
+<option value="KN">Saint K Itts And Nevis</option>
+<option value="LC">Saint Lucia</option>
+<option value="VC">Saint Vincent, The Grenadines</option>
+<option value="WS">Samoa</option>
+<option value="SM">Saint Vincent, The Grenadines</option>
+<option value="ST">Sao Tome And Principe</option>
+<option value="SA">Saudi Arabia</option>
+<option value="SN">Senegal</option>
+<option value="SC">Seychelles</option>
+<option value="SL">Sierra Leone</option>
+<option value="SG">Singapore</option>
+<option value="SK">Slovakia (Slovak Republic)</option>
+<option value="SI">Slovenia</option>
+<option value="SB">Solomon Islands</option>
+<option value="SO">Somalia</option>
+<option value="ZA">South Africa</option>
+<option value="GS">South Georgia , S Sandwich Is.</option>
+<option value="ES">Spain</option>
+<option value="LK">Sri Lanka</option>
+<option value="SH">St. Helena</option>
+<option value="PM">St. Pierre And Miquelon</option>
+<option value="SD">Sudan</option>
+<option value="SR">Suriname</option>
+<option value="SJ">Svalbard, Jan Mayen Islands</option>
+<option value="SZ">Sw Aziland</option>
+<option value="SE">Sweden</option>
+<option value="CH">Switzerland</option>
+<option value="SY">Syrian Arab Republic</option>
+<option value="TW">Taiwan</option>
+<option value="TJ">Tajikistan</option>
+<option value="TZ">Tanzania, United Republic Of</option>
+<option value="TH">Thailand</option>
+<option value="TG">Togo</option>
+<option value="TK">Tokelau</option>
+<option value="TO">Tonga</option>
+<option value="TT">Trinidad And Tobago</option>
+<option value="TN">Tunisia</option>
+<option value="TR">Turkey</option>
+<option value="TM">Turkmenistan</option>
+<option value="TC">Turks And Caicos Islands</option>
+<option value="TV">Tuvalu</option>
+<option value="UG">Uganda</option>
+<option value="UA">Ukraine</option>
+<option value="AE">United Arab Emirates</option>
+<option value="GB">United Kingdom</option>
+<option value="US">United States</option>
+<option value="UM">United States Minor Is.</option>
+<option value="UY">Uruguay</option>
+<option value="UZ">Uzbekistan</option>
+<option value="VU">Vanuatu</option>
+<option value="VE">Venezuela</option>
+<option value="VN">Viet Nam</option>
+<option value="VG">Virgin Islands (British)</option>
+<option value="VI">Virgin Islands (U.S.)</option>
+<option value="WF">Wallis And Futuna Islands</option>
+<option value="EH">Western Sahara</option>
+<option value="YE">Yemen</option>
+<option value="YU">Yugoslavia</option>
+<option value="ZR">Zaire</option>
+<option value="ZM">Zambia</option>
+<option value="ZW">Zimbabwe</option>
+</select>
+                </div>
+            
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Email)
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.DayPhone)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.DayPhone)
+                    @Html.ValidationMessageFor(model => model.DayPhone)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Evening)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.Evening)
+                    @Html.ValidationMessageFor(model => model.Evening)
+                </div>
+                <div class="editor-label">
+                    <input type="checkbox" id="chkSameAs" name="chkSameAs" class="ceheckthesame"/>
+				 <label for="chkSameAs" style="background:none; border:0;  margin-left:24px;" class="sameas">Same as Billing?</label>
+                </div><br /><span class="clr_span"></span> <p><a href="#Billing">Next</a></p>
+            </div></section>
+        <section id="Billing" data-role="page">
+		<p align="center"> <img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></p>
+            <header data-role="header" class="viewshead"><h1>Verify Address</h1></header>
+            <!--<div data-role="content" class="content accountdetail_wrap midaccc ui-content">-->
+		<div data-role="content" class="accountdetail_wrap">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipToName)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipToName) 
+                    @Html.ValidationMessageFor(model => model.ShipToName)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipAddress)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipAddress)
+                    @Html.ValidationMessageFor(model => model.ShipAddress)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipAddress2)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipAddress2)
+                    @Html.ValidationMessageFor(model => model.ShipAddress2)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipCity)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipCity)
+                    @Html.ValidationMessageFor(model => model.ShipCity)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipState)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipState)
+                    @Html.ValidationMessageFor(model => model.ShipState)
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipZip)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.ShipZip)
+                    @Html.ValidationMessageFor(model => model.ShipZip)
+                </div>
+
+                <div class="editor-label country">
+                    @Html.LabelFor(model => model.ShipCountry)
+                </div>
+                <div class="editor-field">
+                  <select name="ShipCountry" id="ShipCountry" data-val="true"><option value="US">United States</option>
+<option value="AF">Afghanistan</option>
+<option value="AL">Albania</option>
+<option value="DZ">Algeria</option>
+<option value="AS">American Samoa</option>
+<option value="AD">Andorra</option>
+<option value="AO">Angola</option>
+<option value="AI">Anguilla</option>
+<option value="AQ">Antarctica</option>
+<option value="AG">Antigua And Barbuda</option>
+<option value="AR">Argentina</option>
+<option value="AM">Armenia</option>
+<option value="AW">Aruba</option>
+<option value="AU">Australia</option>
+<option value="AT">Austria</option>
+<option value="AZ">Azerbaijan</option>
+<option value="BS">Bahamas</option>
+<option value="BH">Bahrain</option>
+<option value="BB">Barbados</option>
+<option value="BY">Belarus</option>
+<option value="BE">Belgium</option>
+<option value="BZ">Belize</option>
+<option value="BJ">Benin</option>
+<option value="BM">Bermuda</option>
+<option value="BT">Bhutan</option>
+<option value="BO">Bolivia</option>
+<option value="BA">Bosnia And Herzegowina</option>
+<option value="BW">Botswana</option>
+<option value="BV">Bouvet Island</option>
+<option value="BR">Brazil</option>
+<option value="IO">British Indian Ocean Territory</option>
+<option value="BN">Brunei Darussalam</option>
+<option value="BG">Bulgaria</option>
+<option value="BF">Burkina Faso</option>
+<option value="BI">Burundi</option>
+<option value="KH">Cambodia</option>
+<option value="CM">Cameroon</option>
+<option value="CA">Canada</option>
+<option value="CV">Cape Verde</option>
+<option value="KY">Cayman Islands</option>
+<option value="CF">Central African Republic</option>
+<option value="TD">Chad</option>
+<option value="CL">Chile</option>
+<option value="CN">China</option>
+<option value="CX">Christmas Island</option>
+<option value="CC">Cocos (Keeling) Islands</option>
+<option value="CO">Colombia</option>
+<option value="KM">Comoros</option>
+<option value="CG">Congo</option>
+<option value="CK">Cook Islands</option>
+<option value="CR">Costa Rica</option>
+<option value="CI">Cote D'Ivoire</option>
+<option value="HR">Croatia (Local Name: Hrvatska)</option>
+<option value="CU">Cuba</option>
+<option value="CY">Cyprus</option>
+<option value="CZ">Czech Republic</option>
+<option value="DK">Denmark</option>
+<option value="DJ">Djibouti</option>
+<option value="DM">Dominica</option>
+<option value="DO">Dominican Republic</option>
+<option value="TP">East Timor</option>
+<option value="EC">Ecuador</option>
+<option value="EG">Egypt</option>
+<option value="SV">El Salvador</option>
+<option value="GQ">Equatorial Guinea</option>
+<option value="ER">Eritrea</option>
+<option value="EE">Estonia</option>
+<option value="ET">Ethiopia</option>
+<option value="FK">Falkland Islands (Malvinas)</option>
+<option value="FO">Faroe Islands</option>
+<option value="FJ">Fiji</option>
+<option value="FI">Finland</option>
+<option value="FR">France</option>
+<option value="GF">French Guiana</option>
+<option value="PF">French Polynesia</option>
+<option value="TF">French Southern Territories</option>
+<option value="GA">Gabon</option>
+<option value="GM">Gambia</option>
+<option value="GE">Georgia</option>
+<option value="DE">Germany</option>
+<option value="GH">Ghana</option>
+<option value="GI">Gibraltar</option>
+<option value="GR">Greece</option>
+<option value="GL">Greenland</option>
+<option value="GD">Grenada</option>
+<option value="GP">Guadeloupe</option>
+<option value="GU">Guam</option>
+<option value="GT">Guatemala</option>
+<option value="GN">Guinea</option>
+<option value="GW">Guinea-Bissau</option>
+<option value="GY">Guyana</option>
+<option value="HT">Haiti</option>
+<option value="HM">Heard And Mc Donald Islands</option>
+<option value="VA">Holy See (Vatican City State)</option>
+<option value="HN">Honduras</option>
+<option value="HK">Hong Kong</option>
+<option value="HU">Hungary</option>
+<option value="IS">Icel And</option>
+<option value="IN">India</option>
+<option value="ID">Indonesia</option>
+<option value="IR">Iran (Islamic Republic Of)</option>
+<option value="IQ">Iraq</option>
+<option value="IE">Ireland</option>
+<option value="IL">Israel</option>
+<option value="IT">Italy</option>
+<option value="JM">Jamaica</option>
+<option value="JP">Japan</option>
+<option value="JO">Jordan</option>
+<option value="KZ">Kazakhstan</option>
+<option value="KP">Korea, Dem People'S Republic</option>
+<option value="KR">Korea, Republic Of</option>
+<option value="KW">Kuwait</option>
+<option value="KG">Kyrgyzstan</option>
+<option value="LA">Lao People'S Dem Republic</option>
+<option value="LV">Latvia</option>
+<option value="LB">Lebanon</option>
+<option value="LS">Lesotho</option>
+<option value="LR">Liberia</option>
+<option value="LY">Libyan Arab Jamahiriya</option>
+<option value="LI">Liechtenstein</option>
+<option value="LT">Lithuania</option>
+<option value="LU">Luxembourg</option>
+<option value="MO">Macau</option>
+<option value="MK">Macedonia</option>
+<option value="MG">Madagascar</option>
+<option value="MW">Malawi</option>
+<option value="MY">Malaysia</option>
+<option value="MV">Maldives</option>
+<option value="ML">Mali</option>
+<option value="MT">Malta</option>
+<option value="MH">Marshall Islands</option>
+<option value="MQ">Martinique</option>
+<option value="MR">Mauritania</option>
+<option value="MU">Mauritius</option>
+<option value="YT">Mayotte</option>
+<option value="MX">Mexico</option>
+<option value="FM">Micronesia, Federated States</option>
+<option value="MD">Moldova, Republic Of</option>
+<option value="MC">Monaco</option>
+<option value="MN">Mongolia</option>
+<option value="MS">Montserrat</option>
+<option value="MA">Morocco</option>
+<option value="MZ">Mozambique</option>
+<option value="MA">Morocco</option>
+<option value="MZ">Mozambique</option>
+<option value="MM">Myanmar</option>
+<option value="NA">Namibia</option>
+<option value="MM">Myanmar</option>
+<option value="NA">Namibia</option>
+<option value="NR">Nauru</option>
+<option value="NP">Nepal</option>
+<option value="NL">Netherlands</option>
+<option value="AN">Netherlands Ant Illes</option>
+<option value="NC">New Caledonia</option>
+<option value="NZ">New Zealand</option>
+<option value="NI">Nicaragua</option>
+<option value="NE">Niger</option>
+<option value="NG">Nigeria</option>
+<option value="NU">Niue</option>
+<option value="NF">Norfolk Island</option>
+<option value="MP">Northern Mariana Islands</option>
+<option value="NO">Norway</option>
+<option value="OM">Oman</option>
+<option value="PK">Pakistan</option>
+<option value="PW">Palau</option>
+<option value="PA">Panama</option>
+<option value="PG">Papua New Guinea</option>
+<option value="PY">Paraguay</option>
+<option value="PE">Peru</option>
+<option value="PH">Philippines</option>
+<option value="PN">Pitcairn</option>
+<option value="PL">Poland</option>
+<option value="PT">Portugal</option>
+<option value="PR">Puerto Rico</option>
+<option value="QA">Qatar</option>
+<option value="RE">Reunion</option>
+<option value="RO">Romania</option>
+<option value="RU">Russian Federation</option>
+<option value="RW">Rwanda</option>
+<option value="KN">Saint K Itts And Nevis</option>
+<option value="LC">Saint Lucia</option>
+<option value="VC">Saint Vincent, The Grenadines</option>
+<option value="WS">Samoa</option>
+<option value="SM">Saint Vincent, The Grenadines</option>
+<option value="ST">Sao Tome And Principe</option>
+<option value="SA">Saudi Arabia</option>
+<option value="SN">Senegal</option>
+<option value="SC">Seychelles</option>
+<option value="SL">Sierra Leone</option>
+<option value="SG">Singapore</option>
+<option value="SK">Slovakia (Slovak Republic)</option>
+<option value="SI">Slovenia</option>
+<option value="SB">Solomon Islands</option>
+<option value="SO">Somalia</option>
+<option value="ZA">South Africa</option>
+<option value="GS">South Georgia , S Sandwich Is.</option>
+<option value="ES">Spain</option>
+<option value="LK">Sri Lanka</option>
+<option value="SH">St. Helena</option>
+<option value="PM">St. Pierre And Miquelon</option>
+<option value="SD">Sudan</option>
+<option value="SR">Suriname</option>
+<option value="SJ">Svalbard, Jan Mayen Islands</option>
+<option value="SZ">Sw Aziland</option>
+<option value="SE">Sweden</option>
+<option value="CH">Switzerland</option>
+<option value="SY">Syrian Arab Republic</option>
+<option value="TW">Taiwan</option>
+<option value="TJ">Tajikistan</option>
+<option value="TZ">Tanzania, United Republic Of</option>
+<option value="TH">Thailand</option>
+<option value="TG">Togo</option>
+<option value="TK">Tokelau</option>
+<option value="TO">Tonga</option>
+<option value="TT">Trinidad And Tobago</option>
+<option value="TN">Tunisia</option>
+<option value="TR">Turkey</option>
+<option value="TM">Turkmenistan</option>
+<option value="TC">Turks And Caicos Islands</option>
+<option value="TV">Tuvalu</option>
+<option value="UG">Uganda</option>
+<option value="UA">Ukraine</option>
+<option value="AE">United Arab Emirates</option>
+<option value="GB">United Kingdom</option>
+<option value="US">United States</option>
+<option value="UM">United States Minor Is.</option>
+<option value="UY">Uruguay</option>
+<option value="UZ">Uzbekistan</option>
+<option value="VU">Vanuatu</option>
+<option value="VE">Venezuela</option>
+<option value="VN">Viet Nam</option>
+<option value="VG">Virgin Islands (British)</option>
+<option value="VI">Virgin Islands (U.S.)</option>
+<option value="WF">Wallis And Futuna Islands</option>
+<option value="EH">Western Sahara</option>
+<option value="YE">Yemen</option>
+<option value="YU">Yugoslavia</option>
+<option value="ZR">Zaire</option>
+<option value="ZM">Zambia</option>
+<option value="ZW">Zimbabwe</option>
+</select>
+                </div>
+
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ShipInstruc)
+                </div>
+                <div class="editor-field ">
+                    @Html.EditorFor(model => model.ShipInstruc)
+                    @Html.ValidationMessageFor(model => model.ShipInstruc)
+                </div>
+
+                <div class="editor-labe checkboxaligned">
+                    @Html.LabelFor(model => model.IsEmailOptIn)
+                </div>
+                <div class="editor-field">
+                    @Html.EditorFor(model => model.IsEmailOptIn)
+                    @Html.ValidationMessageFor(model => model.IsEmailOptIn)
+                </div><br /> <div class="clear">
+        </div>
+		<center>
+        <div data-type="horizontal" data-role="controlgroup" class="ui-corner-all ui-controlgroup ui-controlgroup-horizontal">
+                                        <a data-icon="plus" data-role="button" href="#Shipping" id="btnContinueShopping"
+                                           style="background: #F39C24;" data-theme="c" class="ui-btn ui-corner-left ui-btn-up-c">
+                                            <span class="ui-btn-inner ui-corner-left"><span class="ui-btn-text">Pre</span></span>
+											</a> 
+											
+            <a data-icon="minus" data-role="button" style="background: #F39C24; border-radius:0 !important; " id="submit" href="#" data-theme="c"
+               class="ui-btn ui-btn-up-c ui-corner-right ui-controlgroup-last">
+                <span class="ui-btn-inner ui-corner-right ui-controlgroup-last" style="border-radius:0 !important;"><span class="ui-btn-text">
+                                                                                    Save</span></span></a>
+                                                                                        <a data-icon="minus" data-role="button" style="background: #F39C24;" id="btnGoToShipping" href="@Url.Action("CheckOut", "account")" data-theme="c" class="ui-btn ui-btn-up-c ui-corner-right ui-controlgroup-last">
+                                            <span class="ui-btn-inner ui-corner-right ui-controlgroup-last"><span class="ui-btn-text" >
+                                                                                                                &#10004 out</span></span></a>
+                                    
+                                      
+                                    </div>
+									</center>
+           @* <p >
+                <input type="submit"   value="Save" id="btnSubmit" />
+            </p>*@
+        @*        <p><a href="#Shipping">Previous</a></p>*@
+                </div></section>
+       
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#submit").click(function() {
+            $(".ui-mobile-viewport").submit();
+        });
+        
+    });
+   
+</script>
+
+
+

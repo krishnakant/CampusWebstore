@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CampusWebStore.Shared.Models.ShoppingCartModel>
+@{
+    var lstQty = new List<SelectListItem>();
+
+    for (var i = 1; i <= 30;i++ )
+    {
+        lstQty.Add(new SelectListItem { Text = i.ToString(), Value = i.ToString() });
+
+    }
+    
+    
+}
+@{if(Model.Any())
+  {
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+    <th>Item</th>
+    <th>Detail</th>
+    <th>Type</th>
+    <th>Price</th>
+    <th>Qty</th>
+    <th>Total</th>
+	<th>&nbsp;</th>
+    </tr>
+    @foreach (var m in Model)
+    {
+        var id = @m.Id.Replace("*","-");
+       var ddlId = "#" + id;
+        <tr>
+    <td>@MvcHtmlString.Create(@m.Title)</td>
+    <td>@m.Detail</td>
+    <td>@m.Type</td>
+    <td>@m.ActualPrice</td>
+    <td>@Html.DropDownList(m.Isbn, lstQty, new { @onchange = "javascript:CalculateTotal('"+@id+"')", @id = @id,@selected=@m.Qty,@style="width:40px;" })</td>
+    <script type="text/javascript">$("@ddlId").val(@m.Qty); </script>
+    <td>@m.Total</td>
+     <td><a  onclick='javascript:RemoveCartItem("@id");' class="check_out_link">Remove</a>@Html.ActionLink("Checkout","Checkout","Account")</td>
+    </tr>
+        
+        
+       
+    }
+     </table>
+   
+  }
+          } 

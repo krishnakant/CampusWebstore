@@ -1,0 +1,17 @@
+﻿@using CampusWebSotre.Models
+@model IEnumerable<string>
+
+@{
+    var lstAccoutType = new List<SelectListItem>();
+    
+    if(Model!=null)
+    {
+        foreach(var m in Model)
+        {
+            lstAccoutType.Add(new SelectListItem {Text = m, Value = m});
+
+        }
+        
+    }
+}
+@Html.DropDownList("DropDownAccountType", lstAccoutType)

@@ -1,0 +1,113 @@
+﻿@using CampusWebSotre.Models
+@model CustomerViewModel
+@{
+    ViewBag.Title = "ManageCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#btnSearch").click(function () {
+            $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+            var isError = false;
+
+            var searchText = $("#txtCustomerSearch").val();
+            if (searchText) {
+                if (searchText.length < 2) {
+                    $("#errMsg").html("Please enter alteast two charactor.");
+                    isError = true;
+                } else {
+                    $("#errMsg").html("");
+                }
+            } else {
+                isError = true;
+                $("#errMsg").html("required.");
+            }
+
+            if (!isError) {
+
+                $.ajax({
+                    type: "POST",
+
+                    url: '@Url.Action("JsonGetCustomerList", "Admin")',
+
+                    data: { SearchText: searchText },
+
+                    success: function (data, status, xhr) {
+                        $("#customerDetail").html(data);
+                        //                        $("#customerList").hide();
+                        $("#processing").html("");
+                    }
+                });
+            } else {
+                $("#processing").html("");
+
+            }
+        });
+
+
+    });
+
+    //Function to get the customer detail by id
+    function GetCustomerDetail(custId) {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonGetCustomerDetail", "Admin")',
+
+            data: { CustomerId: custId },
+
+            success: function (data, status, xhr) {
+                $("#customerDetail").html(data);
+                $("#customerList").hide();
+                $("#processing").html("");
+            }
+        });
+
+    }
+
+
+    //Function to get the customer detail by id
+    function ShowCustomerOrderDetail(customerId, orderId) {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonGetCustomerOrderDetail", "Admin")',
+
+            data: { CustomerId: customerId, OrderId: orderId },
+
+            success: function (data, status, xhr) {
+                $("#customerOrderDetail").html(data);
+                $("#processing").html("");
+            }
+        });
+
+    }
+    
+
+</script>
+<div >
+    
+</div>
+<div class="add_new_cal">
+<span id="errMsg" style="color:red;" class="validation-summary-errors"></span>
+<div class="customer_search">
+@Html.TextBox("txtCustomerSearch","", new { @onkeydown = "if(event.which || event.keyCode){if ((event.which == 13) || (event.keyCode == 13)) {document.getElementById('btnSearch').click();return false;}} else {return true}; " })<input type="button" id="btnSearch"   title="Find customer" value="Find customer" />
+<span class=" clr_span">&nbsp;</span>
+</div><span id="processing"></span>
+
+<div id="customerList">
+
+</div>
+
+<div id="customerDetail">
+
+</div>
+</div>
+
+

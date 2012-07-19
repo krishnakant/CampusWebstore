@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Meetings>
+  <Meeting>
+    <id></id>
+    <Title></Title>
+    <MeetingDate></MeetingDate>
+    <StartTime></StartTime>
+    <EndTime></EndTime>
+    <Location></Location>
+  </Meeting>
+  <Meeting>
+    <id>1</id>
+    <Title>MyNewEvent16</Title>
+    <MeetingDate>5/16/2012</MeetingDate>
+    <StartTime>02:00</StartTime>
+    <EndTime>04:00</EndTime>
+    <Location>US</Location>
+  </Meeting>
+  <Meeting>
+    <id>100</id>
+    <Title>My Event18</Title>
+    <MeetingDate>5/18/2012</MeetingDate>
+    <StartTime>05:00</StartTime>
+    <EndTime>06:00</EndTime>
+    <Location>US</Location>
+  </Meeting>
+</Meetings>

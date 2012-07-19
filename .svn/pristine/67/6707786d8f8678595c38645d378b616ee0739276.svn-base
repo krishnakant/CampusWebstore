@@ -1,0 +1,238 @@
+﻿@{
+    ViewBag.Title = "Search";
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        jQuery("#btnSearch").click(function () {
+
+            fnSearch(1);
+        });
+    });
+
+    //function to get search result...
+    function fnSearch(pageno) {
+
+        if (jQuery("#ddlType").val() == "SKU") {
+
+            var source = "";
+
+            switch (jQuery("#ddlMode").val()) {
+                case "GM":
+
+                    source = "GM";
+
+                    window.location.href = "~/Catelogs/CatalogProductItems" + "?Sku=" + jQuery("#txtSearch").val() + "&Source=" + source;
+
+                    break;
+
+                case "TX":
+
+                    source = "TX";
+
+                    window.location.href = "~/Catelogs/CatalogProductItems" + "?Sku=" + jQuery("#txtSearch").val() + "&Source=" + source;
+
+                    break;
+
+                case "TR":
+
+                    source = "TR";
+
+                    window.location.href = "~/Catelogs/CatalogProductItems" + "?Sku=" + jQuery("#txtSearch").val() + "&Source=" + source;
+
+                    break;
+
+                case "ALL":
+
+                    source = null;
+
+                    window.location.href = "~/Catelogs/CatalogProductItems" + "?Sku=" + jQuery("#txtSearch").val() + "&Source=" + source;
+
+                    break;
+            }
+        } else {
+
+            jQuery("#imgLoading").show();
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '@Url.Action("JsonGetSearch", "Home")',
+                data: {
+                    SearchInput: jQuery("#txtSearch").val(),
+                    Source: jQuery("#ddlMode").val(),
+                    Type: jQuery("#ddlType").val(),
+                    Pagesize: jQuery("#ddlPageSize").val(),
+                    PageNo: pageno
+                },
+                success: function (data) {
+
+                    jQuery("#divResult").show();
+
+                    if (data.success) {
+
+                        jQuery("#spanRefineSearch").hide();
+
+                        jQuery("#spanSearchFor").html(jQuery("#spanSearchFor").html() + jQuery("#txtSearch").val());
+
+                        jQuery("#spanResultFound").html(data.totalrecords + " results found");
+
+                        jQuery("#divList").html(fnCreateList(data, pageno));
+
+                    } else {
+                        jQuery("#spanSearchFor").html(jQuery("#spanSearchFor").html() + jQuery("#txtSearch").val());
+
+                        jQuery("#spanResultFound").html(data.error);
+
+                        if (data.ishuge != null) {
+
+                            jQuery("#spanRefineSearch").html(jQuery("#spanRefineSearch").html().replace("#record#", data.ishuge));
+
+                            jQuery("#spanRefineSearch").show();
+                        }
+
+                        jQuery("#divList").html("");
+
+                    }
+
+                    jQuery("#imgLoading").hide();
+                }
+            });
+        }
+
+
+    }
+
+
+    //function to change page number...
+    function fnPageChange(pageno) {
+
+        jQuery("#imgLoading").show();
+
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonSearchResultPaging", "Home")',
+            data: {
+                Pagesize: jQuery("#ddlPageSize").val(),
+                PageNo: pageno
+            },
+            success: function (data) {
+                if (data.success) {
+                    jQuery("#divList").html(fnCreateList(data, pageno));
+                }
+
+                jQuery("#imgLoading").hide();
+            }
+        });
+    }
+
+    //Create table for list....
+    function fnCreateList(data, pageno) {
+        var strList = "<table>";
+
+        var pageStr = '';
+
+        for (var c = 1; c <= data.totalpages; c++) {
+
+            if (c != pageno) {
+                pageStr += '<a href="javascript:fnPageChange(' + c + ');"><span>' + c + '</span></a>';
+            } else {
+                pageStr += '<span>' + c + '</span>';
+            }
+        }
+
+        strList += '<tr align="center" style="color:White;background-color:Gray;font-weight:bold;"><td colspan="4">' + pageStr + '</td></tr>';
+
+        for (var i = 0; i < data.lstCatalogProductLookUpItems.length; i++) {
+
+            strList += "<tr>";
+
+            strList += '<td><a href="/Catalogs/CatalogProductItems?Title=' + data.lstCatalogProductLookUpItems[i].SeoTitle + '&Sku=' + data.lstCatalogProductLookUpItems[i].Sku + '&Source=' + data.lstCatalogProductLookUpItems[i].Source + '&Dlc="' + '><img width="60" height="80" src="' + data.lstCatalogProductLookUpItems[i].Image + '" alt="No Image" /></a></td>';
+
+            strList += '<td><a href="/Catalogs/CatalogProductItems?Title=' + data.lstCatalogProductLookUpItems[i].SeoTitle + '&Sku=' + data.lstCatalogProductLookUpItems[i].Sku + '&Source=' + data.lstCatalogProductLookUpItems[i].Source + '&Dlc="' + '>' + data.lstCatalogProductLookUpItems[i].SeoTitle + ' </a><br /> <span>' + data.lstCatalogProductLookUpItems[i].Comments + '</span></td>';
+
+            strList += '<td>' + data.lstCatalogProductLookUpItems[i].Description + '</td>';
+
+            var txtPrice = '';
+
+            var price = parseFloat(data.lstCatalogProductLookUpItems[i].Price.replace("$", ""));
+
+            var salesprice = parseFloat(data.lstCatalogProductLookUpItems[i].SalePrice.replace("$", ""));
+
+            if (price <= salesprice || salesprice == 0.00) {
+
+                txtPrice = price;
+            }
+            else {
+                txtPrice = " On Sale! " + data.lstCatalogProductLookUpItems[i].SalePrice;
+            }
+
+            strList += '<td>' + txtPrice + '</td>';
+
+            strList += "</tr>";
+
+        }
+
+        strList += '<tr align="center" style="color:White;background-color:Gray;font-weight:bold;"><td colspan="4">' + pageStr + '</td></tr>';
+
+        return strList;
+    }
+    
+</script>
+
+<div id="divMainContent">
+    <h2>
+    Items - Search for items in our database.</h2>
+    <div>
+        <div>
+            <b>Search For:</b>
+            <input id="txtSearch" type="text" />
+            By:
+            <select id="ddlType">
+                <option value="ALL" selected="selected">Everything</option>
+                <option value="TITLE">Title/Description</option>
+                <option value="AUTHOR">Author</option>
+                <option value="SKU">ISBN/SKU</option>
+            </select>
+            For:
+            <select id="ddlMode">
+                <option value="ALL" selected="selected">Everything</option>
+                <option value="GM">Merchandise</option>
+                <option value="TR">General Books</option>
+                <option value="TX">Textbooks</option>
+            </select>
+            <small>Results Per Page:
+            <select id="ddlPageSize">
+                <option value="3">3</option>
+                <option value="5" selected="selected">5</option>
+                <option value="10">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+            </select>
+            </small>
+            <br/>
+            <br/>
+            <input text-align ="middle" type="button" value="Search" id="btnSearch"/>
+        </div>
+        <div id="divResult" style="display: none;">
+            <b> <span id="spanSearchFor">Search For : </span>
+            <br/>
+            <span id="spanResultFound"></span>
+            </b>
+        </div>
+        <br/>
+        <span id="spanRefineSearch" style="display: none;">Search Resulted in #record# results. Please refine your search </span>
+        <br/>
+        <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+        <br/>
+        <div id="divList">
+            
+ 
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,18 @@
+﻿@using CampusWebStore.Shared.Models
+@{
+   
+    var lstCatalogs=(IEnumerable<CatalogModel>)ViewData["CatalogList"]??(new List<CatalogModel>());
+     }    
+   
+    <ul class="catalognav">
+    @foreach(var m in lstCatalogs)
+    {
+        <li>
+        @Html.ActionLink(@m.SeoUrl, "CatalogProduct", "catalogs",new {CatId=@m.CatalogId,Title=@m.SeoUrl},"")
+       
+        </li>
+    }
+    </ul>
+    
+
+

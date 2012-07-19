@@ -1,0 +1,441 @@
+﻿@using CampusWebSotre.Models
+@model IEnumerable<PageViewModel>
+@{
+    ViewBag.Title = "ContentAdmin";
+}
+<script type="text/javascript" src="@Url.Content("~/Scripts/tinymce.3.4.5/tiny_mce.js")"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+    
+        $("#btnAddPage").click(function () {
+            $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        
+            var pageName = $("#txtPageName").val();
+
+            var pageDesc = $("#txtPageDesc").val();
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("JsonContentAdminAddPage", "Admin")',
+
+                data: { PageName: pageName, PageDesc: pageDesc },
+
+                success: function (data, status, xhr) {
+
+                    var isSuccess = String(data.success);
+
+                    var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                    if (!isTrue)
+                    { $("#errMsg").text(data.errMsg); }
+                    else {
+                        $("#pageList").html(data);
+
+                        $("#txtPageName").val("");
+
+                        $("#txtPageDesc").val("");
+                        
+                        $("#errMsg").text('');
+
+                    }
+                    $("#processing").html('');
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        });
+    });
+    ///Function to delete the page
+    function DeletePage(pageName) {
+        if (confirm("Are you sure you want ot delete page?")) {
+            $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("JsonDeletePage", "Admin")',
+
+                data: { PageName: pageName },
+
+                success: function (data, status, xhr) {
+
+                    var isSuccess = String(data.success);
+
+
+                    var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                    if (!isTrue)
+                    { $("#errMsg").text(data.errMsg); }
+                    else {
+                        $("#errMsg").text('');
+                        $("#pageList").html(data);
+
+
+                    }
+                    $("#processing").html('');
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        }
+    }
+
+    ///Function to delete the page
+    function ChkPolicy(id, pageName) {
+
+        var chkStatus = $("#" + id).is(":checked") ? "on" : "off";
+
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonChkPolicy", "Admin")',
+
+            data: { PageName: pageName, ChkPolicy: chkStatus },
+
+            success: function (data, status, xhr) {
+
+                $("#pageList").html(data);
+                $("#processing").html('');
+                $("#errMsg").text('@ViewData["ErrMsg"]');
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+    ///Function to set home page as black page
+    function SetHomePageBlank() {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("SetHomePageBlank", "Admin")',
+
+            success: function (data, status, xhr) {
+
+                $("#pageList").html(data);
+                $("#processing").html('');
+                $("#errMsg").text('@ViewData["ErrMsg"]');
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+
+    ///Function to Edit the page
+    function EditPage(pageName) {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonEditPage", "Admin")',
+            data: { PageName: pageName },
+            success: function (data, status, xhr) {
+
+                $("#AddNewPage").hide();
+
+                //   $("#pageList").html(data);
+
+                $("#EditPage").html(data);
+
+                //    $("#txtAeraPageContent").html(data);
+
+                $("#processing").html('');
+
+                $("#errMsg").text('@ViewData["ErrMsg"]');
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+    ///Function to Edit the page
+    function JsonCopyOrRenamePage(pageName, operation) {
+        var newPageName = "";
+        if (operation == "ReName") {
+            newPageName = $("#txtReNamePage").val();
+        }
+        if (operation == "Copy") {
+            newPageName = $("#txtNewPageName").val();
+        }
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+         
+            type: "POST",
+
+            url: '@Url.Action("JsonCopyOrRenamePage", "Admin")',
+
+            data: { PageName: pageName, NewPageName: newPageName, Operation: operation },
+
+            success: function (data, status, xhr) {
+
+                var isSuccess = String(data.success);
+
+                var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                if (isTrue) {
+
+                    $("#AddNewPage").show("");
+
+                    $("#pageList").html(data);
+
+                    $("#errMsg").text('');
+                    
+                    $("#EditPage").html("");
+
+                } else {
+
+                    $("#errMsg").html(data.errMsg);
+
+                }
+                $("#processing").html('');
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+    ///Function to save the page contents
+    function SavePageContents(pageName, pageDesc) {
+        $("#PageContent").val(tinyMCE.get('txtAeraPageContent').getContent());
+          $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        var pageContent =  $("#PageContent").val();
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonSavePageContents", "Admin")',
+
+            data: { PageName: pageName, PageDesc: pageDesc, PageContent: pageContent },
+
+            success: function (data, status, xhr) {
+                var isSuccess = String(data.success);
+
+                var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                if (!isTrue)
+                { $("#errMsg").text(data.errMsg); }
+                else {
+
+                    $("#AddNewPage").show();
+
+                    $("#errMsg").text('');
+                    $("#EditPage").html('');
+                    $("#pageList").html(data);
+
+                }
+                $("#processing").html('');
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+    ///Function cancel the edit of the page
+    function CancelEdit() {
+      $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonCancelEdit", "Admin")',
+
+            success: function (data, status, xhr) {
+                $("#AddNewPage").show();
+
+                $("#pageList").html(data);
+
+                $("#EditPage").html('');
+
+                $("#processing").html('');
+
+              
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+    ///Function View the backup of the page
+    function ViewBackUp(pageName) {
+
+        window.open('GetPage?pagename=' + pageName + '&backup=backup');
+    }
+    //Function to restore the page from backup
+    function RestoreBackUp(pageName) {
+      $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"> Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonRestoreBackUp", "Admin")',
+
+            data: { PageName: pageName },
+
+            success: function (data, status, xhr) {
+                
+                var isSuccess = String(data.success);
+
+                var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                if (!isTrue)
+                { $("#errMsg").text(data.errMsg); }
+
+                else {
+                    $("#AddNewPage").hide();
+
+                    $("#editor").html(data);
+                    
+                    $("#errMsg").text('');
+
+                }
+                $("#processing").html('');
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+    //Function to restore the page from backup
+    function ChangeFrontPage(pageName) {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("JsonChangeFrontPage", "Admin")',
+            data:{PageName:pageName},
+            success: function (data, status, xhr) {
+                var isSuccess = String(data.success);
+
+                var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                if (!isTrue)
+                { $("#errMsg").text(data.errMsg); }
+
+                else {
+                    $("#AddNewPage").show();
+
+                    $("#pageList").html(data);
+
+                    $("#errMsg").text('');
+
+                }
+                $("#processing").html('');
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+</script>
+   @{
+     
+   }
+<div id="processing">
+</div>
+<br />
+<span id="errMsg" style="color: red;">@ViewData["ErrMsg"]</span>
+<div id="AddNewPage">
+    <table cellspacing="2" cellpadding="2" border="0" class="maincontent" style="width: 80%;">
+        <tbody>
+            <tr>
+                <td valign="top" class="maincontent">
+                    <div id="">
+                        <table width="100%" cellspacing="0" cellpadding="0" border="0" class="alignleft">
+                            <tbody>
+                                <tr>
+                                    <td class="alignleft">
+                                        Here you can control your homepage, policies, and your custom pages. You can add,
+                                        modify, and delete pages. To add a page, type in the page name and its description
+                                        in the boxes below. Click the add button to create your page. Navigate to your newly
+                                        created page, and click edit. You can select pages to become your front page and
+                                        control the custom pages you want to show up as policies.
+                                        <br>
+                                        <br>
+                                        <table width="100%" cellspacing="0" cellpadding="3" border="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="setl">
+                                                            <fieldset id="addPages" class="CheckGroup1">
+                                                                <legend>Add a new page </legend>
+                                                                <table cellspacing="5" cellpadding="5" border="0">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td valign="top">
+                                                                                <span style="font-size: 12px;" id="">Page Name: </span>
+                                                                            </td>
+                                                                            <td valign="top">
+                                                                                <input type="text" id="txtPageName" name="pageName">
+                                                                            </td>
+                                                                            <td valign="top">
+                                                                                Page Desc:
+                                                                            </td>
+                                                                            <td valign="top">
+                                                                                <input type="text" id="txtPageDesc" name="pageDesc">
+                                                                            </td>
+                                                                            <td valign="top">
+                                                                                <input type="button" style="font-size: 12px;" id="btnAddPage" value="Add Page" name="$$"><br>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </fieldset>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div id="pageList">
+                                            @Html.Partial("EditorTemplates/Admin/ShowPages", Model)
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div id="EditPage">
+</div>

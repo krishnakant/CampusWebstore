@@ -1,0 +1,51 @@
+﻿@model IEnumerable<CampusWebSotre.Models.SellBackCartViewModel>
+
+
+@{if (Model.Any())
+  {
+      var totalAmount = 0.00;
+    <table>
+        <tr>
+            <th>
+                Title
+            </th>
+            <th>
+                Store Credit
+            </th>
+            <th>
+                Cash Price
+            </th>
+            
+            
+        </tr>
+        @foreach (var m in Model)
+        {
+           
+            <tr>
+                <td>@MvcHtmlString.Create(@m.Title)
+                </td>
+                <td>@m.StoreCredit
+                </td>
+                <td>@m.CashPrice
+                </td>
+                                
+                <td><a href="#" onclick='javascript:RemoveSellBackItem("@m.Isbn");'><span>X</span></a></td>
+            </tr>
+        
+          
+
+        }
+    </table>
+     <br/><br/>
+     <br/><br/>
+    <text>Total Qty :</text><b>@Model.Count()</b><br />
+    
+    <text>Total Amount:</text><b> $@totalAmount </b>    <br/><br/>
+    <br />
+   <text>  ***To remove an item, set its qty to 0. </text>
+     <br/><br/>
+    <br />
+    <div style="float: right;"> @Html.ActionLink("Finish", "SellBackCheckout", "Account")
+       </div>
+  }
+}

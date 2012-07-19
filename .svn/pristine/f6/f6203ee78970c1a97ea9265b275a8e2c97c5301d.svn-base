@@ -1,0 +1,158 @@
+﻿@using CampusWebSotre.Models
+@{
+    ViewBag.Title = "SellBack";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSearch").click(function () {
+            $("#processing").removeAttr("style");
+            var isbns = $("#txtIsbn").val();
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("SellBackBooks","Home")',
+
+                data: { Isbn: isbns },
+
+                success: function (data, status, xhr) {
+                    $("#processing").attr("style","visibility:hidden;display:block;");
+                    $("#viewSellBack").html(data);
+
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        });
+
+    });
+
+    //function to remove the item form the cart
+
+    function RemoveSellBackItem(id) {
+        $("#processing").removeAttr("style");
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("RemoveSellBackCartItem","Home")',
+
+            data: { Id: id },
+
+            success: function (data, status, xhr) {
+                if (data != null) {
+
+                    var isSuccess = String(data.success);
+
+                    var isTrue = (isSuccess == 'undefined' ? true : false);
+
+                    if (!isTrue)
+                    { $("#errMsg").text(data.errMsg); }
+
+                    else {
+                        $("#sellBackCartItems").html(data);
+                        $("#processing").attr("style", "visibility:hidden;display:block;");
+                        $("#errMsg").text('');
+
+                    }
+                    $("#processing").html('');
+                    //Function to reload the cartitems
+                   
+                
+
+
+
+                }
+            }
+
+
+        });
+
+    }
+
+   
+</script>
+<span id="errMsg"></span>
+<div id="sellBackCartItems">
+
+</div>
+<div id="contentBodyDivInner">
+            <p id="title"></p>
+             
+                <table id="commerceArea">
+                    <tbody><tr>
+                        <td>
+                            
+    <div>
+	
+            <table align="center" cellspacing="0" cellpadding="0" border="0" class="maincontent">
+                <tbody><tr>
+                    <td>
+                        <table cellspacing="1" cellpadding="1" border="0">
+                            <tbody><tr>
+                                <td width="66%" valign="top" class="alignleft">
+                                    <p>
+                                        <span>***Enter "DEMO" into the ISBN field to view a demo of the Buyback module</span>
+                                    </p>
+                                </td>
+                                <td width="33%" valign="top" class="alignright">
+                                    <span style="font-size:Smaller;" >(Enter ISBN's seperated by newline or space)</span>
+                                    <a >What's an ISBN?</a>
+                                    <textarea style="height:73px;width:209px;" class="textboxinput" id="txtIsbn" cols="20" rows="2" name="ctl00$ContentPlaceHolder1$TextBox1"></textarea>
+                                    <div style="visibility:hidden;display:block;" id="processing">
+		
+                                            <img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Searching...
+                                        
+	</div>
+                                    <input type="button" style="font-size:12px;" class="FlatCSSButton" id="btnSearch" value="Search">
+                                </td>
+                            </tr>
+                        </tbody></table>
+                        <br>
+                        <div>
+
+	</div>
+                        
+                        <div style="display: none; position: fixed; z-index: 100001;" >
+		
+                          @*  <div id="modalSearchHelp" class="news">
+                                <table width="500" cellspacing="0" cellpadding="0" border="0" class="modalsBackground">
+                                    <tbody><tr>
+                                        <td>
+                                            <table cellspacing="0" cellpadding="0" border="0">
+                                                <tbody><tr>
+                                                    <td>
+                                                        The International Standard Book Number (ISBN) is a unique commercial book identifier.
+                                                        It is located on the back of each book. Please type this number into the textbox
+                                                        on the search page. You can enter a 10 digit ISBN, or a 13, or a combination of
+                                                        the two.
+                                                    </td>
+                                                    <td>
+                                                        <img style="border-width:0px;" src="../../Content/images/ISBNsample.jpg" id="ctl00_ContentPlaceHolder1_imgISBN">
+                                                    </td>
+                                                </tr>
+                                            </tbody></table>
+                                            <input type="submit" style="font-size:12px;" class="FlatCSSButton" id="ctl00_ContentPlaceHolder1_btnOK" value="OK" name="ctl00$ContentPlaceHolder1$btnOK">
+                                        </td>
+                                    </tr>
+                                </tbody></table>
+                            </div>*@
+                        
+	</div>
+                      </tr>
+            </tbody></table>
+        
+</div>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+	     
+            </div>
+            <div id="viewSellBack">
+          @*  @Html.Partial("EditorTemplates/ViewSellBackBooks")*@
+            </div>

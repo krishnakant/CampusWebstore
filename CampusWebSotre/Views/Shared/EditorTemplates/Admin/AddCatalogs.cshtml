@@ -1,0 +1,153 @@
+﻿@model CampusWebSotre.Models.CatalogPostModel 
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.date').live("cut copy paste", function (e) {
+            e.preventDefault();
+        });
+
+        $(".date").datepicker();
+
+        $("#btnCreateNewCatalog").click(function () {
+
+            var description = $("#Description").val();
+            var startDate = $("#StartDate").val();
+            var endDate = $("#EndDate").val();
+            var isError = false;
+            if (startDate) {
+                $("#spnStartDate").text("");
+            } else {
+                isError = true;
+                $("#spnStartDate").text(".required");
+            }
+            if (endDate) {
+                $("#spnEndDate").text("");
+            } else {
+                $("#spnEndDate").text(".required");
+                isError = true;
+            }
+            if (description) {
+                $("#spnDescription").text("");
+
+            } else {
+                $("#spnDescription").text(".required");
+                isError = true;
+
+            }
+            if (isError) {
+                return false;
+            }
+            var status = jQuery('input[id*="DisplayTumbnail"]').is(":checked") ? "on" : "off";
+            $("#divProcess").show();
+            $.ajax({
+                type: "POST",
+
+                url: '@Url.Action("JsonCreateCatalog", "Admin")',
+
+                data: $("#frmAddCatelog").serialize(),
+
+                success: function (data, status, xhr) {
+                    $.ajax({
+                        type: "GET",
+
+                        url: '@Url.Action("JsonGetAdminCatalogs", "Admin")',
+                        success: function (data, status, xhr) {
+                         
+                       //     $("#divProcess").hide();
+                            $("#ddlCatalog").html(data);
+                          //  $("#ddlCatList").select(description);
+                            window.location.reload();
+                        }
+                    });
+
+
+                }
+            });
+
+        });
+    });
+
+</script>
+<form action="#" id="frmAddCatelog" >
+   
+    <div id="divCreateCatalog">
+        <table>
+            <tr>
+                <td>
+                    <label>Description:</label> 
+                </td>
+                <td>
+                    @Html.TextBoxFor(model=>model.Description)
+                </td>
+                <td><span id="spnDescription" style="color: red "></span></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Start Date:</label> 
+                </td>
+                <td>
+                    @Html.TextBoxFor(model=>model.StartDate,new {@class="date"})
+                </td>
+                <td><span id="spnStartDate" style="color: red "></span></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>End Date:</label> 
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.EndDate, new { @class = "date" })
+                </td>
+                <td><span id="spnEndDate" style="color: red "></span></td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Display Thumbnails:</label> 
+                </td>
+                <td>
+                    @Html.CheckBoxFor(model=>model.DisplayTumbnail)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Comments</label> 
+                </td>
+                <td>
+                    @Html.TextBoxFor(model=>model.Comment)
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Web Columns:</label> 
+                </td>
+                <td>
+                    @Html.TextBoxFor(model=>model.Webcolumn)
+                </td>
+            </tr>
+            <tr><td>
+                    <label>Sort Sequence:</label></td> 
+                <td>
+                    @Html.TextBoxFor(model=>model.SortSquence)
+                </td>
+                @Html.HiddenFor(model=>model.Key)
+            </tr>
+                  
+        </table> <div style="clear: both;"></div>  <div>                            <div style="float: left">
+                                                                                        <input type="button" id="btnCreateNewCatalog"  value="Submit"/></div> <div id="divItemProcess" style="display: none;float: right"><img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br></div> </div>
+ 
+    </div>
+</form>
+<div style="clear: both"></div>
+            @if(Model!=null)
+            {
+                if(Model.AdminCatalogItemViewModel.Any())
+                {
+                    <div id="divCatalogItems">
+                        
+                        @Html.Partial("EditorTemplates/Admin/CatalogItems",Model.AdminCatalogItemViewModel)
+
+                    </div>
+                }
+            }
+            
+   

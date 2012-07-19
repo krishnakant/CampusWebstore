@@ -1,0 +1,365 @@
+﻿@model CampusWebSotre.Models.BaseMainConfigModel
+
+@{
+    ViewBag.Title = "BuyBackWizard";
+}
+
+<link href="@Url.Content("~/Content/Styles/Desktop/jquery.stepy.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/js/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/js/jquery.stepy.js")" type="text/javascript"></script>
+@{
+  
+     var showRetailPanel = "";
+     
+      var showWholePanel = "";
+       if (!Model.RetailBooks)
+       {
+           showRetailPanel = "style=display:none;";
+       }
+       if (!Model.WholeSaleBooks)
+       {
+           showRetailPanel ="style=display:none;";
+       }
+      
+}
+
+<h2>
+    BuyWackWizard</h2>
+<div id="content">
+    <form id="callback" method="POST" action="@Url.Action("BuyBackWizard", "admin")">
+    <fieldset title="Step 1">
+        Welcome to the BuyBack configuration wizard.<br />
+        Lets setup some of the options for buyback so you can customize how your customers
+        expireance buyback on the web.
+        <br />
+        First, we want to ask some questions about how you want to display the prices of
+        the books on your website.
+        <br />
+        <br />
+        -<strong>Would you like to display buyback prices on the web?<br />
+            <br />
+        </strong><legend>description one</legend>
+        <br />
+        @if (Model.DisplayPrices)
+        {
+           
+            <input type="checkbox" id="DisplayPrices" name="DisplayPrices" checked="checked" title="Show prices on your website?" />
+            <br />
+        }
+        else
+        {
+              <input type="checkbox" id="DisplayPrices" name="DisplayPrices" title="Show prices on your website?" />
+        }
+    </fieldset>
+    <fieldset title="Step 2">
+        <legend>description two</legend>Please choose if you would like to display wholesale
+        and/or retail buys for your students. Please select one or both below. If you want
+        to edit this setting, please run this wizard again. Also, select the percentage
+        of the price you would like to display online. For example, if the price of a book
+        is 100.00 and you select to show 90%, the book will apear online to your customers
+        at 90.00<br />
+        <br />
+        You must select one option"
+        
+        <div id="divRetailSale" @showRetailPanel>
+          @if (Model.RetailBooks)
+          {
+              <input type="checkbox" name="RetailBooks" value="true" checked="checked" title="Display retail buy options" /><text>
+              Display
+                  retail 
+              buy
+              options & nbsp;
+                                                                                                   <hr /></text>
+          }
+          else
+          {
+               <input type="checkbox" name="RetailBooks" value="false" title="Display retail buy options" /><text>
+              Display
+                  retail 
+              buy
+              options & nbsp;
+                                                                                                   <hr /></text>
+          }
+        <b>RETAIL</b><br />
+            Percentage:<br />
+            @Html.TextBoxFor(m=>m.RetailPercent,new{@style="width:29px;"})
+       Rounding Coin:
+        <br />
+        <small>Round to the nearest</small><br />
+        <input type="radio" name="RetailCoin" checked="checked"  value="5" title=".5" />.5
+        <input type="radio" name="RetailCoin"  value="10" title=".10" />.10
+        <input type="radio" name="RetailCoin" value="25" title=".25" />.25
+        <input type="radio" name="RetailCoin"  value="50" title=".50" />.50
+        <input type="radio" name="RetailCoin"  value="100" title="100" />100
+        Rounding:<br />
+        <small>Up, Down, or Nearest<br />
+            (to your coin selection)</small>
+        <input type="radio" name="RetailRounding" checked="checked" id="rblRetailRounding"
+            value="U" title="Up" />Up
+        <input type="radio" name="RetailRounding" id="rblRetailRounding1" value="D" title="Down" />Down
+        <input type="radio" name="RetailRounding" id="rblRetailRounding2" value="N" title="Nearest" />Nearest
+        </div>
+        <hr />
+        <div id="divWholeSale" @showWholePanel >
+        @if (Model.WholeSaleBooks)
+        {
+            <input type="checkbox" name="WholeSaleBooks" title="Display wholesale buy options" value="true" checked="checked" /> <text>Display wholesale buy options</text><hr />
+            
+        }
+        else
+        {
+              <input type="checkbox" name="WholeSaleBooks" title="Display wholesale buy options" value="false" /> <text>Display wholesale buy options</text><hr />
+          
+        }
+        
+        <br />
+        <b>WHOLESALE</b><br />
+        Percentage:<br />
+         @Html.TextBoxFor(m=>m.WholeSalePercent,new{@style="width:29px;"})<br />
+        Rounding Coin:
+        <br />
+        <small>Round to the nearest</small>
+        <input type="radio" name="WholeSaleCoin" checked="checked" value="5" />.5
+        <input type="radio" name="WholeSaleCoin" value="10" />.10
+        <input type="radio" name="WholeSaleCoin" value="25" />.25
+            <input type="radio" name="WholeSaleCoin" value="50"/>.50
+        <input type="radio" name="WholeSaleCoin" value="100" />100 Rounding:<br />
+        <small>Up, Down, or Nearest<br />
+            (to your coin selection)</small>
+        <input type="radio" name="WholeSaleRounding" checked="checked" id="rblWholesaleRounding"
+            value="U" title="Up" />Up
+        <input type="radio" name="WholeSaleRounding" id="rblWholesaleRounding1" value="D"
+            title="Down" />Down
+        <input type="radio" name="WholeSaleRounding" id="rblWholesaleRounding2" value="N"
+            title="Nearest" />Nearest</div>
+        <hr />
+    </fieldset>
+    <fieldset title="Step 3">
+        <legend>description Three</legend>This setting allows you to show your buyback need
+        on your website. This will show up under the price for retail books.<br />
+        <br />
+        @if (Model.ShowBuyBackNeed)
+        {
+            <input type="checkbox" name="ShowBuyBackNeed" value="true" checked="checked" title="Show your Buyback need?" />
+            <text>    Show your Buyback need?</text>
+        }
+        else
+        {
+            <input type="checkbox" name="ShowBuyBackNeed" value="false" title="Show your Buyback need?" />
+            <text>    Show your Buyback need?</text>
+        }
+  
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+    </fieldset>
+    <fieldset title="step 4">
+        <legend>Descriptionn 4 </legend>Here you have the ability to have buyback vouchers
+        issued from your website. This will enable users to print a document from the website
+        with the books they wish to sell. They can bring this paper along with the books
+        into your store and return the books for cash acording to the voucher. If you do
+        NOT allow vouchers, we will skip to the last step.<br />
+        When vouchers are enabled, you have the a couple more options.<br />
+        <br />
+        &nbsp;<br />
+        @if (Model.Vouchers)
+        {
+            <input type="checkbox" name="Vouchers" value="true" checked="checked" title="Use Vouchers on your website?" />
+        }
+        else
+        {
+              <input type="checkbox" name="Vouchers" value="false" title="Use Vouchers on your website?" />
+        }
+        Use Vouchers on your website?<br />
+        <br />
+        Time for vouchers to expire:(days)
+          @Html.TextBoxFor(m=>m.VoucherExpire)
+       <br />
+        <br />
+        <br />
+        <br />
+        &nbsp;<br />
+        <br />
+    </fieldset>
+    <fieldset title="step 5">
+        <legend>Descriptionn 5 </legend>Becuase you have selected to use vouchers, you have
+        the option of enabling a store credit feature. This will allow you to present a
+        price to the student, along with a store credit option. Here you can choose to use
+        store credit, and select the percentage you would like to offer. For example, if
+        a book is wholesaling at 100.00 and you are offering 110% for store credit. The
+        student can then bring that book in for 110.00 store credit. This means that 110.00
+        is brought back into your store. Also, many times store credit is not used or forgotton
+        about.<br />
+        <br />
+        @if (Model.StoreCredit)
+        {
+            <input type="checkbox" name="StoreCredit" checked="checked" value="true" title="Use store credit on your website?" />
+<text>Use store credit on your website? </text><br/>
+        }
+        else
+        {
+             <input type="checkbox" name="StoreCredit" value="false" title="Use store credit on your website?" />
+<text>Use store credit on your website? </text><br/>
+        }
+        @if (Model.StoreCredit)
+        {<text>
+            Store
+     Credit%:</text>
+            <br/>
+            @Html.TextBoxFor(m => m.StoreCreditPercent, new { @style = "width:29px;" })
+            <br />
+        }
+    </fieldset>
+    <fieldset title="step 6">
+        <legend>Descriptionn 6 </legend>
+         Here you can select if your users must login or not to get a voucher.<br />
+                        If you require your users to login or make an account with your website, the benifits
+                        are high. First, the voucher is customized for that customer.
+                        <br />
+                        They can not print out 20 vouchers and share with others.<br />
+                        Second, you will be able to track what your customers are buying/selling
+                        <br />
+                        on your website. This is a huge advantage for email campaings.<br />
+                        <br />
+                        <br />
+                        <br />
+                        @if (Model.RequireLogin)
+                        {
+                            <input type="checkbox" name="RequireLogin" value="true" checked="checked" /><text>Require users to login?</text>
+                        }
+                        else
+                        {
+                             <input type="checkbox" name="RequireLogin" value="false" /><text>Require users to login?</text>
+                        }
+        
+                          
+                        <br />
+                        <br />
+                        <br />
+        
+
+    </fieldset>
+    <fieldset title="step 7">
+        <legend>Descriptionn 7 </legend>
+          Here you want to setup your disclaimers for buyback. These will display on the buyback
+                        page, as well as print out on the voucher your students.<br />
+        <br />
+           @Html.TextAreaFor(m => m.Disclaimer, new { @style = "height:163px;width:400px;", @cols = "3", @rows = "3" })
+ 
+       
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+    </fieldset>
+    <fieldset title="step 8">
+        <legend>Descriptionn 8 </legend>
+        
+           Thats it! You are all done. If you need to change something, hit the "Previous"
+                        button. If you wish to change something after you close this window, you can just
+                        run the wizrd again from the admin panel. Thanks!<br />
+                        <br />
+                        <br />
+                        (Please give us a few seconds to update when you hit finish)<br />
+                        <br />
+                        <br />
+                       
+                                We're updating.. please hold a second.<br />
+                            
+                        <br />
+                    
+    </fieldset>
+    
+    <input type="submit" class="finish" value="Finish!" />
+    </form>
+</div>
+<div id="footer">
+    <div id="copy">
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("input:checkbox").change(function() {
+        if($(this).is(":checked")) {
+            $(this).val(true);
+        } else {
+  $(this).val(false);
+        }
+        });
+    });
+  
+
+
+    $(function() {
+
+        $('#default').stepy();
+
+        $('#custom').stepy({
+            backLabel:	'Backward',
+            block:		true,
+            errorImage:	true,
+            nextLabel:	'Forward',
+            titleClick:	true,
+            validate:	true
+        });
+
+        $('div#step').stepy({
+            finishButton: false
+        });
+
+        // Optionaly
+        $('#custom').validate({
+            errorPlacement: function(error, element) {
+                $('#custom div.stepy-error').append(error);
+            }, rules: {
+                'user':			{ maxlength: 1 },
+                'email':		'email',
+                'checked':		'required',
+                'newsletter':	'required',
+                'password':		'required',
+                'bio':			'required',
+                'day':			'required'
+            }, messages: {
+                'user':			{ maxlength: 'User field should be less than 1!' },
+                'email':		{ email: 	 'Invalid e-mail!' },
+                'checked':		{ required:  'Checked field is required!' },
+                'newsletter':	{ required:  'Newsletter field is required!' },
+                'password':		{ required:  'Password field is requerid!' },
+                'bio':			{ required:  'Bio field is required!' },
+                'day':			{ required:  'Day field is requerid!' }
+            }
+        });
+
+        $('#callback').stepy({
+            back: function(index) {
+						
+            }, next: function(index) {
+                if ((Math.random() * 10) < 5) {
+							
+                    return false;
+                }
+
+						
+            }, select: function(index) {
+					
+            }, finish: function(index) {
+						
+            }, titleClick: true
+        });
+
+        $('#target').stepy({
+            description:	false,
+            legend:			false,
+            titleClick:		true,
+            titleTarget:	'#title-target'
+        });
+
+    });
+</script>

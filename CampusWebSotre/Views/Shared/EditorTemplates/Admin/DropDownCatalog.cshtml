@@ -1,0 +1,20 @@
+﻿@using System.Collections
+@using CampusWebSotre.Models
+ 
+ 
+ @{
+    var catList =  new List<SelectListItem>() ;
+     var adminCatlog = (IEnumerable<CatalogViewModel>) ViewData["AdminCatalog"] ?? new List<CatalogViewModel>();
+    foreach (var model in adminCatlog)
+    {
+
+        catList.Add(new SelectListItem
+                                       {
+                                           Value = model.CatalogId,
+                                           Text = model.Desc
+                                       });
+    }
+        
+}
+ 
+Catalogs : @Html.DropDownList("ddlCatList", catList)

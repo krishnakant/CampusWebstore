@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<center>
+        <table cellspacing="2" cellpadding="2" border="0" class="maincontent">
+            <tbody><tr>
+                <td valign="top" class="maincontent">
+                    <h1 class="main_heading">Welcome to CampusWebStore<span class="smalltext">Your Online Campus Bookstore Solution</span></h1>
+					<br><br> 
+					<table cellspacing="0" cellpadding="0" border="0" width="100%" class="home_block">
+						<tr>
+						<td valign="top"><img width="189" height="147" border="0" alt="cwsgirl.png" src="@Url.Content("~/Content/images/DeskTop/cwsgirl.png")"></td><td valign="middle"> Campus WebStore provides your college store with the latest in e-commerce technology, giving students, and the rest of the world, the ability to browse, buy and sell merchandise right from the comfort of their computer.
+						</td>
+						</tr>
+					</table>
+					<span class="clrspan">&nbsp;</span>
+					<h2 class="sub_heading2 padtop25">Everything You Need - Nothing You Don't</h2>
+					<p style="padding: 10px; text-align: left;">&nbsp;&nbsp;Not all e-commerce solutions
+    are equal. Campus Webstore was built from the ground up tailored to the campus store's
+    needs. We have worked with college stores for over 20 years and that experience can give you the tools and features necessary for your store's success today and tomorrow. Don't settle for generic, over-priced solutions, when Campus Webstore has everything you need and nothing you don't.</p>
+	<h2 class="sub_heading2 padtop25">Real-Time Inventory</h2>
+	<p style="padding: 10px; text-align: left;"> &nbsp;&nbsp;Tired of uploading and syncing your
+    website with your inventory? All items you would like to display on your website
+    update automatically. There is no need to adjust inventory, prices or course records.
+    Campus Webstore is REAL TIME.</p>
+	<h2 class="sub_heading2 padtop25">A "One Stop Shop"</h2>
+	<p style="padding: 10px; text-align: left;">&nbsp;&nbsp; Campus Webstore can integrate into your existing campus enrollment system to provide students with a <em>"one stop shop"</em> experience when purchasing their books. This system will automatically find students' books based on the students ID, eliminating errors and saving students time on your website.</p>
+    <br /><br />
+        
+            <table width="700" cellspacing="0" cellpadding="0" border="0" style="margin-left: 35px;"><tbody><tr><td width="40%">
+                <!-- Benefits -->
+                <ul style="text-align: left;" class="content_nav"><li>Shared Database</li><li>POS data is also your web data</li><li>No double entry</li><li>Dynamic content drives the website</li><li>Real-Time Interface</li><li>Web data is always current</li><li>Submitted orders are stored in POS</li><li>Order fulfillment is a POS function</li><li>Robust Buyback Integration</li><li>Comprehensive Faculty Adoptions</li><li>One-click enrollment book match</li><li>Secure Hosting</li><li>Easy to use</li><li>24/7/365 Responsive Technical Support</li><li>Minimal Training Requirements</li><li>Online Faculty Adoptions</li><li>Live Shipping Rates</li><li>Automatically Prints Shipping Labels</li></ul>
+            </td>
+            <td width="40%" valign="top">
+                <!-- Applications -->
+                <ul style="text-align: left;" class="content_nav"><li>Custom Stock Levels</li><li>Automatic Image Resizing</li><li>Dynamic Product Front Page</li><li>CISP Certified</li><li>Credit Card Authentication</li><li>100% Integrated with Real-Time Data</li><li>Custom Look and Feel</li><li>Custom Web-Based Reports</li><li>Unlimited Custom Content</li><li>Unlimited Items</li><li>Unlimited Catalogs</li><li>Online Buyback</li><li>Integrated Order Fulfillment</li><li>Email Confirmations</li><li>Order Notifications</li><li>Course/Book Lookup Option</li><li>Calendar of Events</li><li>Specifically Designed for the Campus Store</li></ul></td></tr></tbody></table>
+<br>
+<br>
+                </td>
+            </tr>
+        </tbody></table>
+    </center>

@@ -1,0 +1,26 @@
+﻿@using CampusWebStore.Shared.Models
+@{
+    var count = 0.00;
+  
+    var lstCartItems =(List<ShoppingCartModel>) ViewData["CarTItems"]??(new List<ShoppingCartModel>());
+     double total = 0;
+    if(lstCartItems!=null)
+    {
+        count = lstCartItems.Count;
+        foreach (var item in lstCartItems)
+        {
+            total += item.Total;
+        }
+    }
+    else
+    {
+        lstCartItems = new List<ShoppingCartModel>();
+    }
+}
+
+
+  <a href=@Url.Action("ViewCartDetail","Home")><img alt="View Cart" onclick="window.location.href='@Url.Action("ViewCartDetail","Home")'" style="width: 20px;height:21px;" src="@Url.Content("~/Content/Images/search.png")" /></a>&nbsp;&nbsp;<b>@MvcHtmlString.Create(@lstCartItems.Count.ToString())</b> Items(s) Total $<b>@total</b> @if (count > 0)
+                                                                                                                                                                                                                                                                                        {<text> </text> @Html.ActionLink("CheckOut", "checkout", "account")}
+
+
+

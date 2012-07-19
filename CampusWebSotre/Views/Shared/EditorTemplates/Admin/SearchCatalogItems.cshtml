@@ -1,0 +1,46 @@
+﻿
+@model IEnumerable<CampusWebSotre.Models.AdminCatalogItemViewModel>
+@if (Model.Any())
+{
+    <table class="orderhistory th_bold" cellspacing="0" cellpadding="0" border="0" style="width: 762px; margin-top: 10px;">
+    
+        <tr class="heding">
+             <th scope="col">
+                Title:
+            </th>
+           
+            <th scope="col">
+                MOD:
+            </th>
+           
+            <th scope="col">
+                Price:
+            </th>
+          <th scope="col">
+                SKU:
+            </th>
+        
+        </tr>
+        @foreach (var m in Model)
+        {
+            <tr>
+             
+                <td>
+                    <a href="#" onclick="javascript:AddCatalogItem('@m.Sku')">  @m.Title </a>
+                   
+                </td>
+                <td>
+                    @m.Mod
+                </td>
+               <td>
+                    @m.Price
+                </td>
+                <td>
+                    @m.Sku
+                </td>
+               
+
+            </tr>
+        }
+    </table>
+}

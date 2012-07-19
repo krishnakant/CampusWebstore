@@ -1,0 +1,16 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+@section featured {
+
+    <section class="feature">
+        <img src="@Url.Content("~/images/findHosting.png")" alt="Hosting" />
+        <h3>Find Web Hosting</h3>
+        <p>
+            You can easily find a web hosting company that offers the right mix of features and price for your applications. 
+            Visit <a href="http://microsoft.com/web/hosting" title="Microsoft/Web Website">Microsoft.com/web</a> to 
+            explore offerings from many providers.
+        </p>
+    </section>
+    }

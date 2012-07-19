@@ -1,0 +1,342 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Xml;
+using System.Xml.Linq;
+using CampusWebStore.Shared;
+using CampusWebStore.Shared.Models;
+using Microsoft.Practices.Unity;
+
+namespace CampusWebStore.Data.Daos
+{
+    public interface IShippingDao
+    {
+        #region "Public Methods"
+
+        ShippingRateModel GetShippingMethodDetails(string storeId, object myVars, string userName, string userPwd, string dbType,
+                                      string uvAddress, string uvAccount, string cacheTIme, string dblCache,
+                                      string strd3PortNumber, string useEncryption, string d3PortNumber);
+
+
+
+        TaxModel GetShippingRate(string storeId, object myVars, string userName, string userPwd, string dbType,
+                             string uvAddress, string uvAccount, string cacheTIme, string dblCache,
+                             string strd3PortNumber, string useEncryption, string d3PortNumber);
+
+        void DoPayment(string storeId, object myVars, string userName, string userPwd, string dbType,
+                             string uvAddress, string uvAccount, string cacheTIme, string dblCache,
+                             string strd3PortNumber, string useEncryption, string d3PortNumber);
+
+        #endregion
+    }
+
+    public class ShippingDao : IShippingDao
+    {
+        #region  "Properties"
+
+        [Dependency]
+        public IDbAccess DbAccess { get; set; }
+
+        #endregion
+
+        /// <summary>
+        /// Get Shipping Methods Details...
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="myVars"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPwd"></param>
+        /// <param name="dbType"></param>
+        /// <param name="uvAddress"></param>
+        /// <param name="uvAccount"></param>
+        /// <param name="cacheTIme"></param>
+        /// <param name="dblCache"></param>
+        /// <param name="strd3PortNumber"></param>
+        /// <param name="useEncryption"></param>
+        /// <param name="d3PortNumber"></param>
+        public ShippingRateModel GetShippingMethodDetails(string storeId, object myVars, string userName, string userPwd, string dbType, string uvAddress, string uvAccount, string cacheTIme, string dblCache, string strd3PortNumber, string useEncryption, string d3PortNumber)
+        {
+
+            var objShippingRateModel = new ShippingRateModel();
+
+
+            var strPickDataReturn = DbAccess.GetStringResult(storeId, Constants.GetShippingMethodDetails, myVars, userName, userPwd, dbType,
+                                                              uvAddress, uvAccount, cacheTIme, dblCache, strd3PortNumber,
+                                                              useEncryption, d3PortNumber);
+
+
+             //Read XML data
+            var doc = new XmlDocument();
+
+            doc.LoadXml(strPickDataReturn);
+
+            var xmlResult = XElement.Parse(strPickDataReturn);
+
+            if (xmlResult.Descendants("ERROR").Any())
+            {
+                //If not set error message
+                objShippingRateModel.ErrorMsg = xmlResult.Descendants("ERROR").SingleOrDefault().Value;
+            }
+            else
+            {
+
+                var listShippingMehods = (from shipping in xmlResult.Descendants("OPTION")
+                                          select shipping).ToList();
+
+                var objWeight = (from weight in xmlResult.Descendants("WEIGHT")
+                                 select new
+                                            {
+                                                ORIGINATIONZIP = weight.Element("ORIGINATIONZIP").Value,
+                                                TOTALDECIMAL = weight.Element("TOTALDECIMAL").Value,
+                                                TOTALOUNCES = weight.Element("TOTALOUNCES").Value,
+                                                FREEWEIGHTOZ = weight.Element("FREEWEIGHTOZ").Value,
+                                            }).SingleOrDefault();
+
+
+                var flatRateFreightAmount =
+                    Convert.ToDecimal(xmlResult.Element("FLATFREIGHTAMOUNT").Value);
+
+                var freeflatRateFreightAmount =
+                    Convert.ToDecimal(xmlResult.Element("FREEFLATAMOUNT").Value);
+
+                var totalFreeOunces = objWeight.FREEWEIGHTOZ;
+
+                var freeWeightInOz = Convert.ToDouble(totalFreeOunces) / 100;
+
+                var orgZipCode = objWeight.ORIGINATIONZIP;
+
+                var totalDecimal = objWeight.TOTALDECIMAL;
+
+                var totalOunces = objWeight.TOTALOUNCES;
+
+                var confnumber = xmlResult.Element("CONFIRMATION").Value;
+
+                //Set in model object...
+                objShippingRateModel.ConfNumber = confnumber;
+
+                var weightInOz = Convert.ToDouble(totalOunces) / 100;
+
+                foreach (var objShippingMethod in listShippingMehods)
+                {
+                    var isFreeShipping = Convert.ToBoolean(objShippingMethod.Element("ISFREE").Value);
+
+                    var tcsTableCode = objShippingMethod.Element("TCSCODE").Value;
+
+                    var strLiveRate = objShippingMethod.Element("LIVERATE").Value;
+
+                    var boolLiveRate = Convert.ToBoolean(strLiveRate); //must pass True/False
+
+                    var isLiveRate = boolLiveRate && weightInOz != 0;
+
+                    //this is the display text for the user to see
+                    var displayText = objShippingMethod.Element("DISPLAY").Value;
+
+                    //this is USPS,FEDEX,UPS,DHL, etc..
+                    var shipperCode = objShippingMethod.Element("SHIPPERCODE").Value;
+
+                    //this is the USPS,FEDEX,UPS name eqivilent
+                    var tableType = objShippingMethod.Element("TABLETYPE").Value;
+
+                    //this is the USPS class (could be more later)
+                    var tableClassCode = objShippingMethod.Element("TABLECLASS").Value;
+
+                    //this is the extra amount they might want to add to the rate
+                    var addAmount = objShippingMethod.Element("ADDAMOUNT").Value;
+
+                    //this is the amount for manual rates
+                    var strAmount = objShippingMethod.Element("AMOUNT").Value;
+
+                    var dAmount = Convert.ToDecimal(addAmount);
+
+                    //if (isLiveRate && IWEBConfigAdmin.UseLiveShippingRates && weightInOz != 0)
+                    //{
+                    //    //we have to go get a rate from somewhere
+                    //    decimal liveRate = 0;
+                    //    decimal newCalulatedRate = 0;
+                    //    if (isFreeShipping)
+                    //    {
+                    //        if (freeWeightInOz == 0)
+                    //        {
+                    //            //the shipping is 100% free for weight, no need to get rate
+                    //            newCalulatedRate = 0;
+                    //        }
+                    //        else
+                    //        {
+                    //            liveRate = GetLiveRate(shipperCode, tableType, tableClassCode, shipzip, orgZipCode, freeWeightInOz);
+                    //        }
+                    //        if (liveRate == 0 && freeWeightInOz != 0)
+                    //        {
+                    //            newCalulatedRate = Convert.ToDecimal(strAmount);
+                    //            //live rate failed
+                    //        }
+                    //        else
+                    //        {
+                    //            newCalulatedRate = liveRate + dAmount + freeflatRateFreightAmount;
+                    //        }
+
+                    //    }
+                    //    else
+                    //    {
+                    //        liveRate = GetLiveRate(shipperCode, tableType, tableClassCode, shipzip, orgZipCode, weightInOz);
+                    //        if (liveRate == 0)
+                    //        {
+                    //            newCalulatedRate = Convert.ToDecimal(strAmount);
+                    //        }
+                    //        else
+                    //        {
+                    //            newCalulatedRate = liveRate + dAmount + flatRateFreightAmount;
+                    //        }
+                    //    }
+
+                    //    listShippingRateModel.Add(new ShippingRateModel
+                    //                                  {
+                    //                                      Display = displayText,
+                    //                                      Amount = newCalulatedRate.ToString("c"),
+                    //                                      Table = tcsTableCode
+                    //                                  });
+                    //}
+                    //else
+                    //{
+                    //    //its not a live rate, a manual rate
+                    //    decimal decAmount = Convert.ToDecimal(strAmount);// +dAmount + flatRateFreightAmount;
+
+                    //    listShippingRateModel.Add(new ShippingRateModel
+                    //    {
+                    //        Display = displayText,
+                    //        Amount = decAmount.ToString("c"),
+                    //        Table = tcsTableCode
+                    //    });
+                    //}
+
+                    //its not a live rate, a manual rate
+                    var decAmount = Convert.ToDecimal(strAmount);// +dAmount + flatRateFreightAmount;
+
+                    objShippingRateModel.ShippingMethods.Add(new ShippingMethod()
+                                                  {
+                                                      Display = displayText,
+                                                      Amount = decAmount.ToString("c"),
+                                                      Table = tcsTableCode
+                                                  });
+
+                    var weight = objWeight.TOTALOUNCES;
+
+                    var zipcode = objWeight.ORIGINATIONZIP;
+
+                    var iweight = Convert.ToInt32(weight);
+
+                }
+
+            }
+            return objShippingRateModel;
+        }
+
+        /// <summary>
+        /// Get Shipping Rate...
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="myVars"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPwd"></param>
+        /// <param name="dbType"></param>
+        /// <param name="uvAddress"></param>
+        /// <param name="uvAccount"></param>
+        /// <param name="cacheTIme"></param>
+        /// <param name="dblCache"></param>
+        /// <param name="strd3PortNumber"></param>
+        /// <param name="useEncryption"></param>
+        /// <param name="d3PortNumber"></param>
+        public TaxModel GetShippingRate(string storeId, object myVars, string userName, string userPwd, string dbType, string uvAddress, string uvAccount, string cacheTIme,
+            string dblCache, string strd3PortNumber, string useEncryption, string d3PortNumber)
+        {
+
+            var objTaxModel = new TaxModel();
+
+
+            var strPickDataReturn = DbAccess.GetStringResult(storeId, Constants.GetTax, myVars, userName, userPwd,
+                                                             dbType,
+                                                             uvAddress, uvAccount, cacheTIme, dblCache, strd3PortNumber,
+                                                             useEncryption, d3PortNumber);
+
+            //Read XML data
+            var doc = new XmlDocument();
+
+            doc.LoadXml(strPickDataReturn);
+
+            var xmlResult = XElement.Parse(strPickDataReturn);
+
+            if (xmlResult.Descendants("ERROR").Any())
+            {
+                //If not set error message
+                objTaxModel.ErrorMsg = xmlResult.Descendants("ERROR").SingleOrDefault().Value;
+            }
+            else
+            {
+                var objTax = (from tax in xmlResult.Descendants("TAXFREIGHT")
+                              select new
+                                         {
+                                             AMOUNT = tax.Element("AMOUNT").Value,
+                                             TOTALFREIGHT = tax.Element("TOTALFREIGHT").Value
+                                         }).SingleOrDefault();
+
+                objTaxModel.Tax = objTax.AMOUNT;
+
+
+                objTaxModel.PaymentMethods = (from payment in xmlResult.Descendants("PAYMENTINFO")
+                                              select new PaymentMethod
+                                                         {
+                                                             Type = payment.Element("TYPE").Value,
+                                                             Tender = payment.Element("TENDER").Value
+                                                         }).ToList();
+            }
+
+            return objTaxModel;
+        }
+
+        /// <summary>
+        /// Make payment for an order...
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="myVars"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPwd"></param>
+        /// <param name="dbType"></param>
+        /// <param name="uvAddress"></param>
+        /// <param name="uvAccount"></param>
+        /// <param name="cacheTIme"></param>
+        /// <param name="dblCache"></param>
+        /// <param name="strd3PortNumber"></param>
+        /// <param name="useEncryption"></param>
+        /// <param name="d3PortNumber"></param>
+        public void DoPayment(string storeId, object myVars, string userName, string userPwd, string dbType,
+                             string uvAddress, string uvAccount, string cacheTIme, string dblCache,
+                             string strd3PortNumber, string useEncryption, string d3PortNumber)
+        {
+
+            var strPickDataReturn = DbAccess.GetStringResult(storeId, Constants.OrderPayment, myVars, userName, userPwd,
+                                                             dbType, uvAddress, uvAccount, cacheTIme, dblCache,
+                                                             strd3PortNumber, useEncryption, d3PortNumber);
+
+
+
+            //Read XML data
+            var doc = new XmlDocument();
+
+            doc.LoadXml(strPickDataReturn);
+
+            var xmlResult = XElement.Parse(strPickDataReturn);
+
+            if (xmlResult.Descendants("ERROR").Any())
+            {
+                //If not set error message
+                //objTaxModel.ErrorMsg = xmlResult.Descendants("ERROR").SingleOrDefault().Value;
+            }
+            else
+            {
+                
+            }
+        }
+    }
+
+
+}

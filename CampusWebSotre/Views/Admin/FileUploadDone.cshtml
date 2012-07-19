@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "FileUploadDone";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var toSend = "";
+
+    toSend += ("If you selected <b>GM</b>, your files have been uploaded to http://" + Request.Url.Host + "/MyGMImages/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("If you selected <b>TR</b>, your files have been uploaded to http://" + Request.Url.Host + "/MyTRImages/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("If you selected <b>TX</b>, your files have been uploaded to http://" + Request.Url.Host + "/MyTXImages/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("If you selected <b>Other</b>, your files have been uploaded to http://" + Request.Url.Host + "/OtherFiles/<b>YourFileName.FileExtension</b><br>");
+    toSend += ("For example, if the file you uploaded was called <b>WordDocument1.doc</b>, and you selected <b>Other</b> then your file would be located at <b>http://" + Request.Url.Host.ToString() + "/OtherFiles/WordDocument1.doc</b>");
+}
+<h2>
+    FileUpload Finished
+</h2>
+Your File(s) have been uploaded.
+<br />
+<blockquote>
+    <span>@MvcHtmlString.Create(toSend)</span>
+</blockquote>
+
+@Html.ActionLink("Click here to upload more files","FileUploader","Admin")

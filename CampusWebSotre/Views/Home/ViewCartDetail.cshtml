@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CampusWebStore.Shared.Models.ShoppingCartModel>
+
+@{
+    ViewBag.Title = "ViewCartDetail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script type="text/javascript">
+    //function to calculate total
+    function CalculateTotal(id) {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"> Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("UpdateItemQty","Home")',
+
+            data: { Id: id, Quantity: $("#" + id).val() },
+
+            success: function (data, status, xhr) {
+                if (data != null) {
+                    //Function to reload the cartitems
+
+
+                    $("#cartITems").html(data);
+                    ViewCartItems();
+                }
+            }
+
+
+        });
+
+    }
+    //Function to remove the items for the cart
+    function RemoveCartItem(id) {
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")"> Please Wait...<br>');
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("RemoveCartItems","Home")',
+
+            data: { Id: id },
+
+            success: function (data, status, xhr) {
+                if (data != null) {
+
+                    //Function to reload the cartitems
+
+
+                    $("#cartITems").html(data);
+                    ViewCartItems();
+                }
+            }
+
+
+        });
+
+    }
+</script>
+
+@{ <div class="main_createaccount">
+            <h1 class="main_heading"> Cart Detail</h1>
+            <span class="heading_bottomline"></span>
+        </div>
+    <br />
+     <br />
+    <div  id="cartITems" class="view_card_page">
+        @Html.Partial("EditorTemplates/ViewCartItems", Model)
+    </div>
+    
+      <div style="height: 32px;" id="processing" class="image_process">
+    </div>
+}

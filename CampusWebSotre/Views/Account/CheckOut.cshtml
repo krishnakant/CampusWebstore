@@ -1,0 +1,869 @@
+﻿@using System.Globalization
+@using CampusWebStore.Shared.Models
+@model IEnumerable<CampusWebStore.Shared.Models.ShoppingCartModel>
+@{
+    ViewBag.Title = "CheckOut";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var cartTotal = 0.0;
+}
+<h1 class="main_heading">
+    Shopping Cart - Checkout</h1>
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        $("#panelMakePayment").hide();
+        $("#CheckoutPolicyTextBox").hide();
+        $("#btnMakePayment").hide();
+        $("#btnGoToShipping").show();
+
+
+        $('#lbStepsVerifyAddy')
+            .css({
+                'background-color': '#FFFF00',
+                'font-weight': 'bold'
+            });
+
+        //Show Custom shipping info box.. 
+        jQuery('input[id*="chkShippingThisTime"]').click(function () {
+
+            var status = jQuery('input[id*="chkShippingThisTime"]').is(":checked") ? "on" : "off";
+
+            if (status == "on") {
+
+                jQuery("#divAddress").hide();
+
+                jQuery("#customship").show();
+
+            } else {
+
+                jQuery("#divAddress").show();
+
+                jQuery("#customship").hide();
+            }
+
+        });
+
+        //Do Payment after finalize order....
+        jQuery('input[id*="btnMakePayment"]').click(function () {
+
+            finalizeOrder();
+        });
+    });
+
+
+    function finalizeOrder() {
+        if (jQuery('input[id*="chkPolicyAgree"]').is(":checked")) {
+
+            jQuery("#imgLoading").show();
+
+            jQuery("#spanError").hide();
+
+            jQuery.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: '@Url.Action("JsonDoPayment", "Shipping")',
+                data: {
+                    CardType: jQuery("#ddlPayCardType").val(),
+                    ExpiryDate: jQuery("#ddlPayExpMonth").val() + jQuery("#ddlPayExpYear").val().substr(2, 2),
+                    CardNo: jQuery("#txtCardNo").val(),
+                    CIDNo: jQuery("#txtPayCIDNumber").val(),
+                    PromoCode: jQuery("#txtPromoCode").val(),
+                    SubTotal: jQuery("#spnSubTotal").text()
+                },
+                success: function (data) {
+                    if (data.success) {
+                     
+                        jQuery("#imgLoading").show();
+                        window.location.href = '@Url.Action("OrderDone","Account")';
+                    }
+                    else {
+                        alert("Response Message:-" + data.errorMsg);
+                        jQuery("#imgLoading").show();
+                    }
+                }
+            });
+        } else {
+
+            jQuery("#spanError").show();
+
+            jQuery("#spanError").html("Please read and agree to checkout policy.");
+        }
+    }
+
+    var status = "off";
+
+    //function to get Shipping Methods details.....
+    function fnVerifyAddress() {
+
+
+        jQuery("#panelPayment").hide();
+        jQuery("#panelMakePayment").hide();
+        jQuery("#CheckoutPolicyTextBox").hide();
+        jQuery("#tblShippingMethods").hide();
+        jQuery("#AddressInfoPanel").show();
+        jQuery("#divAddress").show();
+        jQuery("#divShippingThisTime").show();
+        jQuery("#btnGoToShipping").show();
+        jQuery("#btnMakePayment").show();
+
+        $('#lbStepsVerifyAddy')
+            .css({
+                'background-color': '#FFFF00',
+                'font-weight': 'bold'
+            });
+
+        $('#lbStepsSelectShip')
+            .css({
+                'background-color': 'transparent',
+                'font-weight': 'normal '
+            });
+
+        $('#lbStepsMakePayment')
+            .css({
+                'background-color': 'transparent',
+                'font-weight': 'normal '
+            });
+    }
+
+
+    //function continue shipping.....
+    function fnContinueShipping() {
+
+        if ($("#btnGoToShipping").is(":visible")) {
+            fnGetShippingMethods();
+
+        } else if ($("#btnGoToShipping").is(":visible") == false && $("#btnMakePayment").is(":visible") == true && $("#tblPayment").is(":visible") && $("#btnMakePayment").is(":visible") && $("#CheckoutPolicyTextBox").is(":visible")) {
+            finalizeOrder();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //function to get Shipping Methods details.....
+    function fnGetShippingMethods() {
+        jQuery("#imgLoading").show();
+
+        jQuery("#divAddress").hide();
+        jQuery("#AddressInfoPanel").show();
+        jQuery("#panelPayment").show();
+        jQuery("#panelMakePayment").hide();
+        jQuery("#tblShippingMethods").show();
+        jQuery("#customship").hide();
+        jQuery("#divShippingThisTime").hide();
+        jQuery("#btnGoToShipping").hide();
+        jQuery("#divMakePayment").hide();
+        jQuery("#CheckoutPolicyTextBox").hide();
+        jQuery("#divPaymentOptions").hide();
+
+
+
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonGetShippingMethodDetails", "Shipping")',
+            data: {
+                IsAllowSubscription: jQuery('input[id*="chkShippingThisTime"]').is(":checked"),
+                IsShippingThisTime: jQuery('input[id*="chkShippingThisTime"]').is(":checked"),
+                ShipToName: jQuery("#txtShipToName").val(),
+                ShipAddress: jQuery("#txtShipToAddress").val(),
+                ShipAddress2: jQuery("#txtShipToName").val(),
+                ShipCity: jQuery("#txtShipToAddress").val(),
+                ShipState: jQuery("#txtShipToName").val(),
+                ShipZip: jQuery("#txtShipToAddress").val(),
+                ShipCountry: jQuery("#txtShipToAddress").val(),
+                ShipInstructions: jQuery("#txtShipInstructions").val()
+            },
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                jQuery("#divShipping").hide();
+
+                if (data.success) {
+
+                    var strTable = "<table id='tblShippingMethods' border='0' cellspacing='0' cellpadding='0' class='orderhistory select_shipping_method'>";
+
+                    strTable += "<tr>";
+
+                    strTable += "<th>Select Shipping Method</th>";
+
+                    strTable += "<th>Amount</th>";
+
+                    strTable += "<th>Select</th>";
+
+                    strTable += "</tr>";
+
+                    for (var i = 0; i < data.ShippingMethods.length; i++) {
+                        strTable += "<tr>";
+
+                        strTable += "<td>" + data.ShippingMethods[i].Display + "</td>";
+
+                        strTable += "<td>" + data.ShippingMethods[i].Amount + "</td>";
+
+                        strTable += "<td><a href=" + '"' + "javascript:fnGetTax('" + data.ShippingMethods[i].Display + "','" + data.ShippingMethods[i].Amount + "','" + data.ShippingMethods[i].Table + "');" + '"' + ">Select</a></td>";
+
+                        strTable += "</tr>";
+
+                    }
+
+                    strTable += "</table>";
+
+                    jQuery("#divShippingSelection").html(strTable);
+
+                    jQuery("#divShippingSelection").show();
+
+                    jQuery("#divShippingThisTime").hide();
+
+                    //jQuery("#divPaymentOptions").show();
+
+                    jQuery("#divVerifyBillingShipping").hide();
+
+                    jQuery("#divSelectShippingRates").show();
+
+                    $('#lbStepsVerifyAddy')
+            .css({
+                'background-color': 'transparent',
+                'font-weight': 'normal '
+            });
+
+                    $('#lbStepsSelectShip')
+            .css({
+                'background-color': '#FFFF00',
+                'font-weight': 'bold '
+            });
+
+                    $('#lbStepsMakePayment')
+            .css({
+                'background-color': 'transparent',
+                'font-weight': 'normal '
+            });
+
+
+                }
+                else {
+
+
+                }
+            }
+        });
+    }
+
+    //function to get tax
+    function fnGetTax(name, amt, table) {
+
+        jQuery("#imgLoading").show();
+
+
+
+
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonGetShippingTax", "Shipping")',
+            data: {
+                ShipName: name,
+                Amount: amt,
+
+                Table: table
+            },
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                jQuery("#divShipping").hide();
+
+                if (data.success) {
+
+                    var tax = data.objTaxModel.Tax;
+
+                    var subTotal;
+
+                    jQuery("#spnTax").html(tax);
+
+                    jQuery("#spnShippingCost").html(amt);
+
+                    subTotal = parseFloat(jQuery("#spnCartTotal").text().replace('$', '')) + parseFloat(tax.replace('$', '')) + parseFloat(amt.replace('$', ''));
+
+                    jQuery("#spnSubTotal").html("$" + subTotal.toFixed(2));
+
+                    for (var i = 0; i < data.objTaxModel.PaymentMethods.length; i++) {
+
+                        jQuery("<option value='" + data.objTaxModel.PaymentMethods[i].Tender + "'>" + data.objTaxModel.PaymentMethods[i].Type + "</option>").appendTo("#ddlPayCardType");
+                    }
+
+                    jQuery("#imgLoading").hide();
+
+                    jQuery("#tblPayment").show();
+
+                    jQuery("#btnMakePayment").show();
+
+                    jQuery("#divMakePayment").show();
+
+                    jQuery("#CheckoutPolicyTextBox").show();
+
+                    $('#lbStepsVerifyAddy')
+                    .css({
+                        'background-color': 'transparent',
+                        'font-weight': 'normal '
+                    });
+
+                    $('#lbStepsSelectShip')
+                        .css({
+                            'background-color': 'transparent',
+                            'font-weight': 'normal '
+                        });
+
+                    $('#lbStepsMakePayment')
+                        .css({
+                            'background-color': '#FFFF00',
+                            'font-weight': 'bold '
+                        });
+
+
+
+
+                } else {
+
+                }
+            }
+        });
+    }
+   
+</script>
+<div>
+    <div>
+       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="check_content_table top_table">
+            <tr>
+                <td><div class="check_content">
+                    <h4>
+                        Progress...</h4>
+                    <span>1.<a id="lbStepsVerifyAddy" href="javascript:fnVerifyAddress();">Verify Address
+                    </a></span>
+                    
+                    <span>2.<a id="lbStepsSelectShip" href="javascript:fnGetShippingMethods();">Select Shipping
+                        Method </a></span>
+                    <span>
+                    3.<a id="lbStepsMakePayment" href="#">Make Payment/Finalize Order</a></span>
+                    </div>
+                </td>
+                <td>
+                    <div id="divVerifyBillingShipping" class="check_content_right">
+                        <h3>
+                            Verify Billing/Shipping</h3>
+                        Please verify your shipping and billing address. If you need to make changes, please
+                        edit your account details. If you would like to have this order shipped to a special,
+                        one time only address, you can check the corresponding box below. If all this information
+                        is correct, continue below.
+                    </div>
+                </td>
+                <td>
+                    <div id="divSelectShippingRates" style="display: none" class="check_content_right">
+                        <h3>
+                            Select Shipping Rate</h3>
+                        Please select a shipping method below. Once selected, tax will be calculated, and
+                        you can enter payment information at this time.
+                    </div>
+                </td>
+                <td>
+                    <div id="divPaymentOptions" style="display: none" class="check_content_right">
+                        <h3>
+                            Payment Options</h3>
+                        Please select your payment method below. Please note: Your Credit Card will not
+                        be charged until your order is ready.
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="orderhistory" style="width:785px; margin-top:10px;">
+            <tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+                <td>
+                    <input type="checkbox" checked="checked" id="chkAllowSubscription">
+					<label for="chkAllowSubscription" class="allow_substitutions">
+                        Allow Substitutions on this order
+                    </label>
+                    <img style="border-width: 0px;" src="#" id="imageSubHelp" alt="" />
+                </td>
+            </tr>
+            <tr class="heding">
+                <th>
+                    Item
+                </th>
+                <th>
+                    Detail
+                </th>
+                <th>
+                    Type
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Qty
+                </th>
+                <th>
+                    Ext
+                </th>
+            </tr>
+            @foreach (var m in Model)
+            {
+                cartTotal = m.Total;
+                
+                <tr>
+                    <td>@MvcHtmlString.Create(m.Title)
+                    </td>
+                    <td>@m.Detail
+                    </td>
+                    <td>@m.Type
+                    </td>
+                    <td>@m.ActualPrice
+                    </td>
+                    <td>@m.Qty
+                    </td>
+                    <script type="text/javascript">$("#"+@m.Id).val(@m.Qty); </script>
+                    <td>@m.Total
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="6" style="text-align: right; padding-right: 20px;">@Html.ActionLink("Modify Items", "ViewCartDetail", "Home")
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                
+                    <td style="text-align: left; width:524px;"><div id="AddressInfoPanel">
+                        @{
+                            var objUserModel = (UserModel)Session["USERINFO"];
+                        
+                        }
+                        <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                        <div id="divAddress">
+                            <table>
+                                <tr>
+                                    <td>
+                                       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="check_content_table">
+            <tr>
+                <td><div class="check_content_right" style="margin-top:10px;">  <table id="tblBillingInfo" border="0" cellspacing="0" cellpadding="0" >
+                                            <tr>
+                                                <td>
+                                                    <h3>Billing Info</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.FirstName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.Address
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.Address2
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.City , @objUserModel.State @objUserModel.Zip
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @objUserModel.Country
+                                                </td>
+                                            </tr>
+                                            </table></div></td></tr>
+                                        </table>
+                                    </td>                                 
+                                    <td style="vertical-align: top;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="check_content_table">
+            <tr>
+                <td><div class="check_content_right" style="margin:10px 0 0 4px; ">  <table border="0" cellspacing="0" cellpadding="0" >
+                                            <tr>
+                                                <td>
+                                                    <h3>Shipping Info</h3>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.ShipToName
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.ShipAddress
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.ShipAddress2
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.ShipCity , @objUserModel.ShipState @objUserModel.ShipZip
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>@objUserModel.ShipCountry
+                                                </td>
+                                            </tr>
+                                        </table></div></td></tr></table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br />
+                            @Html.ActionLink("Click here to change your address on file", "AccountDetails", "Account")
+							 <br />
+                        </div>
+                        <span></span>
+                        <div id="customship" style="display: none;">
+                            <span style="font-weight: bold; font-size: 18px">Custom Shipping Address:</span>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="check_content_table">
+            <tr>
+                <td><div class="check_content_right" style="margin-top:10px;">  <table border="0" cellspacing="0" cellpadding="0" >
+                                            <tr>
+                                                <td>
+                                                    Ship To Name:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToName" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Address:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToAddress" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Address2:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToAddress2" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    City:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipToCity" name="txtShipToName" />
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        </div></td></tr></table>
+                                    </td>
+                                    
+                                    <td>
+                                       <table width="100%" border="0" cellspacing="0" cellpadding="0" class="check_content_table">
+            <tr>
+                <td><div class="check_content_right" style="margin:10px 0 0 4px;">  <table border="0" cellspacing="0" cellpadding="0" >
+                                            <tr>
+                                                <td>
+                                                    State:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtState" name="txtState" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Zip:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtZip" name="txtZip" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Country:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtCountry" name="txtCountry" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Ship Instructions:
+                                                </td>
+                                                <td>
+                                                    <input type="text" id="txtShipInstructions" name="txtShipInstructions" />
+                                                </td>
+                                            </tr>
+                                          </table>
+                                        </div></td></tr></table>
+                                    </td>
+                                    </tr>
+                            </table>
+                        </div>
+                        <div id="divShippingSelection" style="display: none;">
+                            <!--Fill by Ajax  -->
+                        </div>
+                        <div id="divShippingThisTime">
+                            <input type="checkbox" id="chkShippingThisTime" name="chkShippingThisTime" />
+                            <label for="chkShippingThisTime" class="allow_substitutions">
+                                Check to use a 'this time only' shipping address</label>
+                        </div>
+              
+                </div>  </td>
+               
+                <td style="vertical-align: top;">
+                    <!-- cart info box -->
+                
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="check_content_table">
+            <tr>
+                <td><div class="check_content_right" style="margin-top:12px; ">  <table border="0" cellspacing="0" cellpadding="0" >
+                        <tr>
+                            <td class="textalignleft">
+                                <h3>Cart Total:</h3>
+                            </td>
+                            <td class="textalignright">
+                                <span id="spnCartTotal">@cartTotal.ToString("C",new CultureInfo("en-us"))</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textalignleft">
+                                <b>Shipping:</b>
+                            </td>
+                            <td class="textalignright">
+                                <span id="spnShippingCost">N/A</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textalignleft">
+                                <b>Tax:</b>
+                            </td>
+                            <td class="textalignright">
+                                <span id="spnTax">N/A</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="textalignleft">
+                                <b>Subtotal:</b>
+                            </td>
+                            <td class="textalignright">
+                                <span id="spnSubTotal">N/A</span>
+                            </td>
+                        </tr>
+                    </table></div>
+                </td>
+            </tr>
+            </table></td></tr>
+        </table>
+        <div id="CheckoutPolicyTextBox" class="check_content_right" style="width: 762px; margin-top: 10px;">
+            <h3>Please read before making payment!</h3>
+            <textarea cols="" rows="" style="height: 122px; padding: 10px;width: 97%; border:1px solid #CDCDCD;">***PLEASE NOTE, IF ORDERING TEXTBOOKS ONLINE, THEY ARE FOR IN-STORE PICK UP ONLY.  They will NOT be shipped.
+
+Please make sure to select in-store pick up when checking out on shipping method page.
+
+Textbook orders will take 48 hours to process.
+
+If you do not receive a confirmation for your order PLEASE DO NOT re-submit your order, call 603-358-2651.
+
+Online Merchandise Orders:
+
+IF YOU ARE ORDERING A GIFT CERTIFICATE, PLEASE PUT THE NAME OF THE RECIPIENT IN THE COMMENTS SECTION.  THANK YOU
+
+All shipping will be done through Federal Express delivery.
+Fed Ex will not deliver to a P.O. Box number.
+
+Rates for shipments outside the continental United States will be based on current Fed Ex shipping rates.
+
+Normal shipping can take from 2 - 6 days.
+Please allow 24 hours for processing.
+
+Orders are processed only during our regular store hours.
+Shipping fees are not refundable.
+
+Return Policy
+ 
+Return Authorization
+ 
+All returns require prior authorization.  Please contact the bookstore at ckinsella@keene.edu or call us at 603-358-2245.
+ 
+
+Receipt required
+
+Shrink-wrapped bundles and textbooks are not returnable if the shrink wrap has been opened.
+ 
+All returned merchandise must have a valid receipt.  The last day for returns/refunds will be listed on the receipt.
+ 
+Software is not returnable.  
+ 
+Some textbooks contain "pin numbers' or access codes for computer programs.  Once these numbers or codes are opened, they are not returnable.
+ 
+ 
+Wrong item, size, or color
+ 
+We will promptly replace or refund any merchandise that is the wrong item, size, or color.  Shipping is refundable only if the wrong merchandise results from an error by the bookstore.  If you made a mistake or have changed your mind, then you must pay for all shipping charges when returning the order.
+ 
+Defective Merchandise
+ 
+We will promptly replace or refund any merchandise that you receive that is damaged or defective.  We will credit the account used for the order for the cost of return shipping upon receipt of the damaged or defective merchandise.
+
+Be sure to include your original receipt and your "return merchandise authorization number".
+
+ 
+Please ship returns to:
+ 
+      KSC Bookstore
+      MS 3101
+      229 Main St		
+      Keene NH  03435-3101
+
+
+ 
+</textarea>
+            <br />
+            <input type="checkbox" id="chkPolicyAgree" /><label for="chkPolicyAgree" class="checked">I Agree</label>
+        </div>
+		
+        <table width="785" id="tblPayment" style="display: none;" border="0" cellspacing="0" cellpadding="0" class="check_content_table">
+            <tr>
+                <td><div class="check_content_right" style="margin:10px 0 0 4px; width:759px;" id="panelPayment">  <table border="0" cellspacing="0" cellpadding="0" >
+            
+                                <tr>
+                                    <td class="textalignleft">
+                                        Type:
+                                    </td>
+                                    <td class="textalignright">
+                                        <select id="ddlPayCardType">@* <option value="NA" selected="selected">Please Select...</option>
+                                                            <option value="CC">Visa</option>
+                                                            <option value="CC">Master Card</option>
+                                                            <option value="CC">Discover Card</option>
+                                                            <option value="CA">Cash</option>*@</select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="textalignleft">
+                                        Card#:
+                                    </td>
+                                    <td class="textalignright">
+                                        <input type="text" id="txtCardNo" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="textalignleft">
+                                        Exp Date:
+                                    </td>
+                                    <td class="textalignright" id="exp_month">
+                                        <select id="ddlPayExpMonth">
+                                            <option value="01" selected="selected">01 - Jan</option>
+                                            <option value="02">02 - Feb</option>
+                                            <option value="03">03 - Mar</option>
+                                            <option value="04">04 - Apr</option>
+                                            <option value="05">05 - May</option>
+                                            <option value="06">06 - Jun</option>
+
+                                            <option value="07">07 - Jul</option>
+                                            <option value="08">08 - Aug</option>
+                                            <option value="09">09 - Sep</option>
+                                            <option value="10">10 - Oct</option>
+                                            <option value="11">11 - Nov</option>
+                                            <option value="12">12 - Dec</option>
+                                        </select>
+                                        <select id="ddlPayExpYear">
+                                            <option value="2012" selected="selected">2012</option>
+                                            <option value="2013">2013</option>
+                                            <option value="2014">2014</option>
+                                            <option value="2015">2015</option>
+                                            <option value="2016">2016</option>
+                                            <option value="2017">2017</option>
+                                            <option value="2018">2018</option>
+                                            <option value="2019">2019</option>
+                                            <option value="2020">2020</option>
+                                            <option value="2021">2021</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="textalignleft">
+                                        CID
+                                    </td>
+                                    <td class="textalignright">
+                                        <input type="text" id="txtPayCIDNumber">
+                                        <img src="#" id="imgHelpCID" alt="" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="textalignleft">
+                                        Promo Code:
+                                    </td>
+                                    <td class="textalignright">
+                                        <input type="text" id="txtPromoCode" />
+                                    </td>
+                                </tr>
+                           
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <div id="divCheckOutButton">
+                        <div id="divContinueShopping">
+                            <input type="button" value="&lt;&lt; CONTINUE SHOPPING" id="btnContinueShopping"
+                                onclick="javascript:fnContinueShipping();" />
+                        </div>
+                        <div id="divGoToShipping">
+                            <input type="button" onclick="javascript:fnGetShippingMethods();" id="btnGoToShipping"
+                                value="CHECKOUT &gt;&gt;" />
+                        </div>
+                        @*btnPaySubmit*@
+                        <div id="divMakePayment">
+                            <input type="button" id="btnMakePayment" value="&lt;&lt; Make Payment &gt;&gt;" />
+                            <span id="spanError"></span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="panelMakePayment" visible="false">
+        <table>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    Our Checkout Policy
+                </td>
+                <td>
+                    <img id="ibMakePaymentCloseButton" src="@Url.Content("~/Content/images/UconnImages/fail.png")" alt="Close" />
+                </td>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+            </tr>
+            <tr>
+                <td>
+                    <input type="Button" value="btnMakePaymentAgree" />
+                    <input type="Button" value="btnMakePaymentDecline" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>

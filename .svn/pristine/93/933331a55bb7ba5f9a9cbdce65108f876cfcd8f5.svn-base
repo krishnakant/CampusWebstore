@@ -1,0 +1,63 @@
+﻿@using CampusWebSotre.Models
+@model IEnumerable<CustomerViewModel>
+@if (Model.Any())
+{
+<table>
+    
+    <tr style="color: Black; background-color: #D3CEB7;">
+        <th scope="col">
+            Username:
+        </th>
+        <th scope="col">
+            Name:
+        </th>
+        <th scope="col">
+            Email Address:
+        </th>
+        <th scope="col">
+            Phone Number:
+        </th>
+        <th scope="col">
+            City:
+        </th>
+        <th scope="col">
+            State:
+        </th>
+        <th scope="col">
+            Zip:
+        </th>
+    </tr>
+    @foreach(var  m in Model)
+     {
+         <tr>
+        <td>
+       <a href="#" onclick="javascript:GetCustomerDetail('@m.UserName')">@m.UserName</a> 
+        </td>
+         <td>
+        @m.Name
+        </td>
+         <td>
+        @m.Email
+        </td>
+         <td>
+         @m.Phone
+        </td>
+         <td>
+         @m.City
+        </td>
+         <td>
+         @m.State
+        </td>
+         <td>
+         @m.Zip
+        </td>
+
+         </tr>
+     }
+     </table>
+}
+else
+{
+   <div>No record found</div>
+    
+}

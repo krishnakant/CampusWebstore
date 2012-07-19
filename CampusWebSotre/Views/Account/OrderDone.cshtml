@@ -1,0 +1,59 @@
+﻿@{
+    ViewBag.Title = "OrderDone";
+}
+@model CampusWebSotre.Models.OrderDetailViewModel
+
+@Html.Partial("EditorTemplates/ShowOrderDetails", Model)
+
+
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/colorbox.css")" media="screen" />
+<script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+
+
+<script type="text/javascript" language="javascript">
+
+
+    //initialize colorbox...
+    jQuery(document).ready(function () {
+
+        $("#dvLinkPrint").show();
+
+        jQuery("#PrintInvoice").colorbox({
+            width: "600px",
+            inline: true,
+            href: "#divOrderDetail",
+            close: "Close",
+            onLoad: function () {
+                $("#divPrintArea").html($("#divPrintArea").html() + $("#OrderDoneData").html());
+                $("#divPrintButton").show();
+            },
+            onClosed: function () {
+                $("#divPrintButton").hide();
+                $("#divPrintArea").empty();
+            }
+        });
+
+    });         
+
+
+    //Call print function
+    function fnPrint() {
+
+        var str = jQuery("#divPrintArea").html();
+
+        var winPrint = window.open('', '', 'left=0,top=0,width=800,height=400,toolbar=1,scrollbars=1,status=0');
+
+        winPrint.document.write(str);
+
+        winPrint.document.close();
+
+        winPrint.focus();
+
+        winPrint.print();
+
+        winPrint.close();
+
+        return false;
+    }
+
+</script>

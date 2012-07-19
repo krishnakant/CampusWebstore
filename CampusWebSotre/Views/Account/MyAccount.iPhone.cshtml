@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "MyAccount";
+
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+
+    var acctype = Convert.ToString(Session["ACCTYPE"]);
+     
+}
+<script type="text/javascript">
+    setTimeout(function () { window.scrollTo(0, 1) }, 100);
+</script>
+<div class="cartcontainer">
+    <div>
+        <form >
+		<center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro myaccount">
+              <a>My Account</a> <a href="@Url.Action("logout","account")">Logout</a>
+        </div>
+        <div class="clear">
+        </div>
+        <div>
+            <a href="@Url.Action("AccountDetails", "Account")" class="myacctext"><img src="/NewCampusWebStore/Content/Images/Mobile/accountiocn.png">Account Details</a>
+            <br />
+            <a href="@Url.Action("OrderHistory", "Account")"  class="myacctext"><img src="/NewCampusWebStore/Content/Images/Mobile/detailicon.png">Order History</a>
+			<br/>
+        </div>
+        </form>
+    </div>
+</div>

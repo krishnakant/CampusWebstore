@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<QuickLinks>
+  <QuickLink>
+    <LinkOrder></LinkOrder>
+    <LinkTitle></LinkTitle>
+    <LinkAddress></LinkAddress>
+  </QuickLink>
+  <QuickLink>
+    <LinkOrder>1</LinkOrder>
+    <LinkTitle>Campus Webstore Site</LinkTitle>
+    <LinkAddress>http://www.campuswebstore.com</LinkAddress>
+  </QuickLink>
+  <QuickLink>
+    <LinkOrder>2</LinkOrder>
+    <LinkTitle>Campus Webstore</LinkTitle>
+    <LinkAddress>http://www.total-computing.com</LinkAddress>
+  </QuickLink>
+</QuickLinks>

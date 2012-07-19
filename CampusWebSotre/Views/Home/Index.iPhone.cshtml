@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+ Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+<script type="text/javascript">
+    setTimeout(function () { window.scrollTo(0, 1) }, 100);
+</script>
+@section featured {
+    <section class="feature">
+     <div class="cartcontainer">
+<center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+ <center><div class="top_search"><div style="padding-right: 23px;" class="input_cntr"><form action="#"><input type="text" value="search"><input type="submit" value="" title="Search"></form></div></div>
+  </center> 
+    <!--container-->
+    <div id="dialog">
+    </div>
+    <div id="form">
+        <form id="frmCourse" runat="server">
+       @*  @Html.Partial("EditorTemplates/MobileHeader")*@
+        <div class="clear">
+        </div>
+        @*<div class="bradecumpro">
+            <a href="#" class="left">Course</a>
+        </div>*@
+        
+       
+           <div class="container">
+      	 
+<div class="">
+
+	</div>
+              <ol class="grid left">
+            <li> <a href="@Url.Action("Course", "Home")" id="A9">
+			 <input type="submit" class="course" id="btnCourse" value="" name="btnCourse">
+			<span>Course</span>
+		</a>
+        
+		</li><li>
+        <a id="A5" href="@Url.Action("CatalogProduct", "Catalogs", new { Catid = 132, Title = "Clothing" })">
+         <input type="submit" class="clothing" id="btnAddProductForm" value="Add Product" name="btnAddProductForm"> 
+						<span>Clothing</span>
+		</a>
+		</li>
+		<li><a id="A1">
+            <input type="submit" class="nonclothing" id="btnnonclothing" value="non clothing" name="btnnonclothing">
+            <span>Non-Clothing</span>
+            </a></li></ol>
+		 <ol class="grid left">
+		 <li><a id="full_site">
+            <input type="submit" class="hotitems" id="btnAdd" value="Add" name="btnAdd">
+            <span>Hot Items</span>
+            </a></li>
+             <li><a id="A3" @Url.Action("SellbackBooks", "Home", new { Catid = 132, Title = "Clothing" })> <input type="submit" class="sellbackbooks" id="btnSendMail" value="Send Mail" name="btnSendMail">
+            <span>Sellback Books</span></a></li>
+          <li> <a id="A4">  <input type="submit" class="FullSite" id="btnSubtract" value="Full Site" name="btnSubtract">
+            <span>Full Site</span></a></li>
+               </ol>     
+               <ol class="grid left">
+		 <li> &nbsp;</li>
+             <li> &nbsp;</li>
+          <li class="login_left"> <a href=" @Url.Action("Logon", "Account")">  <input type="submit" class="Login" id="btnLogin" value="Login" name="btnLogin">
+            <span>Login</span></a></li>
+               </ol>   
+            <div style="padding-left:25px;">
+           
+            </div>
+           
+          
+           </div>
+       
+       </form> </div></div>
+    </section>
+}

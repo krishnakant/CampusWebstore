@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "LogOut";
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+
+<script type="text/javascript">
+    setTimeout(function () { window.scrollTo(0, 1) }, 100);
+</script>
+
+<div>
+            <section id="page1" data-role="page">
+               <div id="headerproduct">
+    <!--header-->
+    <center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+</div>
+
+
+ <div class="cartcontainer">
+                    <div >
+                        <form  runat="server">
+                            @Html.Partial("EditorTemplates/MobileHeader")
+                            <div class="clear">
+                            </div>
+                            <div class="bradecumpro">
+                                <a href="#" class="left">Logging out</a>
+                            </div>
+        <div class="clear"></div>
+
+
+<p align="center" class="logouttext">   
+    You have sucessfully logged out. 
+	Thank you!
+</p>

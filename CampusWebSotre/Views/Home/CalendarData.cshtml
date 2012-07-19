@@ -1,0 +1,17 @@
+﻿@model IEnumerable<CampusWebSotre.Models.CalendarViewModel>
+ 
+@{
+    Layout = null;
+    Response.ContentType = "text/xml";
+}
+
+<data>
+     @foreach (var myevent in Model) 
+     { 
+         <event id="@myevent.CalandarId">
+            <start_date><![CDATA[@String.Format("{0:MM/dd/yyyy HH:mm}",myevent.StartTime)]]></start_date>
+             <end_date><![CDATA[@String.Format("{0:MM/dd/yyyy HH:mm}",myevent.EndTime)]]></end_date>
+          <text><![CDATA[@String.Format(myevent.Title)]]></text>
+        </event> 
+    }
+</data>

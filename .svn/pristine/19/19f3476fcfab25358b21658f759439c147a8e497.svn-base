@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title Campus WebStore</title>
+    <link href="@Url.Content("~/Content/Style.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.6.4.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.8.11.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-2.0.6-development-only.js")" type="text/javascript"></script>
+    @*<script src="@Url.Content("~/Scripts/AjaxLogin.js")" type="text/javascript"></script>*@
+    <meta name="viewport" content="width=device-width">
+    <script type="text/javascript">
+        //Function to show the cart items at top left corner of the page
+        function ViewCartItems() {
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("ViewCart", "web")',
+
+                success: function (data, status, xhr) {
+                    if (data != null) {
+                        var viewCart = '<a href=@Url.Action("ViewCartDetail", "Home")><img alt="View Cart" style="width: 20px;height:21px;" src="@Url.Content("~/Content/Images/search.png")" /></a>&nbsp;&nbsp;<b>' + data.items + '</b> Items(s) Total <b>$' + data.total + '</b> @Html.ActionLink("Checkout", "checkout", "Account")';
+                        $(".viewcart").html(viewCart);
+                        $("#processing").html("");
+                    }
+                }
+
+
+            });
+        }
+        //        ViewCartItems();
+        //*********************************Function to add the books to the cart*************************************************
+
+        function AddToCart(isbn, priceType) {
+            $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+            var id = "";
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("AddToShoppingCart", "Home")',
+
+
+                data: { Isbn: isbn, PriceType: priceType },
+
+
+                success: function (data, status, xhr) {
+                    //********************************************8OCde to add the items into the ddl section****************************************************************
+                    if (data.success) {
+
+                        if (priceType == "NEW")
+                            id = "#new" + isbn;
+                        else
+                            id = "#used" + isbn;
+                        $(id).attr('src', '@Url.Content("~/Content/images/bought-check.gif")');
+                        //    $("#processing").html("");
+                    }
+                    ViewCartItems();
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        }
+       
+    </script>
+</head>
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <div class="topleftwrap">
+                <a href="#" class="logo">
+                    <img src="@Url.Content("~/Content/images/logo.png")" alt="" height="65" /></a>
+            </div>
+            <div class="toprightwrap">
+                <h1>
+                    @{
+                        var user = "Guest"; 
+                    }
+                    @if (Session["USERINFO"] != null)
+                    {
+                        user = ((CampusWebStore.Shared.Models.UserModel)Session["USERINFO"]).FirstName;
+                            
+                        <text> Welcome @user
+                        </text> @Html.ActionLink("My Account", "MyAccount", "Account") <text>
+                        |</text>       
+                        @Html.ActionLink("SignOut", "LogOut", "Account")
+                    }
+                    else
+                    {
+                        <text> Welcome @user,
+                        </text>                         @Html.ActionLink("Sign In", "LogOn", "Account", null, new { id = "logonLink" })<text>
+                        |</text>                         @Html.ActionLink("Create User", "CreateNewUser", "Account", null, new { id = "registerLink" })
+                            
+                    }
+                </h1>
+                <p align="center">
+                    Total Computing Solutions <span style="text-align: right;">1.888.769.7600</span>
+                    <span>Sales@Total-Computing.com</span>
+                </p>
+                <div class="search">
+                    @Html.ActionLink("Search >", "Search", "Home")<span class="viewcart">@Html.Partial("Widgets/viewcart")</span>
+                </div>
+            </div>
+            <span class="clr"></span>
+            <div id="menubar">
+                <ul>
+                    <li><a href="#">@Html.ActionLink("TextBooks", "Course", "Home")</a></li>
+                    <li><a href="#" class="selected">@Html.ActionLink("Clothing", "CatalogProduct", "catalogs", new { CatId = 132, Title = "Clothing" }, "")</a></li>
+                    <li><a href="#">@Html.ActionLink("Supplies", "CatalogProduct", "catalogs", new { CatId = 151, Title = "Supplies" }, "")</a></li>
+                    <li><a href="#">@Html.ActionLink("Computers", "CatalogProduct", "catalogs", new { CatId = 133, Title = "Computers" }, "")</a></li>
+                    <li><a href="#">@Html.ActionLink("Alumni", "CatalogProduct", "catalogs", new { CatId = 150, Title = "Alumni" }, "")</a></li>
+                    <li><a href="#">@Html.ActionLink("Buyback", "SellBackBooks", "Home")</a></li>
+                    <li><a href="#">@Html.ActionLink("Rentals", "GetPage", "Admin", new { PageName = "Rentals" }, null)</a></li>
+                    <li class="rightsep"><a href="#">@Html.ActionLink("Calendar", "Calendar", "Home")</a></li>
+                </ul>
+            </div>
+            <span class="clr"></span>
+        </div>
+        <span class="clr"></span>
+        <div id="container">
+            <div id="leftcontainer">
+                <h1 class="leftnav">
+                    Catalogs</h1>
+                @Html.Partial("Widgets/CatalogList")
+                <h1 class="quicklinks_heading">
+                    Quick Links</h1>
+                <ul class="quicklinks">
+                    <li><a href="#">Home Page</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Portfolio</a></li>
+                    <li><a href="#">Point of Sale</a></li>
+                    <li><a href="#">TextBook Management </a></li>
+                    <li><a href="#">Smart Suite Solution</a></li>
+                    <li><a href="#">Introduction Video</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div id="rightcontainer">
+                @RenderBody()
+                <span class="clr"></span><span class="create_bottomline"></span>
+            </div>
+        </div>
+    </div>
+    <div id="mainfooter">
+        <div class="footer">
+            <div class="leftfooter">
+                <a href="#">
+                    <img src="@Url.Content("~/content/images/facebook_icon.png")" alt="" /></a>
+                <a href="#">
+                    <img src="@Url.Content("~/content/images/twitter_icon.png")" alt="" /></a> <a href="#"
+                        class="signup_email">Sign up For Email</a>
+            </div>
+            <div class="rightfooter">
+                <a href="#">Gift Cards</a> | <a href="#">Terms of Use</a> | <a href="#">Privacy &amp;
+                    Security</a> | <a href="#">Contact Us</a>
+            </div>
+            <span class="clr"></span><span class="footer_bottomline"></span>
+            <p class="copyright">
+                <span>Copyright 2011</span> | <span>All rights reserved.</span> | <span class="powerbycampus">
+                    Powered by Campus webstore</span>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

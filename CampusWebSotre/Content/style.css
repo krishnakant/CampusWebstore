@@ -1,0 +1,103 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {    border: 0 none;    font: inherit;    margin: 0;    padding: 0;  vertical-align: baseline;}
+body{ margin:0; padding:0; font:12px Arial, Helvetica, sans-serif; background:url(../Content/images/body_bg.png) repeat-x 0 0 #f2f2f2;}
+span{display:block;}
+a{text-decoration: none;outline: none;}
+a img{outline: none;border: none;}
+h1{font-family: "Myriad Pro";display: block;font-size: 29px;}
+li{list-style:none;}
+.fl{float: left;}
+.fr{float: right;}
+.clr{ clear:both; display:block;}
+label{color: #1A1A1A;width:100px; vertical-align:middle;float: left;padding: 4px 0 0; text-align:right;font-size:13px;}
+input[type="text"] ,input[type="password"]{border:1px solid #B3B3B3; background:#f2f2f2;width:180px;padding:3px 5px 2px;margin: 0 0 5px 12px;font-size: 13px;color: #1A1A1A;}
+select{border:1px solid #B3B3B3; background:#f2f2f2;width:192px;height:20px;padding:0;margin: 0 0 2px 12px;color: #1A1A1A;font-size: 13px;}
+
+#wrapper { width:1000px; margin:0 auto;}
+#header{width:1000px;margin:0 auto;}
+#container { background:url(../Content/images/container_bg.png) repeat; width:1000px; margin:6px auto 0;display: table;padding-bottom: 50px;}
+.container_botom { background:url(../Content/images/container_bottom_bg.jpg) no-repeat; width:1000px; margin:0 auto;display: block;height: 6px;}
+h1.main_heading{color:#333;font-weight: bold;padding:0 10px 5px;width: 300px; text-align: center;margin: 0 auto 15px;background:url(../Content/images/mainheading_bottomline.jpg) no-repeat left bottom;}
+h2.sub_heading{font-size:14px;color:#000;padding:20px 55px 5px;;display: block;font-weight:bold;background:url(../Content/images/mainheading_bottomline.jpg) no-repeat left bottom;margin: 0 0 15px;}
+
+#mainfooter {background:url(../Content/images/footer.jpg) repeat-x; height:100px;}
+.topleftwrap{width:430px;float: left;}
+.topleftwrap a.logo{padding-top: 25px;display: block;}
+.toprightwrap{ float:right; line-height:17px; font-family:"Myriad Pro";padding: 10px 0 0;}
+.toprightwrap h1{ color:#15397F;font-family:Verdana, Geneva, sans-serif; font-weight:normal;font-size:14px;}
+.toprightwrap p{padding: 3px 25px 0 0;text-align: right;}
+.toprightwrap .search{margin: 2px 0 0;}
+.toprightwrap .search a{color: #15397F;font-family:Verdana, Geneva, sans-serif;}	
+.toprightwrap .search span{display:inline;padding:6px 0 0 26px;font-family:Verdana, Geneva, sans-serif;line-height: 35px;}
+#menubar{width:980px;margin: 0 auto; background:url(../Content/images/menubar_bg.png) repeat left top; }
+#menubar ul{font-size:12px;line-height: 46px; background:url(../Content/images/menubar_sep.png) no-repeat right top; display:table;}
+#menubar ul li{background:url(../images/menubar_sep.png) no-repeat left top;float: left;display: block;text-align: center;}
+#menubar ul li a{display: block; line-height:46px;color:#1A1A1A;padding: 0 26px 0 28px;}
+#menubar ul a:hover{background:url(../Content/images/menubar_hover_bg.png) repeat left top;display: block;text-align: center;}
+#menubar ul a.selected{background:url(../Content/images/menubar_hover_bg.png) repeat left top;display: block;padding: 0 26px 0 28px;}
+/*#menubar ul li.rightsep{background:url(../images/menubar_sep.png) no-repeat right top;display: block;}*/
+
+#leftcontainer{width:195px;float: left;margin: 0 auto;display: table; background:url(../Content/images/leftcontainer_sep.jpg) no-repeat right top;}
+h1.leftnav{font-size:24px;color: #000000; text-align: center;width:100px;margin: 20px auto 0;}
+ul.catalognav{width:140px;font-family:"Myriad Pro";font-size: 14px;margin: 0 auto;padding:15px 20px 12px 6px;}
+ul.catalognav li{display:block; line-height:20px;margin-left: 20px; list-style:none;}
+ul.catalognav li a{color:#333333;}
+h1.quicklinks_heading{font-size:24px;color: #000000; text-align: center;width:120px;margin: 0 auto;padding: 25px 0 10px;}
+ul.quicklinks{width:140px;font-family:"Myriad Pro";font-size: 14px;margin: 0 auto;padding:15px 20px 13px 6px;}
+ul.quicklinks li{display:block; line-height:20px;margin-left: 20px;}
+ul.quicklinks li a{color:#333333;}
+.verisign{background:url(../Content/images/verisign_icon.png) no-repeat center top;display: block;margin: 25px auto 0;height: 49px;width: 100px;}
+#rightcontainer{width: 800px;float: right;margin: 0 auto;display: table;}
+#createaccount{width:785px;margin: 0 auto;padding: 15px 0;float:left}
+.primarydiv{width:785px;margin: 0 auto;padding: 15px 0;float:left}
+
+.accountdetails{width:385px;margin: 0 auto;font-size: 14px;color: #1A1A1A;float: left;padding-left: 8px;}
+.accountdetails h2.accountdetails_heading{display: block;}
+.accountdetails label{width:100px;text-align:right;}
+.accountdetails input[type="text"] ,input[type="password"]{width:140px;}
+.user_message{background:url(../Content/images/message_required_bg.png) repeat left center;display: block;height: 10px;padding:5px 10px 0;font-size:12px;color: #6FA46A;}
+.password_message{background:url(../Content/images/password_message_bg.jpg) repeat left center;display: block;height: 10px;padding:5px 10px 0;font-size:12px;color: #0F0708;}
+
+#creditcardandshipping{width:790px;margin: 0 auto;padding: 25px 7px;}
+.creditcard{width:370px;margin: 0 auto;float:left;}
+
+.creditcard label{width:120px;padding: 3px 0 0;}
+.creditcard input[type="text"]{padding:3px 5px 2px;margin: 0 0 5px 12px;}
+.creditcard span.creditcard_zip label{width:60px; text-align:right;}
+.creditcard span.creditcard_zip input{width:58px;padding:3px 5px 2px;}
+
+.shippinginformation{width:370px;margin: 0 auto;float:left;}
+.shippinginformation label{width:120px;padding: 3px 0 0;}
+.shippinginformation input[type="text"]{}
+.shippinginformation input[type="checkbox"]{width:20px;padding:4px 5px 0;margin: 0 0 2px 10px;float: left;}
+.shippinginformation span.samebilling{}
+.shippinginformation span.samebilling label{padding:0; text-align:left;}
+.shippinginformation span.shippinginformation_zip{display: inline;}
+.shippinginformation span.shippinginformation_zip label{width:60px; text-align:right;}
+.shippinginformation span.shippinginformation_zip input{width:58px;height: 15px;padding:3px 5px 2px;}
+select.state_select{float: left;width: 50px;}
+
+.salesbuybacks{width:500px;float: left;margin: 40px auto 0 45px;}
+.salesbuybacks input[type="checkbox"]{border:1px solid #B3B3B3; background:#f2f2f2;width:10px;padding:4px 0 0;margin: 0 0 3px 10px;float: left;}
+.salesbuybacks label{color: #333;padding: 0 0 0 5px;width:380px;text-align:left;}
+input[type="button"].createusers_btn{float: right;margin-right: 60px;margin-top: 71px;border: none;}
+input[type="submit"].createusers_sbt{float: right;margin-right: 60px;margin-top: 71px;border: none;background:url(../Content/images/input_button_bg.png) repeat-x left top;display: block;border: none;padding: 3px 10px;text-align: center;font-family: "Myriad Pro";font-size: 18px;color: #333;}
+/*input[type="button"]{background:url(../Content/images/input_button_bg.png) repeat-x left top;display: block;border: none;padding: 3px 10px;text-align: center;font-family: "Myriad Pro";font-size: 18px;color: #333;}
+input[type="submit"]{background:url(../Content/images/input_button_bg.png) repeat-x left top;display: block;border: none;padding: 3px 10px;text-align: center;font-family: "Myriad Pro";font-size: 18px;color: #333;}
+*/
+.create_bottomline{background:url(../Content/images/mainheading_bottomline.jpg) repeat-x left bottom;display: block;height:6px;margin:0 auto 30px;width:500px;}
+#mainfooter .footer{width:980px;padding-top: 8px;margin: 0 auto;}
+.leftfooter{float: left;margin: 0 auto 0 25px;}
+.leftfooter a{display: inline;padding:0 0 0 15px;float: left;}
+.leftfooter a.signup_email{background:url(../Content/images/emailmessage_icon.png) no-repeat left center;color:#15397F;font-size: 14px; font-family:Verdana, Geneva, sans-serif;padding:6px 60px;display: block;width:80px;margin-left: 15px;}
+.rightfooter{width:400px;float: right;margin: 0 auto;}
+.rightfooter a{color:#15397F;display: inline; text-align:center;font-size: 12px;padding:0 8px 0 10px;}
+.footer_bottomline{background:url(../Content/images/footer_bottomline.png) no-repeat left bottom;display: block;height:8px;margin:12px auto 10px;width:500px;}
+.copyright{width:400px;margin: 0 auto; text-align: center;color: #000;}
+.copyright span{display: inline;}
+.copyright span.powerbycampus{color: #15397F;}
+
+/*Added by krishna*/
+
+.catalogproducts{width:100%;margin: 0 auto;padding: 25px 7px;}
+.catalogproduct{width:33%;margin: 0 auto;float:left;}
+.productcontents{display: block;width: 140px;}

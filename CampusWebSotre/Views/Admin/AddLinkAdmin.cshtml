@@ -1,0 +1,141 @@
+﻿@model CampusWebSotre.Models.AddLinkViewModel
+@{
+    ViewBag.Title = "Add Quick Link Admin: ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var status = Convert.ToInt32(ViewData["status"]);
+}
+
+<h1 class="main_heading">Add New Link</h1>
+  <div class="add_new_cal">
+  		<p class="use_this_form">
+				Use this form to insert a new Quick Link. If linking to an outside website, please use "http://" before the link. If linking to a page within your own website, no "http://" is needed. 	After hitting the insert link, you will be directed back to the link manager page.</p>                
+        <table id="list" class="scroll" cellpadding="0" cellspacing="0"></table>
+        <table id="subList" class="scroll" cellpadding="0"></table>
+        <div id="pager"></div>
+        <div class="bottom_content">
+        			 @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+            <div id="spanMessage" style="display: none;">
+                <span>Successfully Inserted</span>
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.LinkOrder, new { @style = "text-align:left;" })
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.LinkOrder )
+                @Html.ValidationMessageFor(model => model.LinkOrder)
+                <img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading" style="display: none;"/>
+                <span id="spanMessage1" style="display: none;"></span>
+            </div>
+             <span class="clr_span"></span>
+            <div class="editor-label" >
+                @Html.LabelFor(model => model.LinkTitle, new { @style = "text-align:left;" })
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.LinkTitle)
+                @Html.ValidationMessageFor(model => model.LinkTitle)
+            </div>
+             <span class="clr_span"></span>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.LinkAddress, new { @style = "text-align:left;" })
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.LinkAddress)
+                @Html.ValidationMessageFor(model => model.LinkAddress)
+            </div>
+             <span class="clr_span"></span>
+            
+                <input id="btnInsert" type="submit" style = "margin:0 0 0 111px;float: none;" value="Insert" />
+       
+  
+    }
+    <div>
+        @* @Html.ActionLink("Back to List", "Index")*@
+    </div>
+        </div>
+</div> 
+<script type="text/javascript" language="javascript">
+
+    $(document).ready(function () {
+
+        $("#spanMessage").hide();
+
+        if(@status>0) {
+            jQuery("#spanMessage").css("color", "green");
+            $("#spanMessage").show();
+        }
+    });
+    
+    $(document).ready(function() {
+   
+    $("#LinkOrder").blur(function() {
+        //alert(this.Value);
+        fnCheckAvailability(this.Value);
+    });
+        
+});
+    
+
+    //function to check availability of username....
+function fnCheckAvailability(obj) {
+
+    var from = $("#LinkOrder").val();
+   
+    if (from == '') 
+    {
+        jQuery("#spanMessage1").text('Please enter ID');
+    } 
+    else 
+    {
+        jQuery("#spanMessage1").hide();
+
+        jQuery("#imgLoading").show();
+        
+         $("#LinkTitle").attr("disabled",this ); 
+         $("#LinkAddress").attr("disabled", this); 
+        $("#btnInsert").attr("disabled", this); 
+        
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonCheckLinkOrderAvailability", "Admin")',
+            data: {
+                LinkOrder: jQuery("#LinkOrder").val()
+            },
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                if (data.success) {
+                    
+                    $("#LinkTitle").attr("disabled",false ); 
+                    $("#LinkAddress").attr("disabled", false); 
+                    $("#btnInsert").attr("disabled", false); 
+                    
+                    jQuery("#spanMessage1").css("color", "green");
+
+                    jQuery("#spanMessage1").text('LinkOrder ID is available');
+                    
+
+                } else {
+                    
+                     $("#LinkTitle").attr("disabled",false ); 
+                    $("#LinkAddress").attr("disabled", false); 
+                    $("#btnInsert").attr("disabled", false); 
+                    jQuery("#spanMessage1").css("color", "red");
+
+                    jQuery("#spanMessage1").text('LinkOrder ID is taken');
+                    
+                    $("#LinkOrder").focus();
+                }
+
+                jQuery("#spanMessage1").show();
+            }
+        });
+    }
+    
+}
+</script>

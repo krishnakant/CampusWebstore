@@ -1,0 +1,279 @@
+﻿@using CampusWebSotre.Models
+@model CustomerDetailViewModel
+
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    //Function to check email address is valid or not
+    function IsvalidEmailAddress(text) {
+        var isValid = false;
+        try {
+
+            if (text.length > 0) {
+                var emailReg = /^([\w-\.]+@@([\w-]+\.)+[\w-]{2,4})?$/;
+                if (!emailReg.test(text)) {
+
+                    isValid = true;
+                }
+            }
+        } catch (e) {
+
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+
+    //function to fill the values based on the checkbox select
+    function SameasBilling() {
+       
+              var status = jQuery('input[id*="chkSameAs"]').is(":checked") ? "on" : "off";
+            if (status == "on") {
+                jQuery('input[id*="_ShipToName"]').val(jQuery('input[id*="_FirstName"]').val() + ' ' + jQuery('input[id*="_LastName"]').val());
+                jQuery('input[id*="_ShipAddress"]').val(jQuery('input[id*="_Address"]').val());
+                jQuery('input[id*="_ShipAddress2"]').val(jQuery('input[id*="_Address2"]').val());
+                jQuery('input[id*="_ShipCity"]').val(jQuery('input[id*="_City"]').val());
+                jQuery('input[id*="_ShipState"]').val(jQuery('input[id*="_State"]').val());
+                jQuery('select[id*="_ShipCountry"]').val(jQuery('select[id*="_Country"]').val());
+                jQuery('input[id*="_ShipZip"]').val(jQuery('input[id*="_Zip"]').val());
+            }
+     
+    }
+    $(document).ready(function () {
+   
+        $("#CustomerDetail_DropDownAccountType").val('@Model.CustomerDetail.DropDownAccountType');
+
+        $("#btnSubmit").click(function () {
+            var isError = false;
+            $(".required").each(function () {
+                var val = $(this).val();
+                alert(val.length);
+                if (val.length <= 0) {
+                    $(this).removeClass("required");
+                    $(this).addClass("text-box single-line input-validation-error");
+                    isError = true;
+                }else {
+                    $(this).removeClass("text-box single-line input-validation-error");
+                   
+                }
+
+            });
+
+
+            var email = $(".requiredEmail").val();
+
+            if (!IsvalidEmailAddress(email)) {
+                isError = true;
+                
+            }
+            if (isError) {
+                $("#errMsg").text("Please fill the highlighted fields.");
+                return false;
+            }
+            $("#errMsg").text("");
+            
+            var accType = $("#DropDownAccountType").val();
+
+            $("#CustomerDetail_DropDownAccountType").val(accType);
+
+            $.ajax({
+
+                type: "POST",
+
+                url: '@Url.Action("JsonUpdateCustomerDetail","Admin")',
+
+                dataType: "json",
+
+                data: $("form").first().serialize(),
+
+                success: function (data, status, xhr) {
+
+
+
+
+                },
+                error: function (xhr, status, error) {
+
+                    alert("error");
+                }
+
+            });
+        });
+
+    });
+
+
+</script>
+
+@if (Model != null)
+{
+  <form id="frmUpdateCustomer" action="#">
+        @Html.ValidationSummary(true)
+
+
+        <div style="float: left; width: 300px;">
+      
+            <span>Billing Information</span>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.FirstName)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.FirstName, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.FirstName)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.LastName)
+        
+                @Html.TextBoxFor(model => model.CustomerDetail.LastName, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.LastName)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.Address)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.Address, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.Address)
+            </div>
+
+            <div >
+                @Html.LabelFor(model => model.CustomerDetail.Address2)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.Address2)
+                @Html.ValidationMessageFor(model => model.CustomerDetail.Address2)
+            </div>
+            <div >
+                @Html.LabelFor(model => model.CustomerDetail.City)
+        
+                @Html.TextBoxFor(model => model.CustomerDetail.City, new { @style = "width:100px;", @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.City)
+        
+                @Html.LabelFor(model => model.CustomerDetail.State)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.State, new { @style = "width:30px;", @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.State)
+      
+                @Html.LabelFor(model => model.CustomerDetail.Zip)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.Zip, new { @style = "width:50px;", @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.Zip)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.Country)
+       
+                @Html.EditorFor(model => model.CustomerDetail.Country, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.Country)
+            </div>
+
+        
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.Email)
+        
+                @Html.TextBoxFor(model => model.CustomerDetail.Email, new { @class = "requiredEmail" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.Email)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.DayPhone)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.DayPhone, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.DayPhone)
+       
+                @Html.LabelFor(model => model.CustomerDetail.Evening)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.Evening, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.Evening)
+            </div>
+            <div class="editor-label">
+                @Html.Label("AccountType")</div>
+            <div class="editor-label">
+                @Html.Partial("EditorTemplates/Admin/DropDownAccountType", Model.AllAccountType)
+            </div>
+        
+        </div>
+        <div style="float: right;">
+    
+   
+      
+            <div class="editor-label">
+                <input type="checkbox" id="chkSameAs" name="chkSameAs" onclick="javascript:SameasBilling();" /> <label for="chkSameAs">Same as Billing?</label>
+            </div>
+            <span>Shipping Information</span>
+
+            @Html.HiddenFor(model => model.CustomerDetail.UserName)
+
+            @Html.HiddenFor(model => model.CustomerDetail.IsEmailOptIn)     
+
+              @Html.HiddenFor(model => model.CustomerDetail.DropDownAccountType)     
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.ShipToName)
+        
+                @Html.TextBoxFor(model => model.CustomerDetail.ShipToName, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipToName)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.ShipAddress)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.ShipAddress, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipAddress)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.ShipAddress2)
+       
+                @Html.EditorFor(model => model.CustomerDetail.ShipAddress2)
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipAddress2)
+            </div>
+
+            <div >
+                @Html.LabelFor(model => model.CustomerDetail.ShipCity)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.ShipCity, new { @style = "width:100px;", @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipCity)
+       
+                @Html.LabelFor(model => model.CustomerDetail.ShipState)
+       
+                @Html.TextBoxFor(model => model.CustomerDetail.ShipState, new { @style = "width:30px;", @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipState)
+        
+                @Html.LabelFor(model => model.CustomerDetail.ShipZip)
+        
+                @Html.TextBoxFor(model => model.CustomerDetail.ShipZip, new { @style = "width:50px;", @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipZip)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.ShipCountry)
+        
+                @Html.EditorFor(model => model.CustomerDetail.ShipCountry, new { @class = "required" })
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipCountry)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.CustomerDetail.ShipInstruc)
+       
+                @Html.EditorFor(model => model.CustomerDetail.ShipInstruc)
+                @Html.ValidationMessageFor(model => model.CustomerDetail.ShipInstruc)
+            </div>
+           
+                 
+   
+        </div>
+       
+        <div>
+    
+            <p>
+                <input type="button" value="Update" id="btnSubmit" />
+            </p></div>
+            </form>
+    <br />
+    <br />
+   
+     <div>
+    @Html.Partial("EditorTemplates/Admin/Orderdetail", Model.OrderViewModels)
+    </div>
+    
+    <div id="customerOrderDetail"></div>
+}

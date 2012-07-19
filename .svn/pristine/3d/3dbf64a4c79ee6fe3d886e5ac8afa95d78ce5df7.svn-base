@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CampusWebSotre.Models.OrderViewModel>
+<table>
+    <tr>
+        <th><input type="checkbox" /> </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrderId)
+        </th>
+        <th>
+            <a href="javascript:fnSort('CNAME1');">@Html.DisplayNameFor(model => model.UserName)</a>
+        </th>
+        <th>
+            <a href="javascript:fnSort('CONFIRMATION');">@Html.DisplayNameFor(model => model.ConfNumber)</a>
+        </th>
+        <th>
+            <a href="javascript:fnSort('DATE');">@Html.DisplayNameFor(model => model.DatePlaced)</a>
+        </th>
+        <th>
+            <a href="javascript:fnSort('TRAN.TOTAL');">@Html.DisplayNameFor(model => model.Amount)</a>
+        </th>
+       
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td><input type="checkbox" class="Orders" id="@item.OrderId" /></td>
+        <td>
+            @Html.ActionLink(item.OrderId, "OrderDetails", "Admin", new { transactionnumber = item.OrderId },null)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ConfNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DatePlaced).ToString()
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amount)
+        </td>
+       
+    </tr>
+}
+
+</table>

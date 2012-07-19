@@ -1,0 +1,158 @@
+﻿@using CampusWebSotre.Utils
+@model IEnumerable<CampusWebStore.Shared.Models.SellBackBookModel>
+
+<script type="text/javascript">
+
+function AddToSellBackCart(isbn,priceType) {
+   
+    $.ajax({
+
+        type: "POST",
+
+        url: '@Url.Action("AddSellBackToCart", "Home")',
+
+       data:{Isbn:isbn,PriceType:priceType},
+        success: function (data, status, xhr) {
+
+            //********************************************8OCde to add the items into the ddl section****************************************************************
+           if(data.success) {
+               
+           }
+
+        },
+        error: function (xhr, status, error) {
+
+            alert("error");
+        }
+
+    });
+}
+
+</script>
+@{if (Model.Any())
+  {
+      var i = 0;
+      var style = "";
+      
+      <div>
+        <table cellspacing="5" cellpadding="5" border="1" style="background-color: Transparent;
+            font-size: 12px; width: 320px;" id="ctl00_ContentPlaceHolder1_GridView1" rules="cols">
+            <tbody>
+                <tr style="color: White; background-color: Gray;">
+                    <th scope="col">
+                        &nbsp;
+                    </th>
+                </tr>
+                @foreach (var m in Model)
+                {
+                    style = i % 2 != 0 ? "style=background-color:Beige;" : "";
+
+                    string isbnRetrun = m.Isbn;
+
+                    ValidateIsbn.CheckIsbn(ref isbnRetrun);
+
+                    var imageUrl = "http://images.amazon.com/images/P/" + isbnRetrun + ".01._SCMZZZZZZZ_.jpg"; //assing dynamic url for amazon image
+
+                    <tr @style>
+                        <td align="left" valign="top">
+                            <table cellspacing="3" cellpadding="3" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <b><span style="font-size: 1.5em;" id="ctl00_ContentPlaceHolder1_GridView1_ctl02_lblTitle">@MvcHtmlString.Create(@m.Title)</span></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table cellspacing="3" cellpadding="3" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="135px" valign="top">
+                                                            <img style="height: 160px; width: 115px; border-width: 0px; text-align: center;" src="@imageUrl" id="ctl00_ContentPlaceHolder1_GridView1_ctl02_imgBook">
+                                                            <br>
+                                                            <span style="font-size: Smaller; text-align: center;" id="ctl00_ContentPlaceHolder1_GridView1_ctl02_lblISBN">@m.Isbn</span>
+                                                        </td>
+                                                        <td valign="top">
+                                                            Author: <span id="ctl00_ContentPlaceHolder1_GridView1_ctl02_lblAuthor">@m.Author</span><br>
+                                                            Edition: <span id="ctl00_ContentPlaceHolder1_GridView1_ctl02_Label3">@m.Edition</span><br>
+                                                            <br>
+                                                            <table cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td valign="top">
+                                                                       
+                                                                            <div style="height: 150px; width: 200px;" id="ctl00_ContentPlaceHolder1_GridView1_ctl02_pnlRetail">
+                                                                            <div>@m.RetailWording</div>
+
+                                                                             
+                                                                             @if (true)
+                                                                             {
+                                                                                   <div>@m.WholeSaleWording</div>  
+                                                                                  <span style="text-decoration: line-through;" >@m.RetailPrice</span><br/>
+                                                                                <span style="font-size: Smaller;">(Cash)</span><br/>
+                                                                                @m.RetStoreCredit
+                                                                                <br/>
+                                                                                <span style="font-size: Smaller;">(Store Credit)</span><br/>
+                                                                                 
+                                                                             }
+                                                                             else
+                                                                             {
+                                                                                <div>@m.WholeSaleWording</div>  
+                                                                                  <span style="text-decoration: line-through;" >@m.RetailPrice</span><br/>
+                                                                                <span style="font-size: Smaller;">(Cash)</span><br/>
+                                                                                @m.RetStoreCredit
+                                                                                <br/>
+                                                                                <span style="font-size: Smaller;">(Store Credit)</span><br/>
+                                                                             }
+                                                                               
+                                                                                 <span style="text-decoration: line-through;" >@m.NotBuyingWording</span><br/>
+                                                                                <span style="text-decoration: line-through;" >@m.BuyingWording</span><br/>
+                                                                                <small><span id="ctl00_ContentPlaceHolder1_GridView1_ctl02_lblNeedLimit">@m.NeedLimit</span>
+                                                                                </small>
+                                                                                <br/>
+                                                                                 @if (true)
+                                                                                 {
+                                                                                     <small><input type="button" id="btnWholePrice" style="width: 200px;" Onclick=" Javascript:AddToSellBackCart('@m.Isbn','wholesalebuy');" value="Whole Price" />
+                                                                                     </small>
+                                                                                     <br/>
+                                                                                 }
+                                                                                 else
+                                                                                 {
+                                                                                <small><input type="button" id="btnRetail" Onclick="Javascript:AddToSellBackCart('@m.Isbn','retailbuy');" value="Retail Price" />
+                                                                                </small>
+                                                                                <br />}
+                                                                            </div>
+                                                                        </td>
+
+                                                                        
+                                                                        <td valign="top">
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                                                                             {
+                                                                                 i += 1;
+                                                                             }
+                }
+                
+            </tbody>
+        </table>
+    </div>
+        
+    <br />
+      <div id="divfooter" > <input type="button" onclick='javascript:window.location.href="@Url.Action("Checkout", "Account")"' value="SellBack Cart" class="btnCommonButton" /> <span class="clr"></span></div>
+       
+    <br />
+ 
+  }
+}

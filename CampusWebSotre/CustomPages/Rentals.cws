@@ -1,0 +1,65 @@
+<div id="contentBodyDivInner">
+<p id="title">&nbsp;</p>
+<table id="commerceArea">
+<tbody>
+<tr>
+<td>
+<table class="mainheader" border="0" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td valign="top">&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="maincontent" border="0" cellspacing="2" cellpadding="2">
+<tbody>
+<tr>
+<td class="maincontent" valign="top">
+<h1 class="mainheader" style="text-align: center; height: 45px;"><span style="font-size: x-large;">Online Rentals</span>&nbsp;&nbsp;&nbsp;</h1>
+<hr style="text-align: center; margin:0px; padding:0px;" width="99%" />
+<!--<p>&nbsp;</p>-->
+<h5 style="text-align: center;"><span style="font-size: 11px;">Making Bookstore Rentals Easy</span></h5>
+<p>&nbsp;</p>
+<br />
+<p style="padding: 15px; text-align: left; font-weight: bold;"><span style="font-size: small;">&nbsp;&nbsp;&nbsp; Beginning in 2010, Campus Webstore will provide a new service: <em>Online Rentals</em>. This exciting and easy-to-use Campus Webstore module will offer the following features:</span></p>
+<br />
+<ul style="padding: 10px; text-align: left; list-style-type: none;">
+<li><span style="font-size: small;">1. Bookstores will have the ability to convert any new or used textbook to a rental item by simply creating a new barcode with the item&rsquo;s serial number</span></li>
+<li></li>
+<li><span style="font-size: small;">2. Each rental item is tracked by a serial number as well as by the information of the individual that is renting the item</span></li>
+<li></li>
+<li><span style="font-size: small;">3. Bookstores will be able to set replacement prices and late fees based on the pricing model being used</span></li>
+<li></li>
+<li><span style="font-size: small;">4. They will have the ability to integrate their customers' information into the Loyalty database, which will allows the bookstore to follow up with customers as well as create marketing campaigns</span></li>
+<li></li>
+<li><span style="font-size: small;">5. They will be able to track items by name, student id, driver&rsquo;s license, and other key customer data</span></li>
+<li></li>
+<li><span style="font-size: small;">6. Bookstores can send automated "Item Due" and "Past Due" email reminder notices</span></li>
+<li></li>
+<li><span style="font-size: small;">7. Book returns will be able to be tracked and compared against the original textbook</span></li>
+<li></li>
+<li><span style="font-size: small;">8. Any damaged or unusable books will be able to be billed back to the customer's card on file</span></li>
+<li></li>
+<li><span style="font-size: small;">9. Staff will be able to convert any textbook to a rental item during a POS transaction</span></li>
+<li></li>
+<li><span style="font-size: small;">10. Staff will be able to convert any rental item back to inventory and sell it during a POS transaction</span></li>
+<li></li>
+<li><span style="font-size: small;">11. Rentals will have complete integration to SmartStockLedger, SmartText, SmartGM, SmartPOS, SmartAR, and Campus Webstore</span></li>
+<li></li>
+<li><span style="font-size: small;">12. Any POS tender code can be used for rentals and for additional fees</span></li>
+<li></li>
+<li><span style="font-size: small;">13. Some examples of tender codes available will include Cash, Check, Credit Card, Card on File, A/R, and many others</span></li>
+<li></li>
+<li><span style="font-size: small;">14. Flexible pricing models will be available which will allow bookstores to tailor prices based on many factors such as tuition-based payment, course-based payment, rental periods, and rental days</span></li>
+<li></li>
+<li><span style="font-size: small;">15. All of these great Rental benefits will also be applicable with General Merchandise items</span></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</td>
+</tr>
+</tbody>
+</table>
+</div>

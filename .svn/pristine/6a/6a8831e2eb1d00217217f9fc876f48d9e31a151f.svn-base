@@ -1,0 +1,325 @@
+﻿@using CampusWebSotre.Models
+@using CampusWebSotre.Utils
+@model IEnumerable<ItemLookUpViewModel>
+@{
+    ViewBag.Title = "CatalogProductITems";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script type="text/javascript">
+    var gridItems = '';
+    // function to Add the items in to the cart
+    function AddToCart(sku, source) {
+        //Adding the loading image
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+
+        var qty = $("#txtQty").val();
+
+        var matrixId = $("#ddl" + sku).val();
+
+        //for the Tx type
+
+        var newUsed = "";
+
+        if ($("#rdoNew").val() == 0) {
+            newUsed = "New";
+        }
+        if ($("#rdoUsed").val() == 1) {
+            newUsed = "Used";
+        }
+
+
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("AddCatalogItemsToCart", "Catalogs")',
+
+            data: { Sku: sku, Source: source, Quantity: qty, MatrixId: matrixId, NewUsed: newUsed },
+
+            success: function (data, status, xhr) {
+                if (data.success) {
+
+                    //Fill the cart
+                    ViewCartItems();
+
+                //    $("#processing").html("");
+                }
+                else {
+                    $("#spnErrorMsg").text(data.errMsg);
+                }
+            }
+        });
+    }
+    //***********************************End of fucntion********************************************************
+
+    //Function to increase and decreaese the qty into the textbox
+    var qty = 1;
+    function ManageQty(val) {
+        if (val == "Inc") {
+            if (qty < 30) {
+                qty++;
+                $("#txtQty").val(qty);
+            }
+        }
+        else {
+            if (qty > 1) {
+                qty--;
+                $("#txtQty").val(qty);
+            }
+        }
+    }
+    
+    
+    
+</script>
+
+        <h1 class="main_heading">
+                Item Detail</h1>
+   
+
+<br /><br />
+@if (Model.Any())
+{
+    
+    foreach (var m in Model)
+    {
+       
+        var ddlId = "ddl" + @m.SeoSku;
+        var hdnId = "hdn" + @m.SeoSku;
+        var isImage = DocumentThumbnailUtil.CheckForImage(m.Image);
+        //div to add the loading image 
+    <div id="processing">
+    </div>
+   
+      
+    <div class="product_list">
+   
+        <div class="images">
+            @if (!isImage)
+            {
+               
+                <img alt="image" src="@m.Image" style="width: 200px; height: 267px;float:left" />
+            }
+            else
+            {
+             
+                <img alt="image" src="@Url.Content("~/Content/images/images/noimage.jpg")" style="width: 200px; height: 267px;float:left" />
+            }
+        </div>
+        <div class="product_info">
+            <input type="hidden" id='@hdnId' value='"@m.Description"' />
+            @{ var isMatrix = @m.IsMatrix; }
+            @if (m.Source.ToLower().Equals("gm"))
+            {
+                if (!string.IsNullOrEmpty(isMatrix))
+                {
+
+                <div class="descritption">
+                    <h1 style="font-weight: bold; font-size: 14px;">@MvcHtmlString.Create(@m.Description)
+                    </h1>
+                    <br />
+                    <h3>
+                        Manufacturer :
+                        @m.Vendor
+                    </h3>
+                      <br />
+                    @if (isMatrix.Equals("0"))
+                    {
+
+                        if (!m.SalePrice.Equals("$0.00") & !string.IsNullOrEmpty(m.SalePrice))
+                        {
+                        <h3 style="text-decoration: line-through;">
+                            Price :@m.Price
+                        </h3>
+                          <br />
+                        <h3>
+                            SalesPrice :@m.SalePrice
+                        </h3>
+                          <br />
+                        }
+                        else
+                        {
+                        <h3>
+                            Price :@m.Price
+                        </h3>
+                             <br />          
+                        }
+
+                    }
+                    @if (Convert.ToBoolean(m.FreeShipping))
+                    {
+                        <img src="http://demo.campuswebstore.com/images/freeShipping.png" />
+
+                    }
+                    @if (Convert.ToDecimal(string.IsNullOrEmpty(m.FlatFreight) ? "0" : m.FlatFreight) > 0)
+                    {
+                        <h3>
+                            Flat Frieght Amount : @m.FlatFreight
+                        </h3>
+                          <br />
+
+                    }
+                    <h3>
+                        SKU :
+                        @m.Sku</h3>
+                          <br />
+                    @if (!isMatrix.Equals("0"))
+                    {
+                        <div class="third left">
+                            <p class="selectbgText selectbg">
+                                <select name="@m.SeoSku" id="@ddlId" class="styled">
+                                    @foreach (var itemLookUp in m.MatrixItem)
+                                    {
+                                        var ddlOptionValue = @itemLookUp.MatrixId.Replace("*", "-");
+                                        <option value="@ddlOptionValue">
+                                            @itemLookUp.DLdsc</option>
+
+                                    }
+                                </select>
+                            </p>
+                        </div>
+                    }
+                </div>
+                <div class="clear">
+                </div>
+                <br />
+                    if (isMatrix.Equals("0"))
+                    {
+
+                        if (!(Convert.ToInt32(m.Qoh) <= 0))
+                        {
+                <input type="text" value="1" style="width: 25px; height: 12px;" id="txtQty" />
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="▲" />
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value="▼" />
+                <input type="button" title="Add to cart" id="@m.SeoSku" value="Add to cart" onclick="javascript:AddToCart('@m.SeoSku','@m.Source');"/>
+                        }
+                        else
+                        {
+                <h3>
+                    Out of stock
+                </h3>
+
+                        }
+                    }
+                    else
+                    {
+                         
+                <input type="text" value="1" style="width: 25px; height: 12px;" id="txtQty" />
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="▲" />
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value="▼" />
+                <input type="button" title="Add to cart" id="@m.SeoSku" value="Add to cart" onclick="javascript:AddToCart('@m.SeoSku','@m.Source');"/>
+                    }
+
+                }
+            }
+            else
+            {
+                if (m.Source.ToLower().Equals("tr"))
+                {
+
+                <text> Manufacturer :&nbsp;@m.Manf
+                <br />
+                Binding :&nbsp; @m.Binding
+                <br />
+                Edition :&nbsp; @m.Edition
+                <br />
+                Volume :&nbsp; @m.Vol
+                <br />
+                Price :&nbsp; @m.Price
+                <br />
+                SKU :&nbsp; @m.Sku
+                <br />
+                <br />
+                </text>
+                <div class="clear">
+                </div>
+                <br />
+                <input type="text" value="1" style="width: 25px; height: 12px;" id="txtQty" />
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="▲" />
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value="▼" />
+                <input type="button" title="Add to cart" id="@m.SeoSku" value="Add to cart" onclick="javascript:AddToCart('@m.SeoSku','@m.Source');"/>
+
+                }
+                else
+                {
+                        //for teh type tx
+                <text> Manufacturer :&nbsp;@m.Manf
+                <br />
+                Binding :&nbsp; @m.Binding
+                <br />
+                Edition :&nbsp; @m.Edition
+                <br />
+                Volume :&nbsp; @m.Vol
+                <br />
+                Price :&nbsp; @m.Price
+                <br />
+                SKU :&nbsp; @m.Sku
+                <br />
+                <br />
+                </text>
+                <div class="clear">
+                </div>
+                <br />
+                   
+                    var isDisabled = true;
+                    var isNewQohStock = "";
+                    var isUsedQohStock = "";
+                    var newQoh = Convert.ToInt32(@m.NewQoh);
+
+                    var usedQoh = Convert.ToInt32(@m.UsedQoh);
+                    if (newQoh <= 0)
+                    {
+                        isNewQohStock = "disabled";
+                        m.NewPrice = "out of Stock";
+                    }
+                    if (usedQoh <= 0)
+                    {
+                        isUsedQohStock = "disabled";
+                        m.UsedPrice = "out of Stock";
+
+                    }
+                    if (newQoh <= 0 && usedQoh <= 0)
+                    {
+                        isNewQohStock = "disabled";
+                        isUsedQohStock = "disabled";
+                        m.NewPrice = "out of Stock";
+                        m.UsedPrice = "out of Stock";
+
+                        isDisabled = false;
+                    }
+
+                
+                @Html.Label("New") <input type="radio" id="rdoNew" name="rdoPrice" disabled="@isNewQohStock"  value="0"  /> @Html.Label("NewPrice", m.UsedPrice)<br />
+                @Html.Label("Used") <input type="radio" id="rdoUsed" name="rdoPrice" disabled="@isUsedQohStock" value="1" /> @Html.Label("UsedPrice", m.UsedPrice)
+                <input type="text" value="1" style="width: 25px; height: 12px;" id="txtQty" />
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="▲" />
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value="▼" />
+                    if (isDisabled)
+                    {
+                        
+                <input type="button" title="Add to cart" id="@m.SeoSku" disabled="disabled" value="Out of Stock"/>
+                    }
+                    else
+                    {  <input type="button" title="Add to cart" id="@m.SeoSku" value="Add to cart" onclick=" javascript:AddToCart('@m.Sku','@m.Source');"/>}
+
+                }
+            }
+
+             
+        </div>
+              <br />
+      <br />
+    <div  >
+
+   <h2 class="sub_heading">
+      Item Description</h2>
+  
+    @MvcHtmlString.Create(m.Description)
+</div>
+        </div>
+       
+      
+ 
+    
+    }
+}

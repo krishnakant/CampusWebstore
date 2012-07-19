@@ -1,0 +1,7 @@
+﻿@{
+    ViewBag.Title = "Catalogs";
+}
+
+<h2>Catalogs</h2>
+
+    @Html.Partial("Widgets/CatalogList")

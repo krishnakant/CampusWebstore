@@ -1,0 +1,323 @@
+﻿@model IEnumerable<CampusWebSotre.Models.OrderViewModel>
+@{
+    ViewBag.Title = "OrderHistory";
+
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+
+    var openOrders = Model.Where(m => m.Status.Equals("Open") || m.OrderId.Contains("OPEN")).ToList();
+
+    var closeOrders = Model.Where(m => !m.Status.Equals("Open") && m.OrderId.Contains("CLOSED")).ToList();
+
+    var i = 1;
+}
+<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/colorbox.css")" media="screen" />
+<script src="@Url.Content("~/Scripts/jquery.colorbox-min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    setTimeout(function () { window.scrollTo(0, 1) }, 100);
+    //initialize colorbox...
+    jQuery(document).ready(function () {
+        jQuery(".divPrintInvoice").colorbox({
+            width: "600px",
+            inline: true,
+            href: "#divOrderDetail",
+            close: "Close",
+            onLoad: function () {
+                $("#divPrintButton").show();
+            },
+            onClosed: function () {
+                $("#divPrintButton").hide();
+            }
+        });
+
+    });
+
+
+    //Function to get the order detail by id
+    function fnShowOrderDetail(orderId, trid) {
+        $.mobile.changePage("#Loading", "flip", true, false);
+        var strHtml = jQuery("#" + trid).html();
+
+
+        jQuery("#trOrderheader").html(strHtml);
+
+        $.ajax({
+            type: "POST",
+
+            url: '@Url.Action("JsonGetOrderDetail", "Account")',
+
+            data: { CustomerId: '@ViewBag.UserId', OrderId: orderId },
+
+            success: function (data, status, xhr) {
+
+                //       $("#imgLoading").hide();
+
+                $("#divPrintArea").html(data);
+
+                //        $("#divLinkPrint").show();
+                $.mobile.changePage("#OrderDetail", "flip", true, false);
+
+            }
+        });
+    }
+
+    //Call print function
+    function fnPrint() {
+
+        var str = jQuery("#divPrintArea").html();
+
+        var winPrint = window.open('', '', 'left=0,top=0,width=800,height=400,toolbar=1,scrollbars=1,status=0');
+
+        winPrint.document.write(str);
+
+        winPrint.document.close();
+
+        winPrint.focus();
+
+        winPrint.print();
+
+        winPrint.close();
+
+        return false;
+    }
+</script>
+<script src="@Url.Content("~/Scripts/jquery.mobile-1.0b3.js")" type="text/javascript"></script>
+<link href="@Url.Content("~/Content/jquery.mobile-1.0b2.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+    //    $("#openOrders").click(function () {
+    //        //   $.mobile.showPageLoadingMsg();
+    //        $.mobile.changePage("#OpenOrders", "flip", true, false);
+    //    });
+    jQuery(document).ready(function () {
+
+    });
+</script>
+<section id="OrderHistory" data-role="page">
+    <div data-role="content" class="content">
+    <div id="headerproduct">
+        <!--header-->
+        <center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+    </div>
+    <div class="cartcontainer">
+    <div >
+        <form  runat="server">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro">
+            <a href="#" class="left">Open Orders</a>
+        </div>
+            <div class="clear">
+            </div>
+             <div class="content-primary">
+                        <ul class="ui-listview" data-role="listview">
+                          
+                            <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" 
+                                class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                                <div class="ui-btn-inner ui-li">
+                                    <div class="ui-btn-text">
+                                        <a  href="#OpenOrders"  data-transition="flip"  id="openOrders"  class="ui-link-inherit">Open Orders</a>
+                                    </div>
+                                    <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
+                                </div>
+                            </li>
+                            <li data-corners="false" data-shadow="false" data-iconshadow="true" data-wrapperels="div" data-icon="arrow-r" data-iconpos="right" data-theme="c" 
+                            class="ui-btn ui-btn-icon-right ui-li-has-arrow ui-li ui-btn-up-c">
+                            <div class="ui-btn-inner ui-li">
+                                <div class="ui-btn-text">
+                                    <a  href="#CloseOrders" data-transition="flip" id="closeOrders"  class="ui-link-inherit">Close Orders</a>
+                                </div>
+                                <span class="ui-icon ui-icon-arrow-r ui-icon-shadow">&nbsp;</span>
+                            </div>
+                        </li>
+                        </ul>
+                        </div>
+
+            
+        </form></div></div>
+    </div>
+</section>
+<section id="OpenOrders" data-role="page">
+    <div data-role="content" class="content">
+    <div id="headerproduct">
+        <!--header-->
+        <center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+    </div>
+    <div class="cartcontainer">
+    <div >
+        <form  runat="server">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro">
+            <a href="#" class="left">Open Orders</a>
+        </div>
+        <div class="clear">
+        </div>
+            
+
+        <table cellpadding="0" cellspacing="0" class="tXtBook carttable" border="0" >
+          
+            <tr class="heding">
+                <th>
+                    Order Number
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Amount)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+            </tr>
+            @foreach (var item in openOrders)
+            {
+                var trId = "tr_" + (i++);
+                    
+                <tr id="@trId">
+                    <td>
+                        <a href="javascript:fnShowOrderDetail('@item.OrderId','@trId');">@item.OrderId</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(molItem => item.DatePlaced)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Amount)
+                    </td>
+                    <!-- <td>
+                             @Html.DisplayFor(modelItem => item.DateProcessed)
+                         </td>-->
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                </tr>
+				
+				
+				
+            }
+        </table></form>
+<span class="clr_span"></span>
+		<div class="backbttntext"><a  href="#OrderHistory" data-transition="flip" id="back1" data-rel="page" class="backbttn">Back</a></div>
+				
+		</div></div> 
+		
+								   
+                                   
+                                    
+                                    
+    </div>
+</section>
+<section id="CloseOrders" data-role="page">
+    <div data-role="content" class="content">
+    <div id="headerproduct">
+        <!--header-->
+        <center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+    </div>
+    <div class="cartcontainer">
+        <div >
+            <form  runat="server">
+                @Html.Partial("EditorTemplates/MobileHeader")
+                <div class="clear">
+                </div>
+                <div class="bradecumpro">
+                    <a href="#" class="left">Close Orders</a>
+                </div>
+              
+       <table cellpadding="0" cellspacing="0" class="tXtBook carttable" border="0">
+                  
+                    <tr class="heding">
+                        <th>
+                            Order Number
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Amount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                    </tr>
+                    @foreach (var item in closeOrders)
+                    {
+                        <tr>
+                            <td>
+                                <a href="javascript:fnShowOrderDetail('@item.OrderId');">@item.OrderId</a>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DatePlaced)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Amount)
+                            </td>
+                            <!-- <td>
+                                     @Html.DisplayFor(modelItem => item.DateProcessed)
+                                 </td>-->
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Status)
+                            </td>
+                        </tr>
+                    }
+                </table></form></div>
+    <div class="content-primary">
+                      <span class="clr_span"></span>
+                                     
+									 	<div class="backbttntext">
+									
+										
+									    <a  href="#OrderHistory" data-transition="flip" id="back" data-rel="page" class="backbttn">Back</a>
+                                  
+								  <div>
+    </div>
+    </div></section>
+<section id="OrderDetail" data-role="page">
+    <div data-role="content" class="content">
+    <div id="headerproduct">
+        <!--header-->
+        <center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+    </div>
+    <div class="cartcontainer">
+    <div >
+        <form  runat="server">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro minheight">
+            <a href="#" class="left">Order Detail</a>
+        </div>
+        <div class="clear">
+        </div>
+<div id="divLinkPrint" >
+    <a class="divPrintInvoice" href="#" class="clickfor">Click for Printer Version</a></div>
+	
+<div id="divOrderDetail" align="center" >
+    <div id="divPrintArea">
+      	<span class="clr_span"></span>
+	  
+    </div>
+</div>
+<span class="clr_span"></span>
+<div id="divPrintButton" class="backbttntext" >
+       
+    </div><div> <input type="button" value="Print" id="btnPrint" onclick="javascript:return fnPrint();" class="backbttn"/></div>
+</form></div></div>
+    </div></section>
+<section id="Loading" data-role="page">
+    <div data-role="content" class="content">
+    <div id="headerproduct">
+        <!--header-->
+        <center><img  src="@Url.Content("~/Content/Images/Mobile/bar_top.png")" width="181" alt="CampusWebstore" title="CampusWebstore"  class="mainlogo"/></center> 
+    </div>
+    <div class="cartcontainer">
+    <div >
+        <form  runat="server">
+        @Html.Partial("EditorTemplates/MobileHeader")
+        <div class="clear">
+        </div>
+        <div class="bradecumpro">
+            <a href="#" class="left">Order Detail</a>
+        </div>
+        <div class="clear">
+        </div><center><img id="imgLoading" src="@Url.Content("~/Content/images/Mobile/loading_normal_up.gif")" alt="loading"/><br /><b>Please wait...</b></center></form></div></div></div></section>

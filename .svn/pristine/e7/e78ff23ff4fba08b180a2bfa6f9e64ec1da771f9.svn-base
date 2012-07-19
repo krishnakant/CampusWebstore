@@ -1,0 +1,233 @@
+﻿@using CampusWebSotre.Models
+@using CampusWebSotre.Utils
+@model IEnumerable<CampusWebStore.Shared.Models.SellBackBookModel>
+<script type="text/javascript">
+
+    function AddToSellBackCart(isbn, priceType) {
+
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("AddSellBackToCart", "Home")',
+
+            data: { Isbn: isbn, PurchaseType: priceType },
+            success: function (data, status, xhr) {
+
+                //********************************************8OCde to add the items into the ddl section****************************************************************
+                if (data != "") {
+                    $("#sellBackCartItems").html(data);
+                }
+
+            },
+            error: function (xhr, status, error) {
+
+                alert("error");
+            }
+
+        });
+    }
+
+</script>
+@{if (Model.Any())
+  {
+      var objBaseMainConfigAdmin = new BaseMainConfigAdmin();
+      var i = 0;
+      var style = "";
+    <div id="sellBackCartItems">
+    </div>
+    <div style="float: right;">
+        <table cellspacing="5" cellpadding="5" border="1" style="background-color: Transparent;
+            font-size: 12px; width: 650px;" id="" rules="cols">
+            <tbody>
+                <tr style="color: White; background-color: Gray;">
+                    <th scope="col">
+                        &nbsp;
+                    </th>
+                </tr>
+                @foreach (var m in Model)
+                {
+                    style = i % 2 != 0 ? "style=background-color:Beige;" : "";
+
+                    string isbnRetrun = m.Isbn;
+
+                    ValidateIsbn.CheckIsbn(ref isbnRetrun);
+
+                    var imageUrl = "http://images.amazon.com/images/P/" + isbnRetrun + ".01._SCMZZZZZZZ_.jpg"; //assing dynamic url for amazon image
+
+                    <tr @style>
+                        <td align="left" valign="top">
+                            <table cellspacing="3" cellpadding="3" border="0">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <b><span style="font-size: 1.5em;" id="">@MvcHtmlString.Create(@m.Title)</span></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table cellspacing="3" cellpadding="3" border="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td width="135px" valign="top">
+                                                            <img style="height: 160px; width: 115px; border-width: 0px; text-align: center;" src="@imageUrl" id="ctl00_ContentPlaceHolder1_GridView1_ctl02_imgBook">
+                                                            <br>
+                                                            <span style="font-size: Smaller; text-align: center;" id="">@m.Isbn</span>
+                                                        </td>
+                                                        <td valign="top">
+                                                            Author: <span id="">@m.Author</span><br>
+                                                            Edition: <span id="">@m.Edition</span><br>
+                                                            <br>
+                                                            <table cellspacing="0" cellpadding="0" border="0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td valign="top">
+                                                                            <div style="height: 150px; width: 200px;" id="">
+                                                                                @if (objBaseMainConfigAdmin.IwebBuyBackConfig.RetailBooks)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div>@m.RetailWording</div>
+                                                                                        @if (m.RetailPrice.Equals("0.00") && m.WhslrPrice.Equals("0.00"))
+                                                                                        {
+                                                                                            if (objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                            {
+                                                                                            <span style="text-decoration: line-through;">@m.RetailPrice</span>
+                                                                                            <br />
+                                                                                            }
+                                                                                        }
+                                                                                        <span style="font-size: Smaller;">(Cash)</span><br />
+                                                                                        @if (objBaseMainConfigAdmin.IwebBuyBackConfig.StoreCredit)
+                                                                                        {
+                                                                                            if (m.RetailPrice.Equals("0.00") && m.WhslrPrice.Equals("0.00"))
+                                                                                            {
+                                                                                                if (objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                                {
+                                                                                            <span style="font-size: Smaller; text-decoration: line-through;">@m.RetStoreCredit</span>
+                                                                                            <br />
+                                                                                            <span style="font-size: Smaller; text-decoration: line-through;">(Store Credit)</span><br />
+                                                                               
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        @if (m.RetailPrice.Equals("0.00") && m.WhslrPrice.Equals("0.00"))
+                                                                                        {
+                                                                                            if (!objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                            {
+
+                                                                                            <span style="text-decoration: line-through;">@m.NotBuyingWording</span>
+                                                                                            <br />
+                                                                                            }
+
+
+                                                                                            //tmpbtnBuyRetail.Enabled = false;
+                                                                                            //     tmpRetailCreditLabel.Font.Strikeout = true;
+                                                                                            //tmpbtnBuyRetail.Text = "Check back later";
+                                                                                            //tmpRetailStoreCredit.Font.Strikeout = true;
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span style="text-decoration: line-through;">@m.BuyingWording</span><br />
+                                                                                        }
+                                                                                        @if (m.RetailPrice.Equals("0.00"))
+                                                                                        {
+                                                                                            if (objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                            {
+                                                                                            <small><span id="">@m.NeedLimit</span> </small>
+                                                                                            }
+
+                                                                                        }
+                                                                                        <br />
+                                                                                        @if (objBaseMainConfigAdmin.IwebBuyBackConfig.Vouchers)
+                                                                                        { 
+                                                                                    
+                                                                                            <small>
+                                                                                                <input type="button" id="btnWholePrice" Onclick=" Javascript:AddToSellBackCart('@m.Isbn','wholesalebuy');" value="Whole Price" />
+                                                                                            </small>}
+                                                                                        <br />
+                                                                                    </div>}
+                                                                                @if (objBaseMainConfigAdmin.IwebBuyBackConfig.WholesaleBooks)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div>@m.WholeSaleWording</div>
+                                                                                        @if (m.RetailPrice.Equals("0.00") && m.WhslrPrice.Equals("0.00"))
+                                                                                        {
+                                                                                            if (objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                            {
+                                                                                            <span style="text-decoration: line-through;">@m.WhslrPrice</span>
+                                                                                            <br />
+                                                                                            }
+                                                                                        }
+                                                                                        <span style="font-size: Smaller;">(Cash)</span><br />
+                                                                                        @if (objBaseMainConfigAdmin.IwebBuyBackConfig.StoreCredit)
+                                                                                        {
+                                                                                            if (m.RetailPrice.Equals("0.00") && m.WhslrPrice.Equals("0.00"))
+                                                                                            {
+                                                                                                if (objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                                {
+                                                                                            <span style="font-size: Smaller; text-decoration: line-through;">@m.WhsleStoreCredit</span>
+                                                                                            <br />
+                                                                                            <span style="font-size: Smaller; text-decoration: line-through;">(Store Credit)</span><br />
+                                                                               
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        @if (m.RetailPrice.Equals("0.00") && m.WhslrPrice.Equals("0.00"))
+                                                                                        {
+                                                                                            if (!objBaseMainConfigAdmin.IwebBuyBackConfig.DisplayPrices)
+                                                                                            {
+
+                                                                                            <span style="text-decoration: line-through;">@m.NotBuyingWording</span>
+                                                                                            <br />
+                                                                                            }
+
+
+                                                                                            //tmpbtnBuyRetail.Enabled = false;
+                                                                                            //     tmpRetailCreditLabel.Font.Strikeout = true;
+                                                                                            //tmpbtnBuyRetail.Text = "Check back later";
+                                                                                            //tmpRetailStoreCredit.Font.Strikeout = true;
+
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span style="text-decoration: line-through;">@m.BuyingWording</span><br />
+                                                                                        }
+                                                                                        <br />
+                                                                                        @if (objBaseMainConfigAdmin.IwebBuyBackConfig.Vouchers)
+                                                                                        { 
+                                                                                    
+                                                                                            <small>
+                                                                                                <input type="button" id="btnWholePrice" Onclick=" Javascript:AddToSellBackCart('@m.Isbn','wholesalebuy');" value="Whole Price" />
+                                                                                            </small>}
+                                                                                        <br />
+                                                                                    </div>}
+                                                                            </div>
+                                                                        </td>
+                                                                        <td valign="top">
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                                                                                {
+                                                                                    i += 1;
+                                                                                }
+                }
+            </tbody>
+        </table>
+    </div>
+        
+    <br />
+    <br />
+ 
+  }
+}

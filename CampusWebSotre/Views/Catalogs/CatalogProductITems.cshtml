@@ -1,0 +1,342 @@
+﻿@using System.Configuration
+@using CampusWebSotre.Models
+@using CampusWebSotre.Utils
+@model IEnumerable<ItemLookUpViewModel>
+@{
+    ViewBag.Title = "CatalogProductITems";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*fancybox scripts*@
+<script type="text/javascript" src="@Url.Content("~/Content/fancybox/jquery.min.js")"></script>
+	<script type="text/javascript" src="@Url.Content("~/Content/fancybox/jquery.mousewheel-3.0.4.pack.js")"></script>
+	<script type="text/javascript" src="@Url.Content("~/Content/fancybox/jquery.fancybox-1.3.4.pack.js")"></script>
+	<link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/fancybox/jquery.fancybox-1.3.4.css")" media="screen" />
+ 
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //add fancybox on Catalog Image
+        $("a#catalogImg").fancybox();
+    });
+    var gridItems = '';
+    // function to Add the items in to the cart
+    function AddToCart(sku, source) {
+        //Adding the loading image
+        $("#processing").html('<img src="@Url.Content("~/Content/images/mobile/loading_normal_up.gif")">Please Wait...<br>');
+
+        var qty = $("#txtQty").val();
+
+        var matrixId = $("#ddl" + sku).val();
+
+        //for the Tx type
+
+        var newUsed = "";
+
+        if ($("#rdoNew").val() == 0) {
+            newUsed = "1";
+        }
+        if ($("#rdoUsed").val() == 1) {
+            newUsed = "0";
+        }
+
+
+        $.ajax({
+
+            type: "POST",
+
+            url: '@Url.Action("AddCatalogItemsToCart", "Catalogs")',
+
+            data: { Sku: sku, Source: source, Quantity: qty, MatrixId: matrixId, NewUsed: newUsed },
+
+            success: function (data, status, xhr) {
+                if (data.success) {
+
+                    //Fill the cart
+                    ViewCartItems();
+
+                    //    $("#processing").html("");
+                }
+                else {
+                    $("#spnErrorMsg").text(data.errMsg);
+                    //  ViewCartItems();
+                    $("#processing").html("");
+                }
+            }
+        });
+    }
+    //***********************************End of fucntion********************************************************
+
+    //Function to increase and decreaese the qty into the textbox
+    var qty = 1;
+    function ManageQty(val) {
+        if (val == "Inc") {
+            if (qty < 30) {
+                qty++;
+                $("#txtQty").val(qty);
+            }
+        }
+        else {
+            if (qty > 1) {
+                qty--;
+                $("#txtQty").val(qty);
+            }
+        }
+    }
+    
+    
+    
+</script>
+
+        <h1 class="main_heading">Item Detail</h1>
+
+@if (Model.Any())
+{
+
+    var path = ConfigurationManager.AppSettings["DomainName"];
+
+
+    foreach (var m in Model)
+    {
+
+        var ddlId = "ddl" + @m.SeoSku;
+        var hdnId = "hdn" + @m.SeoSku;
+        var isImage = DocumentThumbnailUtil.CheckForImage(m.Image);
+        //div to add the loading image 
+        m.Image = path + "/" + m.Image;
+    <div class="product_list">
+   
+        <div class="product_images">
+		<div class="inner_img_box">
+             @if (!isImage)
+            {
+               
+                <a href="@m.Image" id="catalogImg"><img alt="" src="@m.Image"/></a>
+			
+            }
+            else
+            {
+             
+                 <a href="@Url.Content("~/Content/images/question_mark.jpg")" id="catalogImg"><img alt="image" src="@Url.Content("~/Content/images/question_mark.jpg")" /></a>
+            }
+			</div>
+        </div>
+        <div class="product_info">
+            <input type="hidden" id='@hdnId' value='"@m.Description"' />
+            @{ var isMatrix = @m.IsMatrix; }
+            @if (m.Source.ToLower().Equals("gm"))
+            {
+                if (!string.IsNullOrEmpty(isMatrix))
+                {
+
+                <div class="descritption">
+                    <h1 style="font-weight: bold; font-size: 14px;">@MvcHtmlString.Create(@m.Description)</h1>
+                    <h3>Manufacturer : @m.Vendor</h3>
+
+                    @if (isMatrix.Equals("0"))
+                    {
+                        if (!m.SalePrice.Equals("$0.00") & !string.IsNullOrEmpty(m.SalePrice))
+                        {
+                        <h3 style="text-decoration: line-through;">Price :@m.Price</h3>
+                        <h3>SalesPrice :@m.SalePrice</h3>
+                        }
+                        else
+                        {
+                        <h3>Price :@m.Price</h3>
+                        }
+
+                    }
+                    @if (Convert.ToBoolean(m.FreeShipping))
+                    {
+                        <img src="http://demo.campuswebstore.com/images/freeShipping.png" />
+
+                    }
+                    @if (Convert.ToDecimal(string.IsNullOrEmpty(m.FlatFreight) ? "0" : m.FlatFreight) > 0)
+                    {
+                        <h3>Flat Frieght Amount : @m.FlatFreight</h3>
+
+                    }
+                    <h3>SKU : @m.Sku</h3>
+                    @if (!isMatrix.Equals("0"))
+                    {
+                        <div class="third left">
+                            <p class="selectbgText selectbg">
+                                <select name="@m.SeoSku" id="@ddlId" class="styled">
+                                    @foreach (var itemLookUp in m.MatrixItem)
+                                    {
+                                        var ddlOptionValue = @itemLookUp.MatrixId.Replace("*", "-");
+                                        <option value="@ddlOptionValue">
+                                            @itemLookUp.DLdsc</option>
+
+                                    }
+                                </select>
+                            </p>
+                        </div>
+                    }
+                </div>
+        
+                    if (isMatrix.Equals("0"))
+                    {
+
+                        if (!(Convert.ToInt32(m.Qoh) <= 0))
+                        {
+                <input type="text" value="1" class="input_txtQty" class="input_txtQty" id="txtQty" />
+				<div class="up_do_arrow">
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="" class="up_button"/>
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value=""  class="down_button"  />
+				</div><span class="clr_span"></span>
+                <input type="button" title="Add to cart" class="add_button"  id="@m.SeoSku" value="Add to cart" onclick="javascript:AddToCart('@m.SeoSku','@m.Source');"/>
+                        }
+                        else
+                        {
+                <h3>Out of stock</h3>
+
+                        }
+                    }
+                    else
+                    {
+                         
+                <input type="text" value="1" class="input_txtQty" id="txtQty" />
+				<div class="up_do_arrow">
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="" class="up_button"/>
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value=""  class="down_button"  />
+				</div><span class="clr_span"></span>
+                <input type="button" title="Add to cart" class="add_button"  id="@m.SeoSku" value="Add to cart" onclick="javascript:AddToCart('@m.SeoSku','@m.Source');"/>
+                    }
+
+                }
+            }
+            else
+            {
+                if (m.Source.ToLower().Equals("tr"))
+                {
+
+                <text> Manufacturer :&nbsp;@m.Manf
+                <br />
+                Binding :&nbsp; @m.Binding
+                <br />
+                Edition :&nbsp; @m.Edition
+                <br />
+                Volume :&nbsp; @m.Vol
+                <br />
+                Price :&nbsp; @m.Price
+                <br />
+                SKU :&nbsp; @m.Sku
+                <br />
+                <br />
+                </text>
+                <div class="clear">
+                </div>
+                <br />
+                <input type="text" value="1" class="input_txtQty" id="txtQty" />
+				<div class="up_do_arrow">
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="" class="up_button"/>
+                <input type="button" onclick=" javascript:ManageQty('Dec');" value=""  class="down_button"  />
+				</div><span class="clr_span"></span>
+                <input type="button" title="Add to cart" class="add_button"  id="@m.Sku" value="Add to cart" onclick="javascript:AddToCart('@m.Sku','@m.Source');"/>
+
+                }
+                else
+                {
+                        //for teh type tx
+                <text> Manufacturer :&nbsp;@m.Manf
+                <br />
+                Binding :&nbsp; @m.Binding
+                <br />
+                Edition :&nbsp; @m.Edition
+                <br />
+                Volume :&nbsp; @m.Vol
+                <br />
+                Price :&nbsp; @m.Price
+                <br />
+                SKU :&nbsp; @m.Sku
+                <br />
+               
+                </text>
+                <div class="clear">
+                </div>
+                <br />
+                   
+                    var isDisabled = true;
+                    var isNewQohStock = "";
+                    var isUsedQohStock = "";
+
+                    var newQoh = Convert.ToInt32(@m.NewQoh);
+
+                    var usedQoh = Convert.ToInt32(@m.UsedQoh);
+                    if (newQoh <= 0)
+                    {
+                        isNewQohStock = "disabled";
+                        m.NewPrice = "out of Stock";
+                    }
+                    if (usedQoh <= 0)
+                    {
+                        isUsedQohStock = "disabled";
+                        m.UsedPrice = "out of Stock";
+
+                    }
+                    if (newQoh <= 0 && usedQoh <= 0)
+                    {
+                        isNewQohStock = "disabled";
+                        isUsedQohStock = "disabled";
+                        m.NewPrice = "out of Stock";
+                        m.UsedPrice = "out of Stock";
+
+                        isDisabled = false;
+                    }
+
+                    if (newQoh > 0)
+                    {
+                        <text>New</text>
+                        <input type="radio" id="rdoNew" name="rdoPrice"  @isNewQohStock checked="checked" value="0"  />
+                        @m.NewPrice<br />
+                        <text>Used</text>
+                        <input type="radio" id="rdoUsed" name="rdoPrice" @isUsedQohStock value="1" />
+                        @m.UsedPrice
+                    }
+                    else
+                    {
+                        <text>New</text>
+                        <input type="radio" id="rdoNew" name="rdoPrice"  @isNewQohStock  value="0"  />
+                        @m.NewPrice<br />
+                        <text>Used</text>
+                        <input type="radio" id="rdoUsed" name="rdoPrice" @isUsedQohStock checked="checked" value="1" />
+                        @m.UsedPrice
+                    }
+                    <br/>
+                    <input type="text" value="1" class="input_txtQty" id="txtQty" />
+				<div class="up_do_arrow">
+                <input type="button" onclick=" javascript:ManageQty('Inc');" value="" class="up_button"/>
+                <input type="button" onclick=" javascript:ManageQty('Dec');"  value=""  class="down_button"  />
+				</div><span class="clr_span"></span>
+                    if (!isDisabled)
+                    {
+                        
+                <input type="button" title="Add to cart" class="add_button"  id="@m.SeoSku" disabled="disabled" value="Out of Stock"  class="add_button" />
+                    }
+                    else
+                    {  <input type="button" title="Add to cart" class="add_button"  id="@m.SeoSku" value="Add to cart" onclick=" javascript:AddToCart('@m.Sku','@m.Source');"/>}
+
+                }
+            }
+
+             
+        </div>
+    <span class="clr_span"></span>
+    <div  >
+
+   <h2 class="sub_heading">
+      Item Description</h2>
+  
+    @MvcHtmlString.Create(m.Description)
+</div>
+        </div>
+       
+      
+ 
+    
+    }
+    <div style="clear: both;"></div>
+     <div id="processing" style="height: 32px;" class="image_process">
+    </div>
+}

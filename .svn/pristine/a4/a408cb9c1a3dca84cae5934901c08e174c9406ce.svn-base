@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<center>
+        <table cellspacing="2" cellpadding="2" border="0" class="maincontent">
+            <tbody><tr>
+                <td valign="top" class="maincontent">
+                    <p style="font-size: 14px; text-align: center;"><i><b><font size="5" face="Arial">WelCome to CampusWebStore</font></b></i></p><p style="font-size: 14px; text-align: center;">Your Online Campus Bookstore Solution
+</p><br><br> <p style="padding: 10px;"><img align="left" width="196" height="152" border="0" alt="cwsgirl.png" src="@Url.Content("~/Content/images/cwsgirl.png")">
+</p><br><p style="padding-left: 20px; padding-right: 20px; text-align: left;"><b><font size="6">C</font>ampus WebStore</b> provides your college store with the latest in e-commerc<b>e technology,
+    giving students, and the rest of the world, the ability to</b> browse, buy and
+    sell merchandise right<font size="5" face="Arial"><i> </i><font size="3" face="Times New Roman">from</font></font> the comfort of their computer.<br><br></p><p style="font-size: 12px; text-align: center;"><br><br><br><b>Everything You Need - Nothing You Don't</b></p><p style="padding: 10px; text-align: left;">&nbsp;&nbsp;Not all e-commerce solutions
+    are equal. Campus Webstore was built from the ground up tailored to the campus store's
+    needs. We have worked with college stores for over 20 years and that experience can give you the tools and features necessary for your store's success today
+    and tomorrow. Don't settle for generic, over-priced solutions, when Campus Webstore
+    has everything you need and nothing you don't.</p><br><p style="font-size: 12px; text-align: center;"><b>Real-Time Inventory</b></p><p style="padding: 10px; text-align: left;">
+
+    &nbsp;&nbsp;Tired of uploading and syncing your
+    website with your inventory? All items you would like to display on your website
+    update automatically. There is no need to adjust inventory, prices or course records.
+    Campus Webstore is REAL TIME.</p><p style="padding: 10px; text-align: left;"><br>
+</p><p style="font-size: 12px; text-align: center;"><b>A "One Stop Shop"</b></p>
+<p style="padding: 10px; text-align: left;">
+    &nbsp;&nbsp; Campus Webstore can integrate into your existing campus
+    enrollment system to provide students with a <em>"one stop shop"</em> experience when
+    purchasing their books. This system will automatically find students' books based
+    on the students ID, eliminating errors and saving students time on your website.
+    </p>
+    <br>
+        
+            <table width="700" cellspacing="0" cellpadding="0" border="0" style="margin-left: 35px;"><tbody><tr><td width="40%">
+                <!-- Benefits -->
+                <ul style="text-align: left;"><li>Shared Database</li><ul style="text-indent: 10px;"><li>POS data is also your web data</li><li>No double entry</li><li>Dynamic content drives the website</li></ul><li>Real-Time Interface</li><ul style="text-indent: 10px;"><li>Web data is always current</li><li>Submitted orders are stored in POS</li><li>Order fulfillment is a POS function</li><li>Robust Buyback Integration</li><li>Comprehensive Faculty Adoptions</li><li>One-click enrollment book match</li></ul><li>Secure Hosting</li><li>Easy to use</li><li>24/7/365 Responsive Technical Support</li><li>Minimal Training Requirements</li><li>Online Faculty Adoptions</li><li>Live Shipping Rates</li><li>Automatically Prints Shipping Labels</li></ul>
+            </td>
+            <td width="40%" valign="top">
+                <!-- Applications -->
+                <ul style="text-align: left;"><li>Custom Stock Levels</li><li>Automatic Image Resizing</li><li>Dynamic Product Front Page</li><li>CISP Certified</li><li>Credit Card Authentication</li><li>100% Integrated with Real-Time Data</li><li>Custom Look and Feel</li><li>Custom Web-Based Reports</li><li>Unlimited Custom Content</li><li>Unlimited Items</li><li>Unlimited Catalogs</li><li>Online Buyback</li><li>Integrated Order Fulfillment</li><li>Email Confirmations</li><li>Order Notifications</li><li>Course/Book Lookup Option</li><li>
+                 of Events</li><li>Specifically Designed for the Campus Store</li></ul></td></tr></tbody></table>
+<br>
+<br>
+                </td>
+            </tr>
+        </tbody></table>
+    </center>

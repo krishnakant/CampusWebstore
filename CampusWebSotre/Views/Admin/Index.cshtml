@@ -1,0 +1,898 @@
+﻿@model CampusWebSotre.Models.AdminViewModel
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h1 class="main_heading">Index</h1>
+<link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#tabs").tabs();
+
+        //Save settings 
+        jQuery("#btnGeneralSettingsSave").click(function () {
+            fnSaveSettings();
+        });
+
+        jQuery("#btnTextSettingsSave").click(function () {
+            fnSaveSettings();
+        });
+
+        jQuery("#btnTradeSettingsSave").click(function () {
+            fnSaveSettings();
+        });
+
+        jQuery("#btnGMSettingsSave").click(function () {
+            fnSaveSettings();
+        });
+
+        jQuery("#btnBuyBackSettings").click(function () {
+            fnSaveSettings();
+        });
+
+    });
+
+    function fnSaveSettings() {
+        jQuery.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '@Url.Action("JsonSaveSettings", "Admin")',
+            data: jQuery("#frmAdminPanel").serialize(),
+            success: function (data) {
+
+                jQuery("#imgLoading").hide();
+
+                if (data.success) {
+
+                    window.location.reload();
+
+                } else {
+                    alert('Error: Data could not be saved');
+                }
+            }
+        });
+    }
+
+</script>
+<div id="tabs" style="float: left; width: 98%;">
+    <ul class="admin_listing">
+        <li><a href="#fragment-1"><span>General Settings</span></a></li>
+        <li><a href="#fragment-2"><span>Content Management</span></a></li>
+        <li><a href="#fragment-3"><span>Text</span></a></li>
+        <li><a href="#fragment-4"><span>Trade</span></a></li>
+        <li><a href="#fragment-5"><span>Gen. Merchandise</span></a></li>
+        <li><a href="#fragment-6"><span>BuyBack</span></a></li>
+        <li class="last_listing"><a href="#fragment-7"><span>Faculty</span></a></li>
+    </ul>
+    <form id="frmAdminPanel" method="Post">
+    <div id="fragment-1">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td>
+                               <b class="fontbold">General Settings for your website, Save and hit save when finished.</b>
+                                <br />
+                                <br />
+                                <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @* <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink8"
+                                                navigateurl="~/Orders.aspx" runat="server">Manage Open Orders</asp:hyperlink>*@
+                                            @Html.ActionLink("Manage Open Orders", "ManageOrders", "Admin")
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*  <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink2"
+                                                navigateurl="~/ManageCustomers.aspx" runat="server">Customers</asp:hyperlink>*@
+                                            @Html.ActionLink("Customers", "ManageCustomer", "Admin")
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @* <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink3"
+                                                navigateurl="~/MaintainCatalogs.aspx" runat="server">Catalogs</asp:hyperlink>*@
+                                            @Html.ActionLink("Catalogs", "MaintainCatalogs", "Admin")
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink7"
+                                                navigateurl="~/taxadmin.aspx" runat="server">Taxes</asp:hyperlink>*@
+                                            @Html.ActionLink("Taxes", "TaxAdmin", "Admin")
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @* <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink4"
+                                                navigateurl="~/FedExShippingSetup.aspx" runat="server">FedEx Shipping</asp:hyperlink>*@
+                                            @Html.ActionLink("FedEx Shipping", "FedExShippingSetup", "Admin")
+                                        </td>
+                                        <td>
+                                            &nbsp;
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*  <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink5"
+                                                navigateurl="~/USPSShippingSetup.aspx" runat="server">USPS Shipping</asp:hyperlink>*@
+                                            @Html.ActionLink("USPS Shipping", "FedExShippingSetup", "Admin")
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @* <img alt="Bullet Arrow" src="Images/icon-bullet.gif" />&nbsp;Enable Buyback? <a href="buybackwizard.aspx">
+                                                (Run Wizard)</a>*@
+                                            @Html.DisplayNameFor(m => m.IsUseBuyBack)&nbsp;@Html.ActionLink("(Run Wizard)", "BuyBackWizard", "Admin")
+                                        </td>
+                                        <td>
+                                            @*<asp:checkbox id="cbUseBuyBack" runat="server" />*@
+                                            @Html.EditorFor(m => m.IsUseBuyBack)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsAsGuest)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsAsGuest)
+                                            @* <asp:checkbox id="cbAsGuest" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @* <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsUseQuickLinks)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsUseQuickLinks)
+                                            @*<asp:checkbox id="cbUseQuickLinks" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsUseCats)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsUseCats)
+                                            @*<asp:checkbox id="cbusecats" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsEmailAdmins)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsEmailAdmins)
+                                            @*<asp:checkbox id="cbemailadmins" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsShowSubs)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsShowSubs)
+                                            @*<asp:checkbox id="cbshowsubs" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;Allow Pick-up instore?
+                                        </td>
+                                        <td>
+                                            <input type="checkbox" id="chkPickupValid" />
+                                            @*<asp:checkbox id="cbpickupvalid" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsLiveRates)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsLiveRates)
+                                            @*<asp:checkbox id="cbLiveRates" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Save<span id="spanErrorGeneralSettings" style="color: red"></span>
+                                        </td>
+                                        <td>
+                                            <input type="button" id="btnGeneralSettingsSave" value="Save" class="save_btn" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="top" width="10%" class="alighright">
+                    <img src="@Url.Content("~/Content/images/config_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fragment-2">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="5" cellspacing="5" border="0" width="100%">
+                        <tr>
+                            <td>
+                               <b class="fontbold"> Manage your content by clicking on one of the links below.</b>
+                                <br />
+                                <br />
+                                <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @* <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink11"
+                                                runat="server" navigateurl="~/PolicyMang.aspx">Edit Checkout Policy</asp:hyperlink><br />*@
+                                            @Html.ActionLink("Edit Checkout Policy", "PolicyMang", "Admin")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink6"
+                                                runat="server" navigateurl="~/FileUploader.aspx">Upload Images</asp:hyperlink><br />*@
+                                            @Html.ActionLink("Upload Images", "FileUploader", "Admin")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink12"
+                                                runat="server" navigateurl="~/ContentAdmin.aspx">Edit/Manage site Content</asp:hyperlink><br />*@
+                                            @Html.ActionLink("Edit/Manage site Content", "ContentAdmin", "Admin")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink13"
+                                                runat="server" navigateurl="~/linkmanager.aspx">Edit/Manage Quick Links</asp:hyperlink><br />*@
+                                            @Html.ActionLink("Edit/Manage Quick Links", "LinkManagerAdmin", "Admin")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @* <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink1"
+                                                runat="server" navigateurl="~/maintainCatalogs.aspx">Maintain Catalogs</asp:hyperlink><br />*@
+                                            @Html.ActionLink("Maintain Catalogs", "MaintainCatalogs", "Admin")
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;<asp:hyperlink id="HyperLink14"
+                                                runat="server" navigateurl="~/CalendarAdmin.aspx">Edit/Manage Calendar of Events</asp:hyperlink><br />*@
+                                            @Html.ActionLink("Edit/Manage Calendar of Events", "CalendarAdmin", "Admin")
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="top" width="10%" class="alighright">
+                    <img src="@Url.Content("~/Content/images/content_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fragment-3">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                        <tr>
+                            <td>
+                                <b class="fontbold">Options for text only, modify items and hit save when finshed.</b>
+                                <br />
+                                <br />
+                                <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsShowIsbn)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsShowIsbn)
+                                            @*<asp:checkbox id="cbshowisbn" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsShowIsbnIntegration)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsShowIsbnIntegration)
+                                            @*<asp:checkbox id="cbShowISBNIntegration" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsoosTx)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsoosTx)
+                                            @*<asp:checkbox id="cboosTX" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsQootx)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsQootx)
+                                            @*<asp:checkbox id="cbQOOTX" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.TxImagePath)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.TxImagePath)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbTXImagePath" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.NewTxLowQty)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.NewTxLowQty)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbNewTXLowQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.NewTXoosQty)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.NewTXoosQty)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbNewTXoosQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.UsedTxLowQty)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.UsedTxLowQty)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbUsedTXLowQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.UsedTXoosQty)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.UsedTXoosQty)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbUsedTXoosQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;@Html.DisplayNameFor(m => m.NewLowStockMsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.NewLowStockMsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbNewLowStockMsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.UsedLowStockMsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.UsedLowStockMsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbUsedLowStockMsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.NewOosMsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.NewOosMsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbNewOOSMsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.UsedOosMsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.UsedOosMsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbUsedOOSMsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Save <span id="spanErrorTextSettings" style="color: red"></span>
+                                        </td>
+                                        <td>
+                                            <input type="button" id="btnTextSettingsSave" value="Save" class="save_btn" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="top" width="10%" class="alighright">
+                    <img src="@Url.Content("~/Content/images/text_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fragment-4">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="5" cellspacing="5" border="0" width="100%">
+                        <tr>
+                            <td>
+                               <b class="fontbold"> Options for Trade only, modify items and hit save when finished.</b>
+                                <br />
+                                <br />
+                                <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsShowIsbnTr)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsShowIsbnTr)
+                                            @*<asp:checkbox id="cbshowisbnTR" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsTrUseQoo)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsTrUseQoo)
+                                            @*<asp:checkbox id="cbTRuseqoo" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsoosTr)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsoosTr)
+                                            @*<asp:checkbox id="cboosTR" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.TrImagePath)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.TrImagePath)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbTRImagePath" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.TrLowQty)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.TrLowQty)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbTRLowQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.TRoosQTY)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.TRoosQTY)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbTRoosQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.TRlowstockmsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.TRlowstockmsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbTRlowstockmsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.TRoosmsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.TRoosmsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbTRoosmsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Save<span id="spanErrorTradeSettings" style="color: red"></span>
+                                        </td>
+                                        <td>
+                                            <input type="button" id="btnTradeSettingsSave" value="Save" class="save_btn" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <img src="@Url.Content("~/Content/images/trade_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fragment-5">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="5" cellspacing="5" border="0" width="100%">
+                        <tr>
+                            <td>
+                                 <b class="fontbold"> Options for GM only, modify items and hit save when finished.</b>
+                                <br />
+                                <br />
+                              <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsoosGm)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsoosGm)
+                                            @*<asp:checkbox id="cboosGM" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsGmUseQoo)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsGmUseQoo)
+                                            @*<asp:checkbox id="cbGMuseqoo" runat="server" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.GmImagePath)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.GmImagePath)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbGMImagePath" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.GmLowQty)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.GmLowQty)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbGMLowQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.GMoosmsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.GMoosmsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbGMoosQTY" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.GMlowstockmsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.GMlowstockmsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbGMlowstockmsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.GMoosmsg)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.GMoosmsg)
+                                            @*<asp:textbox cssclass="textboxinput" id="tbGMoosmsg" runat="server"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Save<span id="spanErrorGMSettings" style="color: red"></span>
+                                        </td>
+                                        <td>
+                                            <input type="button" id="btnGMSettingsSave" value="Save" class="save_btn" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <img src="@Url.Content("~/Content/images/gm_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fragment-6">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="5" cellspacing="5" border="0" width="100%">
+                        <tr>
+                            <td>
+                                <b class="fontbold"> <!-- modal popup configs -->
+                                @*<atlastoolkit:modalpopupextender id="modalPopup2" runat="server" targetcontrolid="imgHelpDisplayPrices"
+                                    popupcontrolid="panelHelpDisplayPrices" backgroundcssclass="modalBackground"
+                                    dropshadow="false" okcontrolid="OkButton" onokscript="" cancelcontrolid="ibCloseButton" />*@
+                                BuyBack settings for your website, hit save when finished.</b>
+                                <br />
+                                <br />
+                               <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsBuyBackEnable)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsBuyBackEnable)
+                                            @*<asp:checkbox runat="server" id="cbBuyBackEnable" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsBuyBackDisplayPrices)
+                                            @*<asp:imagebutton id="imgHelpDisplayPrices" runat="server" imageurl="~/Images/question1.gif" />*@
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsBuyBackDisplayPrices)
+                                            @*<asp:checkbox runat="server" id="cbBuyBackDisplayPrices" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsBuyBackShowSholeSale)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsBuyBackShowSholeSale)
+                                            @*<asp:checkbox runat="server" id="cbBuyBackShowSholeSale" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsBuyBackShowRetail)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsBuyBackShowRetail)
+                                            @*<asp:checkbox runat="server" id="cbBuyBackShowRetail" />*@
+                                        </td>
+                                    </tr>
+                                    @*  <%--<tr>
+                                                                    <td>
+                                                                        <img src="Images/icon-bullet.gif" alt="Bullet Arrow" />&nbsp;Only show one price?
+                                                                        -
+                                                                        <asp:ImageButton ID="imgHelpShowOnePrice" runat="server" ImageUrl="~/Images/question1.gif" />
+                                                                    </td>
+                                                                    <td>
+                                                                        <asp:CheckBox runat="server" ID="cbBuyBackShowOnePrice" />
+                                                                    </td>
+                                                                </tr>--%>*@
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsBuyBackShowNeed)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsBuyBackShowNeed)
+                                            @*<asp:checkbox runat="server" id="cbBuyBackShowNeed" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.IsBuyBackUseStoreCredit)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.IsBuyBackUseStoreCredit)
+                                            @*<asp:checkbox runat="server" id="cbBuyBackUseStoreCredit" />*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackStoreCredit)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackStoreCredit)
+                                            @*<asp:textbox id="tbBuyBackStoreCredit" runat="server" width="50px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackRetailPrice)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackRetailPrice)
+                                            @*<asp:textbox id="tbBuyBackRetailPrice" runat="server" width="50px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackWholesalePrice)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackWholesalePrice)
+                                            @*<asp:textbox id="tbBuyBackWholesalePrice" runat="server" width="50px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackRetailRounding)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.BuyBackRetailRounding, new List<SelectListItem>{
+                                                                 new SelectListItem {Text ="Up",Value = "U"},
+                                                                 new SelectListItem{Text ="Down",Value = "D"}})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackWholeSaleRounding)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.BuyBackWholeSaleRounding, new List<SelectListItem>{
+                                                                 new SelectListItem {Text ="Up",Value = "U"},
+                                                                 new SelectListItem{Text ="Down",Value = "D"}})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackRetailCoin)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.BuyBackRetailCoin, new List<SelectListItem>{
+                                                                 new SelectListItem {Text ="5",Value = "5"},
+                                                                 new SelectListItem {Text ="10",Value = "10"},
+                                                                  new SelectListItem {Text ="25",Value = "25"},
+                                                                  new SelectListItem {Text ="50",Value = "50"},
+                                                                  new SelectListItem {Text ="100",Value = "100"}})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackWholeSaleCoin)
+                                        </td>
+                                        <td>
+                                            @Html.DropDownListFor(m => m.BuyBackWholeSaleCoin, new List<SelectListItem>{
+                                                                 new SelectListItem {Text ="5",Value = "5"},
+                                                                 new SelectListItem {Text ="10",Value = "10"},
+                                                                  new SelectListItem {Text ="25",Value = "25"},
+                                                                  new SelectListItem {Text ="50",Value = "50"},
+                                                                  new SelectListItem {Text ="100",Value = "100"}})
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackRetailPriceWording)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackRetailPriceWording)
+                                            @*<asp:textbox id="tbBuyBackRetailPriceWording" runat="server" width="150px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackWholesalePriceWording)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackWholesalePriceWording)
+                                            @*<asp:textbox id="tbBuyBackWholesalePriceWording" runat="server" width="150px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackNeedWording)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackNeedWording)
+                                            @*<asp:textbox id="tbBuyBackNeedWording" runat="server" width="150px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackBuyingWording)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackBuyingWording)
+                                            @*<asp:textbox id="tbBuyBackBuyingWording" runat="server" width="150px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackNotBuyingWording)
+                                        </td>
+                                        <td>
+                                            @Html.EditorFor(m => m.BuyBackNotBuyingWording)
+                                            @*<asp:textbox id="tbBuyBackNOTBuyingWording" runat="server" width="150px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top">
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;@Html.DisplayNameFor(m => m.BuyBackDisclaimer)
+                                        </td>
+                                        <td>
+                                            @Html.TextAreaFor(m => m.BuyBackDisclaimer)
+                                            @*<asp:textbox id="tbBuyBackDisclaimer" runat="server" textmode="MultiLine" width="150px"></asp:textbox>*@
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Save <span id="spanErrorBuybackSettings" style="color: red"></span>
+                                        </td>
+                                        <td>
+                                            <input type="button" id="btnBuyBackSettings" value="Save" class="save_btn" />
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <img src="@Url.Content("~/Content/images/config_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="fragment-7">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td width="90%"  style="vertical-align: top;">
+                    <table cellpadding="5" cellspacing="5" border="0" width="100%">
+                        <tr>
+                            <td>
+                              <b class="fontbold">  Options for Faculty only, modify items and hit save when finished.</b>
+                                <br />
+                                <br />
+                               <table cellpadding="0" cellspacing="0" border="0" class="orderhistory text_left">
+                                    <tr>
+                                        <td>
+                                            @*<img src="Images/icon-bullet.gif" alt="Bullet Arrow" />*@&nbsp;
+                                            @Html.ActionLink("Faculty Admin Page", "FacultyAdmin","Admin")
+                                            @*<asp:hyperlink id="hlfacultyadmin"
+                                                runat="server" navigateurl="~/FacultyAdmin.aspx">Faculty Admin Page</asp:hyperlink>*@
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <img src="@Url.Content("~/Content/images/gm_big.png")" alt="Content Management" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    </form>
+</div>

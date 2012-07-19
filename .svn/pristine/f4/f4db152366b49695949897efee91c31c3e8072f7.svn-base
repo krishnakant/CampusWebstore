@@ -1,0 +1,232 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
+using CampusWebStore.Data.Daos;
+using CampusWebStore.Shared.Models;
+using Microsoft.Practices.Unity;
+
+//using TotalCompMobil.Data.Daos;
+
+namespace CampusWebStore.Business.Services
+{
+    public interface ICatalogsServices
+    {
+        #region Properties
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Method to get the record for the store
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="myVars"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPwd"></param>
+        /// <param name="dbType"></param>
+        /// <param name="uvAddress"></param>
+        /// <param name="uvAccount"></param>
+        /// <param name="cacheTIme"></param>
+        /// <param name="dblCache"></param>
+        /// <param name="strd3PortNumber"></param>
+        /// <param name="useEncryption"></param>
+        /// <param name="d3PortNumber"></param>
+        /// <returns></returns>
+        IEnumerable<CatalogModel> GetCatalogsList(string storeId, object myVars, string userName, string userPwd,
+                                                  string dbType,
+                                                  string uvAddress, string uvAccount, string cacheTIme, string dblCache,
+                                                  string strd3PortNumber,
+                                                  string useEncryption, string d3PortNumber);
+
+        /// <summary>
+        /// Get thelist of Catalog product with the items in the ItemLookUpModel model
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="myVars"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPwd"></param>
+        /// <param name="dbType"></param>
+        /// <param name="uvAddress"></param>
+        /// <param name="uvAccount"></param>
+        /// <param name="cacheTIme"></param>
+        /// <param name="dblCache"></param>
+        /// <param name="strd3PortNumber"></param>
+        /// <param name="useEncryption"></param>
+        /// <param name="d3PortNumber"></param>
+        ///  /// <param name="source"></param>
+        /// <returns></returns>
+        IEnumerable<ItemLookUpModel> GetCataLogProductLookUpItems(string storeId, object myVars, string source,
+                                                                  string userName, string userPwd, string dbType,
+                                                                  string uvAddress, string uvAccount, string cacheTIme,
+                                                                  string dblCache, string strd3PortNumber,
+                                                                  string useEncryption, string d3PortNumber);
+
+        /// <summary>
+        /// Get the list of the Catalog products only
+        /// </summary>
+        /// <param name="storeId"></param>
+        /// <param name="myVars"></param>
+        /// <param name="userName"></param>
+        /// <param name="userPwd"></param>
+        /// <param name="dbType"></param>
+        /// <param name="uvAddress"></param>
+        /// <param name="uvAccount"></param>
+        /// <param name="cacheTIme"></param>
+        /// <param name="dblCache"></param>
+        /// <param name="strd3PortNumber"></param>
+        /// <param name="useEncryption"></param>
+        /// <param name="d3PortNumber"></param>
+        /// <returns></returns>
+        IEnumerable<CatalogItemModel> CataLogProducts(string storeId, object myVars, string userName, string userPwd,
+                                                      string dbType,
+                                                      string uvAddress, string uvAccount, string cacheTIme,
+                                                      string dblCache, string strd3PortNumber,
+                                                      string useEncryption, string d3PortNumber);
+
+        IEnumerable<CatalogModel> GetTopCatalogs(string storeId, string userName, string userPwd,
+                                                 string dbType,
+                                                 string uvAddress, string uvAccount, string cacheTIme, string dblCache,
+                                                 string strd3PortNumber,
+                                                 string useEncryption, string d3PortNumber);
+
+        #endregion
+    }
+
+    public class CatalogsServices : ICatalogsServices
+    {
+        #region Properties
+
+        [Dependency]
+        public ICatalogsDaos CatalogsDao { get; set; }
+
+        #endregion
+
+        #region ICatalogsServices Members
+
+        public IEnumerable<CatalogModel> GetCatalogsList(string storeId, object myVars, string userName, string userPwd,
+                                                         string dbType, string uvAddress, string uvAccount,
+                                                         string cacheTIme, string dblCache, string strd3PortNumber,
+                                                         string useEncryption, string d3PortNumber)
+        {
+            try
+            {
+                //Calling the method to get the xml form the database
+                string strPickDataReturn = CatalogsDao.GetCatalogsList(storeId, myVars, userName, userPwd, dbType,
+                                                                       uvAddress, uvAccount, cacheTIme, dblCache,
+                                                                       strd3PortNumber, useEncryption, d3PortNumber);
+
+                var doc = new XmlDocument();
+
+                doc.LoadXml(strPickDataReturn);
+
+                //Parsing the xml
+                XElement xmlCatalogs = XElement.Parse(strPickDataReturn);
+
+                //Reading the xml and filling model
+                List<CatalogModel> catalogsModels = (from catalogs in xmlCatalogs.Descendants("CATALOG")
+                                                     where !string.IsNullOrEmpty(catalogs.Element("SEOURL").Value)
+                                                     select new CatalogModel
+                                                                {
+                                                                    CatalogId = catalogs.Element("CATID").Value,
+                                                                    Desc = catalogs.Element("DESC").Value,
+                                                                    SeoUrl = catalogs.Element("SEOURL").Value,
+                                                                }).ToList();
+
+                return catalogsModels;
+            }
+            catch (Exception x)
+            {
+                throw;
+            }
+        }
+
+
+        public IEnumerable<ItemLookUpModel> GetCataLogProductLookUpItems(string storeId, object myVars, string source,
+                                                                         string userName, string userPwd, string dbType,
+                                                                         string uvAddress, string uvAccount,
+                                                                         string cacheTIme, string dblCache,
+                                                                         string strd3PortNumber, string useEncryption,
+                                                                         string d3PortNumber)
+        {
+            try
+            {
+                var itemLookUpModel = CatalogsDao.GetCataLogProductLookUpItems(storeId, myVars,
+                                                                                                        userName,
+                                                                                                        userPwd, dbType,
+                                                                                                        uvAddress,
+                                                                                                        uvAccount,
+                                                                                                        cacheTIme,
+                                                                                                        dblCache,
+                                                                                                        strd3PortNumber,
+                                                                                                        useEncryption,
+                                                                                                        d3PortNumber);
+
+             
+                if (source.ToLower().Equals("gm"))
+                {
+                    foreach (var item in itemLookUpModel)
+                    {
+                       
+                        var flatAmount = item.FlatFreight;
+
+                        decimal dFlatAmount = 0;
+
+                        if (!String.IsNullOrEmpty(flatAmount))
+                        {
+                            dFlatAmount = Convert.ToDecimal(flatAmount) / 100;
+                        }
+
+                        item.FlatFreight = dFlatAmount.ToString();
+                        
+                    }
+                }
+            
+                return itemLookUpModel;
+            }
+
+            catch (Exception x)
+            {
+                throw;
+            }
+        }
+
+
+        public IEnumerable<CatalogItemModel> CataLogProducts(string storeId, object myVars, string userName,
+                                                             string userPwd, string dbType, string uvAddress,
+                                                             string uvAccount, string cacheTIme, string dblCache,
+                                                             string strd3PortNumber, string useEncryption,
+                                                             string d3PortNumber)
+        {
+            try
+            {
+                IEnumerable<CatalogItemModel> cataItemModels = CatalogsDao.CataLogProductList(storeId, myVars, userName,
+                                                                                              userPwd, dbType, uvAddress,
+                                                                                              uvAccount,
+                                                                                              cacheTIme, dblCache,
+                                                                                              strd3PortNumber,
+                                                                                              useEncryption,
+                                                                                              d3PortNumber);
+                return cataItemModels;
+            }
+            catch (Exception x)
+            {
+                throw;
+            }
+        }
+
+        #endregion
+
+
+        public IEnumerable<CatalogModel> GetTopCatalogs(string storeId, string userName, string userPwd, string dbType, string uvAddress, string uvAccount, string cacheTIme, string dblCache, string strd3PortNumber, string useEncryption, string d3PortNumber)
+        {
+            object myVars = new { STOREID = storeId };
+
+            return  CatalogsDao.GetTopCatalogs(storeId, myVars, userName, userPwd, dbType,
+                                                                       uvAddress, uvAccount, cacheTIme, dblCache,
+                                                                       strd3PortNumber, useEncryption, d3PortNumber);
+        }
+    }
+}

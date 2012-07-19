@@ -1,0 +1,35 @@
+﻿@{
+  
+    Layout = "~/Views/Shared/_Layout.iPhone.cshtml";
+}
+ 
+<h2>Catalogs</h2>
+
+   
+     <div id="headerproduct">
+        <!--header-->
+        <img alt="bar_top" src="@Url.Content("~/Content/Images/bar_top.png")" width="320" />
+      
+    </div>
+    <!--//header-->
+    <div class="cartcontainer">
+        <!--container-->
+        <div id="form">
+            <form id="form1" action=""   name="">
+                @Html.Partial("EditorTemplates/MobileHeader")
+            <div class="clear">
+            </div>
+            <div class="bradecumpro">
+                <a href="#" class="left">Store</a>
+            </div>
+
+             <div class="content-primary">	
+		 @Html.Partial("Widgets/CatalogList")
+</div>
+ <div class="clear">
+            </div>
+                    
+           
+            <div class="productfoot">
+            </div>
+            </form></div></div>

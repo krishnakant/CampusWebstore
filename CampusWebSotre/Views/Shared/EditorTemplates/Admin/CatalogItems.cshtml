@@ -1,0 +1,129 @@
+﻿
+@model IEnumerable<CampusWebSotre.Models.AdminCatalogItemViewModel>
+@if (Model.Any())
+{
+    var sortOrder = 0;
+    <table class="orderhistory th_bold" cellspacing="0" cellpadding="0" border="0" style="width: 762px; margin-top: 10px;">
+    
+        <tr class="heding">
+            <th scope="col">
+                SKU:
+            </th>
+            <th scope="col">
+                MOD:
+            </th>
+            <th scope="col">
+                Title:
+            </th>
+            <th scope="col">
+                Price:
+            </th>
+            <th scope="col">
+                Sales Price:
+            </th>
+            <th></th>
+            <th></th>
+             <th></th>
+            <th></th>
+        </tr>
+       
+        @foreach (var m in Model)
+        {
+            <tr>
+             
+                <td>
+                    @m.Sku
+                </td>
+                <td>
+                    @m.Mod
+                </td>
+                <td>
+                  @MvcHtmlString.Create(@m.Title)
+                </td>
+                <td>
+                    @m.Price
+                </td>
+                <td style="width: 122px;">
+                    <div id="divSalesPrice_@(sortOrder)" style="display: none">
+                        <input type="text" value="@m.SalesPrice" id="txtSalesPrice_@(sortOrder)" style="width:50px;" /><img alt="Edit" id="imgSalesPrice_@(sortOrder)" class="EditPrice" src="@Url.Content("~/content/images/desktop/up_alt.png")" /><img alt="cancel" class="cancel" id="imgCancel_@(sortOrder)" src="@Url.Content("~/content/images/desktop/cancel.png")" /></div>
+                        <span id="spnSalesPrice_@(sortOrder)">@m.SalesPrice</span>
+                </td>
+                 <td>
+                    <a href="javascript:EditSalesPrice('@sortOrder')">
+                    Edit</a>
+                </td>
+                 <td>
+                    <a href="javascript:RemoveItem('@sortOrder')">
+                    Remove</a>
+                </td>
+                <td>
+                    <a href="javascript:MoveUpDown('@sortOrder','moveup')">
+                    MoveUp</a>
+                </td>
+                 <td>
+                  <a href="javascript:MoveUpDown('@sortOrder','movedown')">  MoveDown</a>
+                </td>
+
+            </tr>
+            sortOrder++;
+        }
+    </table>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".cancel").click(function () {
+            var newId = (this.id).split('_');
+            $("#divSalesPrice_" + newId[1]).hide();
+            $("#spnSalesPrice_" + newId[1]).show();
+
+        });
+        $(".EditPrice").click(function () {
+            $("#divItemProcess").hide();
+            var newId = (this.id).split('_');
+            var value = $("#txtSalesPrice_" + newId[1]).val();
+            $("#spnSalesPrice_" + newId[1]).text(value);
+            $.ajax({
+                type: "Post",
+                data: { id: newId[1], CatId: $("#ddlCatList").val(),NewSalesPrice:value },
+                url: '@Url.Action("JsonEditSalesPrice", "Admin")',
+                success: function (data, status, xhr) {
+                    $("#divCatalogItems").html(data);
+                    $("#divItemProcess").hide();
+                }
+            });
+        
+        });
+    });
+
+    function EditSalesPrice(sortOrder) {
+        $("#divSalesPrice_" + sortOrder).show();
+        $("#spnSalesPrice_" + sortOrder).hide();
+    }
+
+    function MoveUpDown(sortOrder, type) {
+        $("#divItemProcess").show();
+        $.ajax({
+            type: "Post",
+            data: { id: sortOrder, Type: type, CatId: $("#ddlCatList").val() },
+            url: '@Url.Action("JsonMoveUpDown", "Admin")',
+            success: function (data, status, xhr) {
+                $("#divCatalogItems").html(data);
+                $("#divItemProcess").hide();
+            }
+        });
+    }
+    function RemoveItem(sku) {
+        $("#divItemProcess").show();
+        $.ajax({
+            type: "Post",
+            data: { id: sku,CatId: $("#ddlCatList").val() },
+            url: '@Url.Action("JsonRemoveCatalogItem", "Admin")',
+            success: function (data, status, xhr) {
+                $("#divCatalogItems").html(data);
+                $("#divItemProcess").hide();
+            }
+        });
+    }
+
+</script>
