@@ -1,0 +1,20 @@
+[1mdiff --git a/CampusWebSotre/App_Themes/.gitignore b/CampusWebSotre/App_Themes/.gitignore[m
+[1mdeleted file mode 100644[m
+[1mindex 0bc51d1..0000000[m
+[1m--- a/CampusWebSotre/App_Themes/.gitignore[m
+[1m+++ /dev/null[m
+[36m@@ -1,13 +0,0 @@[m
+[31m-# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)[m
+[31m-# bin[m
+[31m-obj[m
+[31m-[m
+[31m-# mstest test results[m
+[31m-TestResults[m
+[31m-[m
+[31m-# Conversion Details[m
+[31m-CampusWebStore.sln[m
+[31m-Backup/[m
+[31m-UpgradeLog.XML[m
+[31m-UpgradeLog.htm[m
+[31m-_UpgradeReport_Files/[m
+\ No newline at end of file[m
